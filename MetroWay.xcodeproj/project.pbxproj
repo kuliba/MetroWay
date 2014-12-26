@@ -1,0 +1,1062 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A706570D1A4461A700B8D21D /* ToDo.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A706570C1A4461A700B8D21D /* ToDo.rtf */; };
+		A70657101A44620E00B8D21D /* MWAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A706570F1A44620E00B8D21D /* MWAppDelegate.m */; };
+		A70657151A44631900B8D21D /* MetroWay-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A70657131A44631900B8D21D /* MetroWay-Info.plist */; };
+		A70657341A4463D600B8D21D /* MWDevelopment.m in Sources */ = {isa = PBXBuildFile; fileRef = A706571B1A4463D600B8D21D /* MWDevelopment.m */; };
+		A70657351A4463D600B8D21D /* MWDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = A706571D1A4463D600B8D21D /* MWDownload.m */; };
+		A70657361A4463D600B8D21D /* MWLanguage.m in Sources */ = {isa = PBXBuildFile; fileRef = A706571F1A4463D600B8D21D /* MWLanguage.m */; };
+		A70657371A4463D600B8D21D /* MWList.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657211A4463D600B8D21D /* MWList.m */; };
+		A70657381A4463D600B8D21D /* MWListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657231A4463D600B8D21D /* MWListItem.m */; };
+		A70657391A4463D600B8D21D /* MWLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657251A4463D600B8D21D /* MWLocation.m */; };
+		A706573A1A4463D600B8D21D /* MWMetroMap.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657271A4463D600B8D21D /* MWMetroMap.m */; };
+		A706573B1A4463D600B8D21D /* MWRouteItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657291A4463D600B8D21D /* MWRouteItem.m */; };
+		A706573C1A4463D600B8D21D /* MWRouter.m in Sources */ = {isa = PBXBuildFile; fileRef = A706572B1A4463D600B8D21D /* MWRouter.m */; };
+		A706573D1A4463D600B8D21D /* MWRouteStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = A706572D1A4463D600B8D21D /* MWRouteStorage.m */; };
+		A706573E1A4463D600B8D21D /* MWSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = A706572F1A4463D600B8D21D /* MWSettings.m */; };
+		A706573F1A4463D600B8D21D /* MWStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657311A4463D600B8D21D /* MWStorage.m */; };
+		A70657401A4463D600B8D21D /* MWUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657331A4463D600B8D21D /* MWUpload.m */; };
+		A706574C1A44648500B8D21D /* MWEdge.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657431A44648500B8D21D /* MWEdge.m */; };
+		A706574D1A44648500B8D21D /* MWHaul.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657451A44648500B8D21D /* MWHaul.m */; };
+		A706574E1A44648500B8D21D /* MWLine.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657471A44648500B8D21D /* MWLine.m */; };
+		A706574F1A44648500B8D21D /* MWStation.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657491A44648500B8D21D /* MWStation.m */; };
+		A70657501A44648500B8D21D /* MWVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = A706574B1A44648500B8D21D /* MWVertex.m */; };
+		A706576E1A4464A800B8D21D /* MWBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657531A4464A800B8D21D /* MWBaseTableViewCell.m */; };
+		A706576F1A4464A800B8D21D /* MWDownloadStatusButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657551A4464A800B8D21D /* MWDownloadStatusButton.m */; };
+		A70657701A4464A800B8D21D /* MWDraw.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657571A4464A800B8D21D /* MWDraw.m */; };
+		A70657711A4464A800B8D21D /* MWDrawArc.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657591A4464A800B8D21D /* MWDrawArc.m */; };
+		A70657721A4464A800B8D21D /* MWDrawFillCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = A706575B1A4464A800B8D21D /* MWDrawFillCircle.m */; };
+		A70657731A4464A800B8D21D /* MWDrawGradientArc.m in Sources */ = {isa = PBXBuildFile; fileRef = A706575D1A4464A800B8D21D /* MWDrawGradientArc.m */; };
+		A70657741A4464A800B8D21D /* MWDrawGradientRect.m in Sources */ = {isa = PBXBuildFile; fileRef = A706575F1A4464A800B8D21D /* MWDrawGradientRect.m */; };
+		A70657751A4464A800B8D21D /* MWDrawLine.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657611A4464A800B8D21D /* MWDrawLine.m */; };
+		A70657761A4464A800B8D21D /* MWDrawRoundedRect.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657631A4464A800B8D21D /* MWDrawRoundedRect.m */; };
+		A70657771A4464A800B8D21D /* MWDrawTextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657651A4464A800B8D21D /* MWDrawTextLine.m */; };
+		A70657781A4464A800B8D21D /* MWMapTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657671A4464A800B8D21D /* MWMapTableViewCell.m */; };
+		A70657791A4464A800B8D21D /* MWRouteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657691A4464A800B8D21D /* MWRouteButton.m */; };
+		A706577A1A4464A800B8D21D /* MWViewRouteR14.m in Sources */ = {isa = PBXBuildFile; fileRef = A706576B1A4464A800B8D21D /* MWViewRouteR14.m */; };
+		A706577B1A4464A800B8D21D /* MWViewStationCircleR14.m in Sources */ = {isa = PBXBuildFile; fileRef = A706576D1A4464A800B8D21D /* MWViewStationCircleR14.m */; };
+		A70657921A4464CF00B8D21D /* MWMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A706577E1A4464CF00B8D21D /* MWMenuViewController.m */; };
+		A70657931A4464CF00B8D21D /* MWMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A706577F1A4464CF00B8D21D /* MWMenuViewController.xib */; };
+		A70657941A4464CF00B8D21D /* MWMetroMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657811A4464CF00B8D21D /* MWMetroMapViewController.m */; };
+		A70657951A4464CF00B8D21D /* MWMetroMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A70657821A4464CF00B8D21D /* MWMetroMapViewController.xib */; };
+		A70657961A4464CF00B8D21D /* MWSearchStationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657841A4464CF00B8D21D /* MWSearchStationViewController.m */; };
+		A70657971A4464CF00B8D21D /* MWSearchStationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A70657851A4464CF00B8D21D /* MWSearchStationViewController.xib */; };
+		A70657981A4464CF00B8D21D /* MWSelectLanguageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657871A4464CF00B8D21D /* MWSelectLanguageViewController.m */; };
+		A70657991A4464CF00B8D21D /* MWSelectLanguageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A70657881A4464CF00B8D21D /* MWSelectLanguageViewController.xib */; };
+		A706579A1A4464CF00B8D21D /* MWSelectMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A706578A1A4464CF00B8D21D /* MWSelectMapViewController.m */; };
+		A706579B1A4464CF00B8D21D /* MWSelectMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A706578B1A4464CF00B8D21D /* MWSelectMapViewController.xib */; };
+		A706579C1A4464CF00B8D21D /* MWSelectSortViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A706578D1A4464CF00B8D21D /* MWSelectSortViewController.m */; };
+		A706579E1A4464CF00B8D21D /* MWStationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657901A4464CF00B8D21D /* MWStationListViewController.m */; };
+		A706579F1A4464CF00B8D21D /* MWStationListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A70657911A4464CF00B8D21D /* MWStationListViewController.xib */; };
+		A70657B11A4464F300B8D21D /* CloseBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657A11A4464F300B8D21D /* CloseBlack.png */; };
+		A70657B21A4464F300B8D21D /* CloseGray.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657A21A4464F300B8D21D /* CloseGray.png */; };
+		A70657B31A4464F300B8D21D /* CloseWhite.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657A31A4464F300B8D21D /* CloseWhite.png */; };
+		A70657B41A4464F300B8D21D /* Delete.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657A41A4464F300B8D21D /* Delete.png */; };
+		A70657B51A4464F300B8D21D /* Download.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657A51A4464F300B8D21D /* Download.png */; };
+		A70657B61A4464F300B8D21D /* grid.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657A61A4464F300B8D21D /* grid.png */; };
+		A70657B71A4464F300B8D21D /* List1.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657A71A4464F300B8D21D /* List1.png */; };
+		A70657B81A4464F300B8D21D /* List2.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657A81A4464F300B8D21D /* List2.png */; };
+		A70657B91A4464F300B8D21D /* Magnifier.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657A91A4464F300B8D21D /* Magnifier.png */; };
+		A70657BA1A4464F300B8D21D /* Map.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657AA1A4464F300B8D21D /* Map.png */; };
+		A70657BB1A4464F300B8D21D /* Menu.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657AB1A4464F300B8D21D /* Menu.png */; };
+		A70657BC1A4464F300B8D21D /* SearchBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657AC1A4464F300B8D21D /* SearchBackground.png */; };
+		A70657BD1A4464F300B8D21D /* StarCheck.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657AD1A4464F300B8D21D /* StarCheck.png */; };
+		A70657BE1A4464F300B8D21D /* StarOff.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657AE1A4464F300B8D21D /* StarOff.png */; };
+		A70657BF1A4464F300B8D21D /* StarOn.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657AF1A4464F300B8D21D /* StarOn.png */; };
+		A70657C01A4464F300B8D21D /* Update.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657B01A4464F300B8D21D /* Update.png */; };
+		A70657C91A44652000B8D21D /* belo_horizonte_metro_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657C31A44652000B8D21D /* belo_horizonte_metro_background.png */; };
+		A70657CA1A44652000B8D21D /* MWBeloHorizonteMetro.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657C51A44652000B8D21D /* MWBeloHorizonteMetro.m */; };
+		A70657CB1A44652000B8D21D /* MWPortoAlegreMetro.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657C71A44652000B8D21D /* MWPortoAlegreMetro.m */; };
+		A70657CC1A44652000B8D21D /* porto_alegre_metro_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657C81A44652000B8D21D /* porto_alegre_metro_background.png */; };
+		A70657D11A44654000B8D21D /* MWTorontoSubway.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657CF1A44654000B8D21D /* MWTorontoSubway.m */; };
+		A70657D21A44654000B8D21D /* toronto_subway_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657D01A44654000B8D21D /* toronto_subway_background.png */; };
+		A70657D71A44656000B8D21D /* MWWuhanMetro.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657D51A44656000B8D21D /* MWWuhanMetro.m */; };
+		A70657D81A44656000B8D21D /* wuhan_metro_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657D61A44656000B8D21D /* wuhan_metro_background.png */; };
+		A70657DD1A44658100B8D21D /* medellin_metro_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657DA1A44658100B8D21D /* medellin_metro_background.png */; };
+		A70657DE1A44658100B8D21D /* MWMedellinMetro.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657DC1A44658100B8D21D /* MWMedellinMetro.m */; };
+		A70657E61A4465A300B8D21D /* kyoto_subway_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657E01A4465A300B8D21D /* kyoto_subway_background.png */; };
+		A70657E71A4465A300B8D21D /* MWKyotoSubway.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657E21A4465A300B8D21D /* MWKyotoSubway.m */; };
+		A70657E81A4465A300B8D21D /* MWYokohamaSubway.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657E41A4465A300B8D21D /* MWYokohamaSubway.m */; };
+		A70657E91A4465A300B8D21D /* yokohama_subway_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657E51A4465A300B8D21D /* yokohama_subway_background.png */; };
+		A70657EE1A4465CA00B8D21D /* amsterdam_metro_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657EB1A4465CA00B8D21D /* amsterdam_metro_background.png */; };
+		A70657EF1A4465CA00B8D21D /* MWAmsterdamMetro.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657ED1A4465CA00B8D21D /* MWAmsterdamMetro.m */; };
+		A70657FA1A4465E200B8D21D /* MWMoscowMetro.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657F21A4465E200B8D21D /* MWMoscowMetro.m */; };
+		A70657FB1A4465E200B8D21D /* MWNizhnyNovgorodMetro.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657F41A4465E200B8D21D /* MWNizhnyNovgorodMetro.m */; };
+		A70657FC1A4465E200B8D21D /* MWYekaterinburgMetro.m in Sources */ = {isa = PBXBuildFile; fileRef = A70657F61A4465E200B8D21D /* MWYekaterinburgMetro.m */; };
+		A70657FD1A4465E200B8D21D /* moscow_metro_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657F71A4465E200B8D21D /* moscow_metro_background.png */; };
+		A70657FE1A4465E200B8D21D /* nizhny_novgorod_metro_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657F81A4465E200B8D21D /* nizhny_novgorod_metro_background.png */; };
+		A70657FF1A4465E200B8D21D /* yekaterinburg_metro_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70657F91A4465E200B8D21D /* yekaterinburg_metro_background.png */; };
+		A70658041A4465FE00B8D21D /* bangkok_airport_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70658011A4465FE00B8D21D /* bangkok_airport_background.png */; };
+		A70658051A4465FE00B8D21D /* MWBangkokAirport.m in Sources */ = {isa = PBXBuildFile; fileRef = A70658031A4465FE00B8D21D /* MWBangkokAirport.m */; };
+		A706580D1A44661400B8D21D /* boston_subway_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70658071A44661400B8D21D /* boston_subway_background.png */; };
+		A706580E1A44661400B8D21D /* los_angeles_metro_background.png in Resources */ = {isa = PBXBuildFile; fileRef = A70658081A44661400B8D21D /* los_angeles_metro_background.png */; };
+		A706580F1A44661400B8D21D /* MWBostonSubway.m in Sources */ = {isa = PBXBuildFile; fileRef = A706580A1A44661400B8D21D /* MWBostonSubway.m */; };
+		A70658101A44661400B8D21D /* MWLosAngelesMetro.m in Sources */ = {isa = PBXBuildFile; fileRef = A706580C1A44661400B8D21D /* MWLosAngelesMetro.m */; };
+		A70658111A44672000B8D21D /* MWSelectSortViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A70658131A44672000B8D21D /* MWSelectSortViewController.xib */; };
+		A744F1C11A4479040078B0E3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A744F1C31A4479040078B0E3 /* Localizable.strings */; };
+		A744F1C71A447DD50078B0E3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A744F1C61A447DD50078B0E3 /* Default-568h@2x.png */; };
+		A744F1C91A4494C10078B0E3 /* libFlurry_6.0.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A744F1C81A4494C10078B0E3 /* libFlurry_6.0.0.a */; };
+		A7BDC94D1A445164008F2645 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A7BDC94C1A445164008F2645 /* main.m */; };
+		A7BDC9501A445164008F2645 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A7BDC94F1A445164008F2645 /* AppDelegate.m */; };
+		A7BDC9581A445164008F2645 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7BDC9571A445164008F2645 /* Images.xcassets */; };
+		A7BDC9671A445164008F2645 /* MetroWayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A7BDC9661A445164008F2645 /* MetroWayTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A7BDC9611A445164008F2645 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7BDC93F1A445164008F2645 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A7BDC9461A445164008F2645;
+			remoteInfo = MetROutes;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A706570C1A4461A700B8D21D /* ToDo.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = ToDo.rtf; sourceTree = "<group>"; };
+		A706570E1A44620E00B8D21D /* MWAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWAppDelegate.h; sourceTree = "<group>"; };
+		A706570F1A44620E00B8D21D /* MWAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWAppDelegate.m; sourceTree = "<group>"; };
+		A70657131A44631900B8D21D /* MetroWay-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MetroWay-Info.plist"; sourceTree = "<group>"; };
+		A70657141A44631900B8D21D /* MetroWay-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MetroWay-Prefix.pch"; sourceTree = "<group>"; };
+		A706571A1A4463D600B8D21D /* MWDevelopment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDevelopment.h; path = General/MWDevelopment.h; sourceTree = "<group>"; };
+		A706571B1A4463D600B8D21D /* MWDevelopment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDevelopment.m; path = General/MWDevelopment.m; sourceTree = "<group>"; };
+		A706571C1A4463D600B8D21D /* MWDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDownload.h; path = General/MWDownload.h; sourceTree = "<group>"; };
+		A706571D1A4463D600B8D21D /* MWDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDownload.m; path = General/MWDownload.m; sourceTree = "<group>"; };
+		A706571E1A4463D600B8D21D /* MWLanguage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWLanguage.h; path = General/MWLanguage.h; sourceTree = "<group>"; };
+		A706571F1A4463D600B8D21D /* MWLanguage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWLanguage.m; path = General/MWLanguage.m; sourceTree = "<group>"; };
+		A70657201A4463D600B8D21D /* MWList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWList.h; path = General/MWList.h; sourceTree = "<group>"; };
+		A70657211A4463D600B8D21D /* MWList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWList.m; path = General/MWList.m; sourceTree = "<group>"; };
+		A70657221A4463D600B8D21D /* MWListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWListItem.h; path = General/MWListItem.h; sourceTree = "<group>"; };
+		A70657231A4463D600B8D21D /* MWListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWListItem.m; path = General/MWListItem.m; sourceTree = "<group>"; };
+		A70657241A4463D600B8D21D /* MWLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWLocation.h; path = General/MWLocation.h; sourceTree = "<group>"; };
+		A70657251A4463D600B8D21D /* MWLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWLocation.m; path = General/MWLocation.m; sourceTree = "<group>"; };
+		A70657261A4463D600B8D21D /* MWMetroMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWMetroMap.h; path = General/MWMetroMap.h; sourceTree = "<group>"; };
+		A70657271A4463D600B8D21D /* MWMetroMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWMetroMap.m; path = General/MWMetroMap.m; sourceTree = "<group>"; };
+		A70657281A4463D600B8D21D /* MWRouteItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWRouteItem.h; path = General/MWRouteItem.h; sourceTree = "<group>"; };
+		A70657291A4463D600B8D21D /* MWRouteItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWRouteItem.m; path = General/MWRouteItem.m; sourceTree = "<group>"; };
+		A706572A1A4463D600B8D21D /* MWRouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWRouter.h; path = General/MWRouter.h; sourceTree = "<group>"; };
+		A706572B1A4463D600B8D21D /* MWRouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWRouter.m; path = General/MWRouter.m; sourceTree = "<group>"; };
+		A706572C1A4463D600B8D21D /* MWRouteStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWRouteStorage.h; path = General/MWRouteStorage.h; sourceTree = "<group>"; };
+		A706572D1A4463D600B8D21D /* MWRouteStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWRouteStorage.m; path = General/MWRouteStorage.m; sourceTree = "<group>"; };
+		A706572E1A4463D600B8D21D /* MWSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWSettings.h; path = General/MWSettings.h; sourceTree = "<group>"; };
+		A706572F1A4463D600B8D21D /* MWSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWSettings.m; path = General/MWSettings.m; sourceTree = "<group>"; };
+		A70657301A4463D600B8D21D /* MWStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWStorage.h; path = General/MWStorage.h; sourceTree = "<group>"; };
+		A70657311A4463D600B8D21D /* MWStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWStorage.m; path = General/MWStorage.m; sourceTree = "<group>"; };
+		A70657321A4463D600B8D21D /* MWUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWUpload.h; path = General/MWUpload.h; sourceTree = "<group>"; };
+		A70657331A4463D600B8D21D /* MWUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWUpload.m; path = General/MWUpload.m; sourceTree = "<group>"; };
+		A70657421A44648500B8D21D /* MWEdge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWEdge.h; path = Graph/MWEdge.h; sourceTree = "<group>"; };
+		A70657431A44648500B8D21D /* MWEdge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWEdge.m; path = Graph/MWEdge.m; sourceTree = "<group>"; };
+		A70657441A44648500B8D21D /* MWHaul.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWHaul.h; path = Graph/MWHaul.h; sourceTree = "<group>"; };
+		A70657451A44648500B8D21D /* MWHaul.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWHaul.m; path = Graph/MWHaul.m; sourceTree = "<group>"; };
+		A70657461A44648500B8D21D /* MWLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWLine.h; path = Graph/MWLine.h; sourceTree = "<group>"; };
+		A70657471A44648500B8D21D /* MWLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWLine.m; path = Graph/MWLine.m; sourceTree = "<group>"; };
+		A70657481A44648500B8D21D /* MWStation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWStation.h; path = Graph/MWStation.h; sourceTree = "<group>"; };
+		A70657491A44648500B8D21D /* MWStation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWStation.m; path = Graph/MWStation.m; sourceTree = "<group>"; };
+		A706574A1A44648500B8D21D /* MWVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWVertex.h; path = Graph/MWVertex.h; sourceTree = "<group>"; };
+		A706574B1A44648500B8D21D /* MWVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWVertex.m; path = Graph/MWVertex.m; sourceTree = "<group>"; };
+		A70657521A4464A800B8D21D /* MWBaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWBaseTableViewCell.h; path = Draw/MWBaseTableViewCell.h; sourceTree = "<group>"; };
+		A70657531A4464A800B8D21D /* MWBaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWBaseTableViewCell.m; path = Draw/MWBaseTableViewCell.m; sourceTree = "<group>"; };
+		A70657541A4464A800B8D21D /* MWDownloadStatusButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDownloadStatusButton.h; path = Draw/MWDownloadStatusButton.h; sourceTree = "<group>"; };
+		A70657551A4464A800B8D21D /* MWDownloadStatusButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDownloadStatusButton.m; path = Draw/MWDownloadStatusButton.m; sourceTree = "<group>"; };
+		A70657561A4464A800B8D21D /* MWDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDraw.h; path = Draw/MWDraw.h; sourceTree = "<group>"; };
+		A70657571A4464A800B8D21D /* MWDraw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDraw.m; path = Draw/MWDraw.m; sourceTree = "<group>"; };
+		A70657581A4464A800B8D21D /* MWDrawArc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDrawArc.h; path = Draw/MWDrawArc.h; sourceTree = "<group>"; };
+		A70657591A4464A800B8D21D /* MWDrawArc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDrawArc.m; path = Draw/MWDrawArc.m; sourceTree = "<group>"; };
+		A706575A1A4464A800B8D21D /* MWDrawFillCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDrawFillCircle.h; path = Draw/MWDrawFillCircle.h; sourceTree = "<group>"; };
+		A706575B1A4464A800B8D21D /* MWDrawFillCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDrawFillCircle.m; path = Draw/MWDrawFillCircle.m; sourceTree = "<group>"; };
+		A706575C1A4464A800B8D21D /* MWDrawGradientArc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDrawGradientArc.h; path = Draw/MWDrawGradientArc.h; sourceTree = "<group>"; };
+		A706575D1A4464A800B8D21D /* MWDrawGradientArc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDrawGradientArc.m; path = Draw/MWDrawGradientArc.m; sourceTree = "<group>"; };
+		A706575E1A4464A800B8D21D /* MWDrawGradientRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDrawGradientRect.h; path = Draw/MWDrawGradientRect.h; sourceTree = "<group>"; };
+		A706575F1A4464A800B8D21D /* MWDrawGradientRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDrawGradientRect.m; path = Draw/MWDrawGradientRect.m; sourceTree = "<group>"; };
+		A70657601A4464A800B8D21D /* MWDrawLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDrawLine.h; path = Draw/MWDrawLine.h; sourceTree = "<group>"; };
+		A70657611A4464A800B8D21D /* MWDrawLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDrawLine.m; path = Draw/MWDrawLine.m; sourceTree = "<group>"; };
+		A70657621A4464A800B8D21D /* MWDrawRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDrawRoundedRect.h; path = Draw/MWDrawRoundedRect.h; sourceTree = "<group>"; };
+		A70657631A4464A800B8D21D /* MWDrawRoundedRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDrawRoundedRect.m; path = Draw/MWDrawRoundedRect.m; sourceTree = "<group>"; };
+		A70657641A4464A800B8D21D /* MWDrawTextLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWDrawTextLine.h; path = Draw/MWDrawTextLine.h; sourceTree = "<group>"; };
+		A70657651A4464A800B8D21D /* MWDrawTextLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWDrawTextLine.m; path = Draw/MWDrawTextLine.m; sourceTree = "<group>"; };
+		A70657661A4464A800B8D21D /* MWMapTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWMapTableViewCell.h; path = Draw/MWMapTableViewCell.h; sourceTree = "<group>"; };
+		A70657671A4464A800B8D21D /* MWMapTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWMapTableViewCell.m; path = Draw/MWMapTableViewCell.m; sourceTree = "<group>"; };
+		A70657681A4464A800B8D21D /* MWRouteButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWRouteButton.h; path = Draw/MWRouteButton.h; sourceTree = "<group>"; };
+		A70657691A4464A800B8D21D /* MWRouteButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWRouteButton.m; path = Draw/MWRouteButton.m; sourceTree = "<group>"; };
+		A706576A1A4464A800B8D21D /* MWViewRouteR14.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWViewRouteR14.h; path = Draw/MWViewRouteR14.h; sourceTree = "<group>"; };
+		A706576B1A4464A800B8D21D /* MWViewRouteR14.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWViewRouteR14.m; path = Draw/MWViewRouteR14.m; sourceTree = "<group>"; };
+		A706576C1A4464A800B8D21D /* MWViewStationCircleR14.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWViewStationCircleR14.h; path = Draw/MWViewStationCircleR14.h; sourceTree = "<group>"; };
+		A706576D1A4464A800B8D21D /* MWViewStationCircleR14.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWViewStationCircleR14.m; path = Draw/MWViewStationCircleR14.m; sourceTree = "<group>"; };
+		A706577D1A4464CF00B8D21D /* MWMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWMenuViewController.h; path = Screens/MWMenuViewController.h; sourceTree = "<group>"; };
+		A706577E1A4464CF00B8D21D /* MWMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWMenuViewController.m; path = Screens/MWMenuViewController.m; sourceTree = "<group>"; };
+		A706577F1A4464CF00B8D21D /* MWMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MWMenuViewController.xib; path = Screens/MWMenuViewController.xib; sourceTree = "<group>"; };
+		A70657801A4464CF00B8D21D /* MWMetroMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWMetroMapViewController.h; path = Screens/MWMetroMapViewController.h; sourceTree = "<group>"; };
+		A70657811A4464CF00B8D21D /* MWMetroMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWMetroMapViewController.m; path = Screens/MWMetroMapViewController.m; sourceTree = "<group>"; };
+		A70657821A4464CF00B8D21D /* MWMetroMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MWMetroMapViewController.xib; path = Screens/MWMetroMapViewController.xib; sourceTree = "<group>"; };
+		A70657831A4464CF00B8D21D /* MWSearchStationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWSearchStationViewController.h; path = Screens/MWSearchStationViewController.h; sourceTree = "<group>"; };
+		A70657841A4464CF00B8D21D /* MWSearchStationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWSearchStationViewController.m; path = Screens/MWSearchStationViewController.m; sourceTree = "<group>"; };
+		A70657851A4464CF00B8D21D /* MWSearchStationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MWSearchStationViewController.xib; path = Screens/MWSearchStationViewController.xib; sourceTree = "<group>"; };
+		A70657861A4464CF00B8D21D /* MWSelectLanguageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWSelectLanguageViewController.h; path = Screens/MWSelectLanguageViewController.h; sourceTree = "<group>"; };
+		A70657871A4464CF00B8D21D /* MWSelectLanguageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWSelectLanguageViewController.m; path = Screens/MWSelectLanguageViewController.m; sourceTree = "<group>"; };
+		A70657881A4464CF00B8D21D /* MWSelectLanguageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MWSelectLanguageViewController.xib; path = Screens/MWSelectLanguageViewController.xib; sourceTree = "<group>"; };
+		A70657891A4464CF00B8D21D /* MWSelectMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWSelectMapViewController.h; path = Screens/MWSelectMapViewController.h; sourceTree = "<group>"; };
+		A706578A1A4464CF00B8D21D /* MWSelectMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWSelectMapViewController.m; path = Screens/MWSelectMapViewController.m; sourceTree = "<group>"; };
+		A706578B1A4464CF00B8D21D /* MWSelectMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MWSelectMapViewController.xib; path = Screens/MWSelectMapViewController.xib; sourceTree = "<group>"; };
+		A706578C1A4464CF00B8D21D /* MWSelectSortViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWSelectSortViewController.h; path = Screens/MWSelectSortViewController.h; sourceTree = "<group>"; };
+		A706578D1A4464CF00B8D21D /* MWSelectSortViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWSelectSortViewController.m; path = Screens/MWSelectSortViewController.m; sourceTree = "<group>"; };
+		A706578F1A4464CF00B8D21D /* MWStationListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWStationListViewController.h; path = Screens/MWStationListViewController.h; sourceTree = "<group>"; };
+		A70657901A4464CF00B8D21D /* MWStationListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWStationListViewController.m; path = Screens/MWStationListViewController.m; sourceTree = "<group>"; };
+		A70657911A4464CF00B8D21D /* MWStationListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MWStationListViewController.xib; path = Screens/MWStationListViewController.xib; sourceTree = "<group>"; };
+		A70657A11A4464F300B8D21D /* CloseBlack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CloseBlack.png; path = Images/CloseBlack.png; sourceTree = "<group>"; };
+		A70657A21A4464F300B8D21D /* CloseGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CloseGray.png; path = Images/CloseGray.png; sourceTree = "<group>"; };
+		A70657A31A4464F300B8D21D /* CloseWhite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CloseWhite.png; path = Images/CloseWhite.png; sourceTree = "<group>"; };
+		A70657A41A4464F300B8D21D /* Delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Delete.png; path = Images/Delete.png; sourceTree = "<group>"; };
+		A70657A51A4464F300B8D21D /* Download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Download.png; path = Images/Download.png; sourceTree = "<group>"; };
+		A70657A61A4464F300B8D21D /* grid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = grid.png; path = Images/grid.png; sourceTree = "<group>"; };
+		A70657A71A4464F300B8D21D /* List1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = List1.png; path = Images/List1.png; sourceTree = "<group>"; };
+		A70657A81A4464F300B8D21D /* List2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = List2.png; path = Images/List2.png; sourceTree = "<group>"; };
+		A70657A91A4464F300B8D21D /* Magnifier.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Magnifier.png; path = Images/Magnifier.png; sourceTree = "<group>"; };
+		A70657AA1A4464F300B8D21D /* Map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Map.png; path = Images/Map.png; sourceTree = "<group>"; };
+		A70657AB1A4464F300B8D21D /* Menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Menu.png; path = Images/Menu.png; sourceTree = "<group>"; };
+		A70657AC1A4464F300B8D21D /* SearchBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SearchBackground.png; path = Images/SearchBackground.png; sourceTree = "<group>"; };
+		A70657AD1A4464F300B8D21D /* StarCheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = StarCheck.png; path = Images/StarCheck.png; sourceTree = "<group>"; };
+		A70657AE1A4464F300B8D21D /* StarOff.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = StarOff.png; path = Images/StarOff.png; sourceTree = "<group>"; };
+		A70657AF1A4464F300B8D21D /* StarOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = StarOn.png; path = Images/StarOn.png; sourceTree = "<group>"; };
+		A70657B01A4464F300B8D21D /* Update.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Update.png; path = Images/Update.png; sourceTree = "<group>"; };
+		A70657C31A44652000B8D21D /* belo_horizonte_metro_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = belo_horizonte_metro_background.png; path = Locations/Brazil/belo_horizonte_metro_background.png; sourceTree = "<group>"; };
+		A70657C41A44652000B8D21D /* MWBeloHorizonteMetro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWBeloHorizonteMetro.h; path = Locations/Brazil/MWBeloHorizonteMetro.h; sourceTree = "<group>"; };
+		A70657C51A44652000B8D21D /* MWBeloHorizonteMetro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWBeloHorizonteMetro.m; path = Locations/Brazil/MWBeloHorizonteMetro.m; sourceTree = "<group>"; };
+		A70657C61A44652000B8D21D /* MWPortoAlegreMetro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWPortoAlegreMetro.h; path = Locations/Brazil/MWPortoAlegreMetro.h; sourceTree = "<group>"; };
+		A70657C71A44652000B8D21D /* MWPortoAlegreMetro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWPortoAlegreMetro.m; path = Locations/Brazil/MWPortoAlegreMetro.m; sourceTree = "<group>"; };
+		A70657C81A44652000B8D21D /* porto_alegre_metro_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = porto_alegre_metro_background.png; path = Locations/Brazil/porto_alegre_metro_background.png; sourceTree = "<group>"; };
+		A70657CE1A44654000B8D21D /* MWTorontoSubway.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWTorontoSubway.h; path = Locations/Canada/MWTorontoSubway.h; sourceTree = "<group>"; };
+		A70657CF1A44654000B8D21D /* MWTorontoSubway.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWTorontoSubway.m; path = Locations/Canada/MWTorontoSubway.m; sourceTree = "<group>"; };
+		A70657D01A44654000B8D21D /* toronto_subway_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = toronto_subway_background.png; path = Locations/Canada/toronto_subway_background.png; sourceTree = "<group>"; };
+		A70657D41A44656000B8D21D /* MWWuhanMetro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWWuhanMetro.h; path = Locations/China/MWWuhanMetro.h; sourceTree = "<group>"; };
+		A70657D51A44656000B8D21D /* MWWuhanMetro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWWuhanMetro.m; path = Locations/China/MWWuhanMetro.m; sourceTree = "<group>"; };
+		A70657D61A44656000B8D21D /* wuhan_metro_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = wuhan_metro_background.png; path = Locations/China/wuhan_metro_background.png; sourceTree = "<group>"; };
+		A70657DA1A44658100B8D21D /* medellin_metro_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = medellin_metro_background.png; path = Locations/Colombia/medellin_metro_background.png; sourceTree = "<group>"; };
+		A70657DB1A44658100B8D21D /* MWMedellinMetro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWMedellinMetro.h; path = Locations/Colombia/MWMedellinMetro.h; sourceTree = "<group>"; };
+		A70657DC1A44658100B8D21D /* MWMedellinMetro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWMedellinMetro.m; path = Locations/Colombia/MWMedellinMetro.m; sourceTree = "<group>"; };
+		A70657E01A4465A300B8D21D /* kyoto_subway_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = kyoto_subway_background.png; path = Locations/Japan/kyoto_subway_background.png; sourceTree = "<group>"; };
+		A70657E11A4465A300B8D21D /* MWKyotoSubway.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWKyotoSubway.h; path = Locations/Japan/MWKyotoSubway.h; sourceTree = "<group>"; };
+		A70657E21A4465A300B8D21D /* MWKyotoSubway.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWKyotoSubway.m; path = Locations/Japan/MWKyotoSubway.m; sourceTree = "<group>"; };
+		A70657E31A4465A300B8D21D /* MWYokohamaSubway.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWYokohamaSubway.h; path = Locations/Japan/MWYokohamaSubway.h; sourceTree = "<group>"; };
+		A70657E41A4465A300B8D21D /* MWYokohamaSubway.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWYokohamaSubway.m; path = Locations/Japan/MWYokohamaSubway.m; sourceTree = "<group>"; };
+		A70657E51A4465A300B8D21D /* yokohama_subway_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = yokohama_subway_background.png; path = Locations/Japan/yokohama_subway_background.png; sourceTree = "<group>"; };
+		A70657EB1A4465CA00B8D21D /* amsterdam_metro_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = amsterdam_metro_background.png; path = Locations/Netherlands/amsterdam_metro_background.png; sourceTree = "<group>"; };
+		A70657EC1A4465CA00B8D21D /* MWAmsterdamMetro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWAmsterdamMetro.h; path = Locations/Netherlands/MWAmsterdamMetro.h; sourceTree = "<group>"; };
+		A70657ED1A4465CA00B8D21D /* MWAmsterdamMetro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWAmsterdamMetro.m; path = Locations/Netherlands/MWAmsterdamMetro.m; sourceTree = "<group>"; };
+		A70657F11A4465E200B8D21D /* MWMoscowMetro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWMoscowMetro.h; path = Locations/Russia/MWMoscowMetro.h; sourceTree = "<group>"; };
+		A70657F21A4465E200B8D21D /* MWMoscowMetro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWMoscowMetro.m; path = Locations/Russia/MWMoscowMetro.m; sourceTree = "<group>"; };
+		A70657F31A4465E200B8D21D /* MWNizhnyNovgorodMetro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWNizhnyNovgorodMetro.h; path = Locations/Russia/MWNizhnyNovgorodMetro.h; sourceTree = "<group>"; };
+		A70657F41A4465E200B8D21D /* MWNizhnyNovgorodMetro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWNizhnyNovgorodMetro.m; path = Locations/Russia/MWNizhnyNovgorodMetro.m; sourceTree = "<group>"; };
+		A70657F51A4465E200B8D21D /* MWYekaterinburgMetro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWYekaterinburgMetro.h; path = Locations/Russia/MWYekaterinburgMetro.h; sourceTree = "<group>"; };
+		A70657F61A4465E200B8D21D /* MWYekaterinburgMetro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWYekaterinburgMetro.m; path = Locations/Russia/MWYekaterinburgMetro.m; sourceTree = "<group>"; };
+		A70657F71A4465E200B8D21D /* moscow_metro_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = moscow_metro_background.png; path = Locations/Russia/moscow_metro_background.png; sourceTree = "<group>"; };
+		A70657F81A4465E200B8D21D /* nizhny_novgorod_metro_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = nizhny_novgorod_metro_background.png; path = Locations/Russia/nizhny_novgorod_metro_background.png; sourceTree = "<group>"; };
+		A70657F91A4465E200B8D21D /* yekaterinburg_metro_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = yekaterinburg_metro_background.png; path = Locations/Russia/yekaterinburg_metro_background.png; sourceTree = "<group>"; };
+		A70658011A4465FE00B8D21D /* bangkok_airport_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bangkok_airport_background.png; path = Locations/Thailand/bangkok_airport_background.png; sourceTree = "<group>"; };
+		A70658021A4465FE00B8D21D /* MWBangkokAirport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWBangkokAirport.h; path = Locations/Thailand/MWBangkokAirport.h; sourceTree = "<group>"; };
+		A70658031A4465FE00B8D21D /* MWBangkokAirport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWBangkokAirport.m; path = Locations/Thailand/MWBangkokAirport.m; sourceTree = "<group>"; };
+		A70658071A44661400B8D21D /* boston_subway_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = boston_subway_background.png; path = Locations/USA/boston_subway_background.png; sourceTree = "<group>"; };
+		A70658081A44661400B8D21D /* los_angeles_metro_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = los_angeles_metro_background.png; path = Locations/USA/los_angeles_metro_background.png; sourceTree = "<group>"; };
+		A70658091A44661400B8D21D /* MWBostonSubway.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWBostonSubway.h; path = Locations/USA/MWBostonSubway.h; sourceTree = "<group>"; };
+		A706580A1A44661400B8D21D /* MWBostonSubway.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWBostonSubway.m; path = Locations/USA/MWBostonSubway.m; sourceTree = "<group>"; };
+		A706580B1A44661400B8D21D /* MWLosAngelesMetro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MWLosAngelesMetro.h; path = Locations/USA/MWLosAngelesMetro.h; sourceTree = "<group>"; };
+		A706580C1A44661400B8D21D /* MWLosAngelesMetro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MWLosAngelesMetro.m; path = Locations/USA/MWLosAngelesMetro.m; sourceTree = "<group>"; };
+		A744F1C21A4479040078B0E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A744F1C41A4479110078B0E3 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A744F1C51A4479C50078B0E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MWSelectSortViewController.xib; sourceTree = "<group>"; };
+		A744F1C61A447DD50078B0E3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		A744F1C81A4494C10078B0E3 /* libFlurry_6.0.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFlurry_6.0.0.a; path = Frameworks/Flurry/libFlurry_6.0.0.a; sourceTree = "<group>"; };
+		A744F1CA1A4494D50078B0E3 /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Flurry.h; path = Frameworks/Flurry/Flurry.h; sourceTree = "<group>"; };
+		A7BDC9471A445164008F2645 /* MetroWay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetroWay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7BDC94B1A445164008F2645 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7BDC94C1A445164008F2645 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A7BDC94E1A445164008F2645 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A7BDC94F1A445164008F2645 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A7BDC9571A445164008F2645 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		A7BDC9601A445164008F2645 /* MetroWayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MetroWayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7BDC9651A445164008F2645 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7BDC9661A445164008F2645 /* MetroWayTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MetroWayTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A7BDC9441A445164008F2645 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A744F1C91A4494C10078B0E3 /* libFlurry_6.0.0.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7BDC95D1A445164008F2645 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A70657161A44636000B8D21D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A744F1C81A4494C10078B0E3 /* libFlurry_6.0.0.a */,
+				A744F1CA1A4494D50078B0E3 /* Flurry.h */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A70657191A4463BD00B8D21D /* General */ = {
+			isa = PBXGroup;
+			children = (
+				A706571A1A4463D600B8D21D /* MWDevelopment.h */,
+				A706571B1A4463D600B8D21D /* MWDevelopment.m */,
+				A706571C1A4463D600B8D21D /* MWDownload.h */,
+				A706571D1A4463D600B8D21D /* MWDownload.m */,
+				A706571E1A4463D600B8D21D /* MWLanguage.h */,
+				A706571F1A4463D600B8D21D /* MWLanguage.m */,
+				A70657201A4463D600B8D21D /* MWList.h */,
+				A70657211A4463D600B8D21D /* MWList.m */,
+				A70657221A4463D600B8D21D /* MWListItem.h */,
+				A70657231A4463D600B8D21D /* MWListItem.m */,
+				A70657241A4463D600B8D21D /* MWLocation.h */,
+				A70657251A4463D600B8D21D /* MWLocation.m */,
+				A70657261A4463D600B8D21D /* MWMetroMap.h */,
+				A70657271A4463D600B8D21D /* MWMetroMap.m */,
+				A70657281A4463D600B8D21D /* MWRouteItem.h */,
+				A70657291A4463D600B8D21D /* MWRouteItem.m */,
+				A706572A1A4463D600B8D21D /* MWRouter.h */,
+				A706572B1A4463D600B8D21D /* MWRouter.m */,
+				A706572C1A4463D600B8D21D /* MWRouteStorage.h */,
+				A706572D1A4463D600B8D21D /* MWRouteStorage.m */,
+				A706572E1A4463D600B8D21D /* MWSettings.h */,
+				A706572F1A4463D600B8D21D /* MWSettings.m */,
+				A70657301A4463D600B8D21D /* MWStorage.h */,
+				A70657311A4463D600B8D21D /* MWStorage.m */,
+				A70657321A4463D600B8D21D /* MWUpload.h */,
+				A70657331A4463D600B8D21D /* MWUpload.m */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
+		A70657411A44647400B8D21D /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				A70657421A44648500B8D21D /* MWEdge.h */,
+				A70657431A44648500B8D21D /* MWEdge.m */,
+				A70657441A44648500B8D21D /* MWHaul.h */,
+				A70657451A44648500B8D21D /* MWHaul.m */,
+				A70657461A44648500B8D21D /* MWLine.h */,
+				A70657471A44648500B8D21D /* MWLine.m */,
+				A70657481A44648500B8D21D /* MWStation.h */,
+				A70657491A44648500B8D21D /* MWStation.m */,
+				A706574A1A44648500B8D21D /* MWVertex.h */,
+				A706574B1A44648500B8D21D /* MWVertex.m */,
+			);
+			name = Graph;
+			sourceTree = "<group>";
+		};
+		A70657511A44649300B8D21D /* Draw */ = {
+			isa = PBXGroup;
+			children = (
+				A70657521A4464A800B8D21D /* MWBaseTableViewCell.h */,
+				A70657531A4464A800B8D21D /* MWBaseTableViewCell.m */,
+				A70657541A4464A800B8D21D /* MWDownloadStatusButton.h */,
+				A70657551A4464A800B8D21D /* MWDownloadStatusButton.m */,
+				A70657561A4464A800B8D21D /* MWDraw.h */,
+				A70657571A4464A800B8D21D /* MWDraw.m */,
+				A70657581A4464A800B8D21D /* MWDrawArc.h */,
+				A70657591A4464A800B8D21D /* MWDrawArc.m */,
+				A706575A1A4464A800B8D21D /* MWDrawFillCircle.h */,
+				A706575B1A4464A800B8D21D /* MWDrawFillCircle.m */,
+				A706575C1A4464A800B8D21D /* MWDrawGradientArc.h */,
+				A706575D1A4464A800B8D21D /* MWDrawGradientArc.m */,
+				A706575E1A4464A800B8D21D /* MWDrawGradientRect.h */,
+				A706575F1A4464A800B8D21D /* MWDrawGradientRect.m */,
+				A70657601A4464A800B8D21D /* MWDrawLine.h */,
+				A70657611A4464A800B8D21D /* MWDrawLine.m */,
+				A70657621A4464A800B8D21D /* MWDrawRoundedRect.h */,
+				A70657631A4464A800B8D21D /* MWDrawRoundedRect.m */,
+				A70657641A4464A800B8D21D /* MWDrawTextLine.h */,
+				A70657651A4464A800B8D21D /* MWDrawTextLine.m */,
+				A70657661A4464A800B8D21D /* MWMapTableViewCell.h */,
+				A70657671A4464A800B8D21D /* MWMapTableViewCell.m */,
+				A70657681A4464A800B8D21D /* MWRouteButton.h */,
+				A70657691A4464A800B8D21D /* MWRouteButton.m */,
+				A706576A1A4464A800B8D21D /* MWViewRouteR14.h */,
+				A706576B1A4464A800B8D21D /* MWViewRouteR14.m */,
+				A706576C1A4464A800B8D21D /* MWViewStationCircleR14.h */,
+				A706576D1A4464A800B8D21D /* MWViewStationCircleR14.m */,
+			);
+			name = Draw;
+			sourceTree = "<group>";
+		};
+		A706577C1A4464B400B8D21D /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				A706577D1A4464CF00B8D21D /* MWMenuViewController.h */,
+				A706577E1A4464CF00B8D21D /* MWMenuViewController.m */,
+				A706577F1A4464CF00B8D21D /* MWMenuViewController.xib */,
+				A70657801A4464CF00B8D21D /* MWMetroMapViewController.h */,
+				A70657811A4464CF00B8D21D /* MWMetroMapViewController.m */,
+				A70657821A4464CF00B8D21D /* MWMetroMapViewController.xib */,
+				A70657831A4464CF00B8D21D /* MWSearchStationViewController.h */,
+				A70657841A4464CF00B8D21D /* MWSearchStationViewController.m */,
+				A70657851A4464CF00B8D21D /* MWSearchStationViewController.xib */,
+				A70657861A4464CF00B8D21D /* MWSelectLanguageViewController.h */,
+				A70657871A4464CF00B8D21D /* MWSelectLanguageViewController.m */,
+				A70657881A4464CF00B8D21D /* MWSelectLanguageViewController.xib */,
+				A70657891A4464CF00B8D21D /* MWSelectMapViewController.h */,
+				A706578A1A4464CF00B8D21D /* MWSelectMapViewController.m */,
+				A706578B1A4464CF00B8D21D /* MWSelectMapViewController.xib */,
+				A706578C1A4464CF00B8D21D /* MWSelectSortViewController.h */,
+				A706578D1A4464CF00B8D21D /* MWSelectSortViewController.m */,
+				A70658131A44672000B8D21D /* MWSelectSortViewController.xib */,
+				A706578F1A4464CF00B8D21D /* MWStationListViewController.h */,
+				A70657901A4464CF00B8D21D /* MWStationListViewController.m */,
+				A70657911A4464CF00B8D21D /* MWStationListViewController.xib */,
+			);
+			name = Screens;
+			sourceTree = "<group>";
+		};
+		A70657A01A4464E000B8D21D /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				A70657A11A4464F300B8D21D /* CloseBlack.png */,
+				A70657A21A4464F300B8D21D /* CloseGray.png */,
+				A70657A31A4464F300B8D21D /* CloseWhite.png */,
+				A70657A41A4464F300B8D21D /* Delete.png */,
+				A70657A51A4464F300B8D21D /* Download.png */,
+				A70657A61A4464F300B8D21D /* grid.png */,
+				A70657A71A4464F300B8D21D /* List1.png */,
+				A70657A81A4464F300B8D21D /* List2.png */,
+				A70657A91A4464F300B8D21D /* Magnifier.png */,
+				A70657AA1A4464F300B8D21D /* Map.png */,
+				A70657AB1A4464F300B8D21D /* Menu.png */,
+				A70657AC1A4464F300B8D21D /* SearchBackground.png */,
+				A70657AD1A4464F300B8D21D /* StarCheck.png */,
+				A70657AE1A4464F300B8D21D /* StarOff.png */,
+				A70657AF1A4464F300B8D21D /* StarOn.png */,
+				A70657B01A4464F300B8D21D /* Update.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		A70657C11A44650200B8D21D /* Locations */ = {
+			isa = PBXGroup;
+			children = (
+				A70657C21A44651100B8D21D /* Brazil */,
+				A70657CD1A44652900B8D21D /* Canada */,
+				A70657D31A44654A00B8D21D /* China */,
+				A70657D91A44656A00B8D21D /* Colombia */,
+				A70657DF1A44658C00B8D21D /* Japan */,
+				A70657EA1A4465AF00B8D21D /* Netherlands */,
+				A70657F01A4465D100B8D21D /* Russia */,
+				A70658001A4465E700B8D21D /* Thailand */,
+				A70658061A44660400B8D21D /* USA */,
+			);
+			name = Locations;
+			sourceTree = "<group>";
+		};
+		A70657C21A44651100B8D21D /* Brazil */ = {
+			isa = PBXGroup;
+			children = (
+				A70657C31A44652000B8D21D /* belo_horizonte_metro_background.png */,
+				A70657C41A44652000B8D21D /* MWBeloHorizonteMetro.h */,
+				A70657C51A44652000B8D21D /* MWBeloHorizonteMetro.m */,
+				A70657C61A44652000B8D21D /* MWPortoAlegreMetro.h */,
+				A70657C71A44652000B8D21D /* MWPortoAlegreMetro.m */,
+				A70657C81A44652000B8D21D /* porto_alegre_metro_background.png */,
+			);
+			name = Brazil;
+			sourceTree = "<group>";
+		};
+		A70657CD1A44652900B8D21D /* Canada */ = {
+			isa = PBXGroup;
+			children = (
+				A70657CE1A44654000B8D21D /* MWTorontoSubway.h */,
+				A70657CF1A44654000B8D21D /* MWTorontoSubway.m */,
+				A70657D01A44654000B8D21D /* toronto_subway_background.png */,
+			);
+			name = Canada;
+			sourceTree = "<group>";
+		};
+		A70657D31A44654A00B8D21D /* China */ = {
+			isa = PBXGroup;
+			children = (
+				A70657D41A44656000B8D21D /* MWWuhanMetro.h */,
+				A70657D51A44656000B8D21D /* MWWuhanMetro.m */,
+				A70657D61A44656000B8D21D /* wuhan_metro_background.png */,
+			);
+			name = China;
+			sourceTree = "<group>";
+		};
+		A70657D91A44656A00B8D21D /* Colombia */ = {
+			isa = PBXGroup;
+			children = (
+				A70657DA1A44658100B8D21D /* medellin_metro_background.png */,
+				A70657DB1A44658100B8D21D /* MWMedellinMetro.h */,
+				A70657DC1A44658100B8D21D /* MWMedellinMetro.m */,
+			);
+			name = Colombia;
+			sourceTree = "<group>";
+		};
+		A70657DF1A44658C00B8D21D /* Japan */ = {
+			isa = PBXGroup;
+			children = (
+				A70657E01A4465A300B8D21D /* kyoto_subway_background.png */,
+				A70657E11A4465A300B8D21D /* MWKyotoSubway.h */,
+				A70657E21A4465A300B8D21D /* MWKyotoSubway.m */,
+				A70657E31A4465A300B8D21D /* MWYokohamaSubway.h */,
+				A70657E41A4465A300B8D21D /* MWYokohamaSubway.m */,
+				A70657E51A4465A300B8D21D /* yokohama_subway_background.png */,
+			);
+			name = Japan;
+			sourceTree = "<group>";
+		};
+		A70657EA1A4465AF00B8D21D /* Netherlands */ = {
+			isa = PBXGroup;
+			children = (
+				A70657EB1A4465CA00B8D21D /* amsterdam_metro_background.png */,
+				A70657EC1A4465CA00B8D21D /* MWAmsterdamMetro.h */,
+				A70657ED1A4465CA00B8D21D /* MWAmsterdamMetro.m */,
+			);
+			name = Netherlands;
+			sourceTree = "<group>";
+		};
+		A70657F01A4465D100B8D21D /* Russia */ = {
+			isa = PBXGroup;
+			children = (
+				A70657F11A4465E200B8D21D /* MWMoscowMetro.h */,
+				A70657F21A4465E200B8D21D /* MWMoscowMetro.m */,
+				A70657F31A4465E200B8D21D /* MWNizhnyNovgorodMetro.h */,
+				A70657F41A4465E200B8D21D /* MWNizhnyNovgorodMetro.m */,
+				A70657F51A4465E200B8D21D /* MWYekaterinburgMetro.h */,
+				A70657F61A4465E200B8D21D /* MWYekaterinburgMetro.m */,
+				A70657F71A4465E200B8D21D /* moscow_metro_background.png */,
+				A70657F81A4465E200B8D21D /* nizhny_novgorod_metro_background.png */,
+				A70657F91A4465E200B8D21D /* yekaterinburg_metro_background.png */,
+			);
+			name = Russia;
+			sourceTree = "<group>";
+		};
+		A70658001A4465E700B8D21D /* Thailand */ = {
+			isa = PBXGroup;
+			children = (
+				A70658011A4465FE00B8D21D /* bangkok_airport_background.png */,
+				A70658021A4465FE00B8D21D /* MWBangkokAirport.h */,
+				A70658031A4465FE00B8D21D /* MWBangkokAirport.m */,
+			);
+			name = Thailand;
+			sourceTree = "<group>";
+		};
+		A70658061A44660400B8D21D /* USA */ = {
+			isa = PBXGroup;
+			children = (
+				A70658081A44661400B8D21D /* los_angeles_metro_background.png */,
+				A706580B1A44661400B8D21D /* MWLosAngelesMetro.h */,
+				A706580C1A44661400B8D21D /* MWLosAngelesMetro.m */,
+				A70658071A44661400B8D21D /* boston_subway_background.png */,
+				A70658091A44661400B8D21D /* MWBostonSubway.h */,
+				A706580A1A44661400B8D21D /* MWBostonSubway.m */,
+			);
+			name = USA;
+			sourceTree = "<group>";
+		};
+		A7BDC93E1A445164008F2645 = {
+			isa = PBXGroup;
+			children = (
+				A744F1C61A447DD50078B0E3 /* Default-568h@2x.png */,
+				A7BDC9491A445164008F2645 /* MetroWay */,
+				A7BDC9631A445164008F2645 /* MetroWayTests */,
+				A7BDC9481A445164008F2645 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A7BDC9481A445164008F2645 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A7BDC9471A445164008F2645 /* MetroWay.app */,
+				A7BDC9601A445164008F2645 /* MetroWayTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A7BDC9491A445164008F2645 /* MetroWay */ = {
+			isa = PBXGroup;
+			children = (
+				A706570C1A4461A700B8D21D /* ToDo.rtf */,
+				A744F1C31A4479040078B0E3 /* Localizable.strings */,
+				A706570E1A44620E00B8D21D /* MWAppDelegate.h */,
+				A706570F1A44620E00B8D21D /* MWAppDelegate.m */,
+				A7BDC94E1A445164008F2645 /* AppDelegate.h */,
+				A7BDC94F1A445164008F2645 /* AppDelegate.m */,
+				A7BDC9571A445164008F2645 /* Images.xcassets */,
+				A7BDC94A1A445164008F2645 /* Supporting Files */,
+				A70657161A44636000B8D21D /* Frameworks */,
+				A70657191A4463BD00B8D21D /* General */,
+				A70657411A44647400B8D21D /* Graph */,
+				A70657511A44649300B8D21D /* Draw */,
+				A706577C1A4464B400B8D21D /* Screens */,
+				A70657A01A4464E000B8D21D /* Images */,
+				A70657C11A44650200B8D21D /* Locations */,
+			);
+			path = MetroWay;
+			sourceTree = "<group>";
+		};
+		A7BDC94A1A445164008F2645 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A70657131A44631900B8D21D /* MetroWay-Info.plist */,
+				A70657141A44631900B8D21D /* MetroWay-Prefix.pch */,
+				A7BDC94B1A445164008F2645 /* Info.plist */,
+				A7BDC94C1A445164008F2645 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A7BDC9631A445164008F2645 /* MetroWayTests */ = {
+			isa = PBXGroup;
+			children = (
+				A7BDC9661A445164008F2645 /* MetroWayTests.m */,
+				A7BDC9641A445164008F2645 /* Supporting Files */,
+			);
+			name = MetroWayTests;
+			path = MetROutesTests;
+			sourceTree = "<group>";
+		};
+		A7BDC9641A445164008F2645 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A7BDC9651A445164008F2645 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A7BDC9461A445164008F2645 /* MetroWay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7BDC96A1A445164008F2645 /* Build configuration list for PBXNativeTarget "MetroWay" */;
+			buildPhases = (
+				A7BDC9431A445164008F2645 /* Sources */,
+				A7BDC9441A445164008F2645 /* Frameworks */,
+				A7BDC9451A445164008F2645 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MetroWay;
+			productName = MetROutes;
+			productReference = A7BDC9471A445164008F2645 /* MetroWay.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A7BDC95F1A445164008F2645 /* MetroWayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7BDC96D1A445164008F2645 /* Build configuration list for PBXNativeTarget "MetroWayTests" */;
+			buildPhases = (
+				A7BDC95C1A445164008F2645 /* Sources */,
+				A7BDC95D1A445164008F2645 /* Frameworks */,
+				A7BDC95E1A445164008F2645 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A7BDC9621A445164008F2645 /* PBXTargetDependency */,
+			);
+			name = MetroWayTests;
+			productName = MetROutesTests;
+			productReference = A7BDC9601A445164008F2645 /* MetroWayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A7BDC93F1A445164008F2645 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Valentin Ozerov";
+				TargetAttributes = {
+					A7BDC9461A445164008F2645 = {
+						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = FGD2WA7379;
+					};
+					A7BDC95F1A445164008F2645 = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = A7BDC9461A445164008F2645;
+					};
+				};
+			};
+			buildConfigurationList = A7BDC9421A445164008F2645 /* Build configuration list for PBXProject "MetroWay" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				ru,
+			);
+			mainGroup = A7BDC93E1A445164008F2645;
+			productRefGroup = A7BDC9481A445164008F2645 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A7BDC9461A445164008F2645 /* MetroWay */,
+				A7BDC95F1A445164008F2645 /* MetroWayTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A7BDC9451A445164008F2645 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A70657EE1A4465CA00B8D21D /* amsterdam_metro_background.png in Resources */,
+				A70657FE1A4465E200B8D21D /* nizhny_novgorod_metro_background.png in Resources */,
+				A70657B91A4464F300B8D21D /* Magnifier.png in Resources */,
+				A70657B81A4464F300B8D21D /* List2.png in Resources */,
+				A70657C91A44652000B8D21D /* belo_horizonte_metro_background.png in Resources */,
+				A744F1C71A447DD50078B0E3 /* Default-568h@2x.png in Resources */,
+				A70657951A4464CF00B8D21D /* MWMetroMapViewController.xib in Resources */,
+				A70657BE1A4464F300B8D21D /* StarOff.png in Resources */,
+				A70657B61A4464F300B8D21D /* grid.png in Resources */,
+				A70657B21A4464F300B8D21D /* CloseGray.png in Resources */,
+				A70657B71A4464F300B8D21D /* List1.png in Resources */,
+				A70657FD1A4465E200B8D21D /* moscow_metro_background.png in Resources */,
+				A70658041A4465FE00B8D21D /* bangkok_airport_background.png in Resources */,
+				A70657B31A4464F300B8D21D /* CloseWhite.png in Resources */,
+				A70657DD1A44658100B8D21D /* medellin_metro_background.png in Resources */,
+				A706570D1A4461A700B8D21D /* ToDo.rtf in Resources */,
+				A70657151A44631900B8D21D /* MetroWay-Info.plist in Resources */,
+				A706579F1A4464CF00B8D21D /* MWStationListViewController.xib in Resources */,
+				A70657B41A4464F300B8D21D /* Delete.png in Resources */,
+				A70658111A44672000B8D21D /* MWSelectSortViewController.xib in Resources */,
+				A70657BA1A4464F300B8D21D /* Map.png in Resources */,
+				A70657BC1A4464F300B8D21D /* SearchBackground.png in Resources */,
+				A7BDC9581A445164008F2645 /* Images.xcassets in Resources */,
+				A70657991A4464CF00B8D21D /* MWSelectLanguageViewController.xib in Resources */,
+				A70657BB1A4464F300B8D21D /* Menu.png in Resources */,
+				A70657B51A4464F300B8D21D /* Download.png in Resources */,
+				A706579B1A4464CF00B8D21D /* MWSelectMapViewController.xib in Resources */,
+				A70657D21A44654000B8D21D /* toronto_subway_background.png in Resources */,
+				A70657B11A4464F300B8D21D /* CloseBlack.png in Resources */,
+				A70657BD1A4464F300B8D21D /* StarCheck.png in Resources */,
+				A70657931A4464CF00B8D21D /* MWMenuViewController.xib in Resources */,
+				A70657D81A44656000B8D21D /* wuhan_metro_background.png in Resources */,
+				A70657CC1A44652000B8D21D /* porto_alegre_metro_background.png in Resources */,
+				A744F1C11A4479040078B0E3 /* Localizable.strings in Resources */,
+				A706580E1A44661400B8D21D /* los_angeles_metro_background.png in Resources */,
+				A70657BF1A4464F300B8D21D /* StarOn.png in Resources */,
+				A70657E91A4465A300B8D21D /* yokohama_subway_background.png in Resources */,
+				A70657E61A4465A300B8D21D /* kyoto_subway_background.png in Resources */,
+				A70657C01A4464F300B8D21D /* Update.png in Resources */,
+				A706580D1A44661400B8D21D /* boston_subway_background.png in Resources */,
+				A70657971A4464CF00B8D21D /* MWSearchStationViewController.xib in Resources */,
+				A70657FF1A4465E200B8D21D /* yekaterinburg_metro_background.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7BDC95E1A445164008F2645 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A7BDC9431A445164008F2645 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A70657711A4464A800B8D21D /* MWDrawArc.m in Sources */,
+				A70657FC1A4465E200B8D21D /* MWYekaterinburgMetro.m in Sources */,
+				A706580F1A44661400B8D21D /* MWBostonSubway.m in Sources */,
+				A70657D71A44656000B8D21D /* MWWuhanMetro.m in Sources */,
+				A7BDC9501A445164008F2645 /* AppDelegate.m in Sources */,
+				A70657CA1A44652000B8D21D /* MWBeloHorizonteMetro.m in Sources */,
+				A70657371A4463D600B8D21D /* MWList.m in Sources */,
+				A706579E1A4464CF00B8D21D /* MWStationListViewController.m in Sources */,
+				A706574E1A44648500B8D21D /* MWLine.m in Sources */,
+				A70657391A4463D600B8D21D /* MWLocation.m in Sources */,
+				A70657761A4464A800B8D21D /* MWDrawRoundedRect.m in Sources */,
+				A70657731A4464A800B8D21D /* MWDrawGradientArc.m in Sources */,
+				A706573D1A4463D600B8D21D /* MWRouteStorage.m in Sources */,
+				A70657FA1A4465E200B8D21D /* MWMoscowMetro.m in Sources */,
+				A706577B1A4464A800B8D21D /* MWViewStationCircleR14.m in Sources */,
+				A70657401A4463D600B8D21D /* MWUpload.m in Sources */,
+				A706574F1A44648500B8D21D /* MWStation.m in Sources */,
+				A70657781A4464A800B8D21D /* MWMapTableViewCell.m in Sources */,
+				A70657501A44648500B8D21D /* MWVertex.m in Sources */,
+				A706579A1A4464CF00B8D21D /* MWSelectMapViewController.m in Sources */,
+				A70658101A44661400B8D21D /* MWLosAngelesMetro.m in Sources */,
+				A706574D1A44648500B8D21D /* MWHaul.m in Sources */,
+				A70657741A4464A800B8D21D /* MWDrawGradientRect.m in Sources */,
+				A70657101A44620E00B8D21D /* MWAppDelegate.m in Sources */,
+				A706573C1A4463D600B8D21D /* MWRouter.m in Sources */,
+				A70657E71A4465A300B8D21D /* MWKyotoSubway.m in Sources */,
+				A70657721A4464A800B8D21D /* MWDrawFillCircle.m in Sources */,
+				A70657941A4464CF00B8D21D /* MWMetroMapViewController.m in Sources */,
+				A70657D11A44654000B8D21D /* MWTorontoSubway.m in Sources */,
+				A706576F1A4464A800B8D21D /* MWDownloadStatusButton.m in Sources */,
+				A706574C1A44648500B8D21D /* MWEdge.m in Sources */,
+				A70657351A4463D600B8D21D /* MWDownload.m in Sources */,
+				A70657EF1A4465CA00B8D21D /* MWAmsterdamMetro.m in Sources */,
+				A706577A1A4464A800B8D21D /* MWViewRouteR14.m in Sources */,
+				A70657381A4463D600B8D21D /* MWListItem.m in Sources */,
+				A7BDC94D1A445164008F2645 /* main.m in Sources */,
+				A70657FB1A4465E200B8D21D /* MWNizhnyNovgorodMetro.m in Sources */,
+				A70657771A4464A800B8D21D /* MWDrawTextLine.m in Sources */,
+				A70657341A4463D600B8D21D /* MWDevelopment.m in Sources */,
+				A706576E1A4464A800B8D21D /* MWBaseTableViewCell.m in Sources */,
+				A706573B1A4463D600B8D21D /* MWRouteItem.m in Sources */,
+				A70657CB1A44652000B8D21D /* MWPortoAlegreMetro.m in Sources */,
+				A70657751A4464A800B8D21D /* MWDrawLine.m in Sources */,
+				A70657701A4464A800B8D21D /* MWDraw.m in Sources */,
+				A70657DE1A44658100B8D21D /* MWMedellinMetro.m in Sources */,
+				A706579C1A4464CF00B8D21D /* MWSelectSortViewController.m in Sources */,
+				A70657981A4464CF00B8D21D /* MWSelectLanguageViewController.m in Sources */,
+				A70657961A4464CF00B8D21D /* MWSearchStationViewController.m in Sources */,
+				A706573F1A4463D600B8D21D /* MWStorage.m in Sources */,
+				A70658051A4465FE00B8D21D /* MWBangkokAirport.m in Sources */,
+				A70657E81A4465A300B8D21D /* MWYokohamaSubway.m in Sources */,
+				A70657791A4464A800B8D21D /* MWRouteButton.m in Sources */,
+				A706573A1A4463D600B8D21D /* MWMetroMap.m in Sources */,
+				A706573E1A4463D600B8D21D /* MWSettings.m in Sources */,
+				A70657361A4463D600B8D21D /* MWLanguage.m in Sources */,
+				A70657921A4464CF00B8D21D /* MWMenuViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7BDC95C1A445164008F2645 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7BDC9671A445164008F2645 /* MetroWayTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A7BDC9621A445164008F2645 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A7BDC9461A445164008F2645 /* MetroWay */;
+			targetProxy = A7BDC9611A445164008F2645 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A70658131A44672000B8D21D /* MWSelectSortViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A744F1C51A4479C50078B0E3 /* en */,
+			);
+			name = MWSelectSortViewController.xib;
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		A744F1C31A4479040078B0E3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A744F1C21A4479040078B0E3 /* Base */,
+				A744F1C41A4479110078B0E3 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A7BDC9681A445164008F2645 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A7BDC9691A445164008F2645 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A7BDC96B1A445164008F2645 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				INFOPLIST_FILE = MetROutes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MetROutes/Frameworks/Flurry",
+				);
+				PRODUCT_NAME = MetroWay;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A7BDC96C1A445164008F2645 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				INFOPLIST_FILE = MetROutes/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MetROutes/Frameworks/Flurry",
+				);
+				PRODUCT_NAME = MetroWay;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		A7BDC96E1A445164008F2645 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = MetROutesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = MetroWayTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MetROutes.app/MetROutes";
+			};
+			name = Debug;
+		};
+		A7BDC96F1A445164008F2645 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = MetROutesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = MetroWayTests;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MetROutes.app/MetROutes";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A7BDC9421A445164008F2645 /* Build configuration list for PBXProject "MetroWay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7BDC9681A445164008F2645 /* Debug */,
+				A7BDC9691A445164008F2645 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7BDC96A1A445164008F2645 /* Build configuration list for PBXNativeTarget "MetroWay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7BDC96B1A445164008F2645 /* Debug */,
+				A7BDC96C1A445164008F2645 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7BDC96D1A445164008F2645 /* Build configuration list for PBXNativeTarget "MetroWayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7BDC96E1A445164008F2645 /* Debug */,
+				A7BDC96F1A445164008F2645 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A7BDC93F1A445164008F2645 /* Project object */;
+}
