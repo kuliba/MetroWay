@@ -1,0 +1,118 @@
+/*
+ Localizable.strings
+ Metro Maps
+ 
+ Created by Valentin Ozerov on 04.04.14.
+ Copyright (c) 2014 Valentin Ozerov. All rights reserved.
+ */
+
+// Main menu view
+"MainMenu_NavigationBarTitle" = "Меню";
+"MainMenu_NavigationBarDoneButton" = "Готово";
+
+"MainMenu_MetroMapsCellTextLabelTitle" = "Схемы метро";
+"MainMenu_MetroMapsCurrent" = "Текущая";
+
+"MainMenu_SettingsLanguage" = "Язык";
+"MainMenu_SettingsEnglishTitles" = "Надписи на английском";
+"MainMenu_SettingsRoutesSortingType" = "Сортировка маршрутов";
+"MainMenu_SettingsAutomaticUpdate" = "Автообновление";
+
+"MainMenu_FeedbackSendAnLetter" = "Написать письмо";
+"MainMenu_FeedbackMailAlertTitle" = "Учетная запись не найдена";
+"MainMenu_FeedbackMailAlertMessage" = "Создайте учетную запись для отправки письма.";
+"MainMenu_FeedbackMailSubject" = "О MetROutes";
+
+// Metro Map
+"MetroMap_SpinnerLoadingMapTitle" = "Загрузка схемы метро...";
+"MetroMap_SpinnerDeletingEnglishTextTitle" = "Удаление надписей на английском языке...";
+"MetroMap_SpinnerAddingEnglishTextTitle" = "Добавление надписей на английском языке...";
+
+"MetroMap_RouterMaps_min" = "мин";
+"MetroMap_RouterMaps_transfers_short" = "перес.";
+
+"MetroMap_SearchFrom" = "Откуда...";
+"MetroMap_SearchTo" = "Куда...";
+
+"MetroMap_FromMenuTitle" = "Отсюда";
+"MetroMap_ToMenuTitle" = "Cюда";
+
+// Select metro map
+"SelectMap_MainTitle" = "Схемы метро";
+
+"SelectMap_SegmentedItem1" = "Все";
+"SelectMap_SegmentedItem2" = "Мои";
+
+"SelectMap_CancelButtonTitle" = "Отмена";
+
+"SelectMap_LinesCountTitle" = "Количество линий";
+"SelectMap_StationsCountTitle" = "Количество станций";
+"SelectMap_LengthTitle" = "Длина линий";
+"SelectMap_DistanceTitle" = "Расстояние";
+
+"SelectMap_NoResultButtonTitle" = "Города не найдены";
+
+"SelectMap_KilometersShort" = "км";
+"SelectMap_DistanceNear" = "рядом";
+
+"SelectMap_DistanceNearest" = "Ближайшие";
+
+"SelectMap_FavoritesTitle" = "Избранные";
+
+"SelectMap_DownloadButtonTitle" = "Загрузить";
+"SelectMap_UpdateButtonTitle" = "Обновить";
+
+"SelectMap_PopupMenuDeleteAlertDialogTitle" = "Удаление схемы метро";
+"SelectMap_PopupMenuDeleteAlertDialogMessage" = "Вы действительно хотите удалить схему метро? Впоследствие ее можно будет загрузить снова.";
+"SelectMap_PopupMenuDeleteAlertDialogCancel" = "Отменить";
+"SelectMap_PopupMenuDeleteAlertDialogDelete" = "Удалить";
+
+"SelectMap_NoInternetAlertViewTitle" = "Нет доступа к Интернету";
+"SelectMap_NoInternetAlertViewMessage" = "Для доступа к данным. Включите сотовые данные или используйте Wi-Fi.";
+
+"SelectMap_DownloadAlertTitle" = "Загрузка";
+"SelectMap_DownloadAlertMessage" = "Соединение...";
+"SelectMap_DownloadAlertMB" = "Мб";
+"SelectMap_DownloadAlertCancelButtonTitle" = "Отмена";
+
+"SelectMap_UpdateMapAlertTitle" = "Доступна новая версия схемы. Вы хотите ее обновить?";
+"SelectMap_UpdateMapAlertUpdateButtonTitle" = "Обновить";
+"SelectMap_UpdateMapAlertLaterButtonTitle" = "Позже";
+
+"SelectMap_CannotConnectionAlertTitle" = "Соединение с сервером недоступно";
+
+"SelectMap_MyTabDescription" = "Список ближайших и избранных схем метро";
+
+"SelectMap_ThumbnailNotAvailable" = "Превью не доступно";
+
+// Select Language Controller
+"SelectLanguage_Title" = "Язык";
+
+// Sorting Type View
+"SortingType_Title" = "Сортировка маршрутов";
+"SortingType_byTripTime" = "По времени поездки";
+"SortingType_byTransfers" = "По числу пересадок";
+
+// Search station View
+"SearchStation_CancelButtonTitle" = "Отмена";
+"SearchStation_ListButtonTitle" = "Список";
+"SearchStation_PlaceholderWhereFrom" = "Откуда";
+"SearchStation_PlaceholderWhereTo" = "Куда";
+
+"SearchStation_NearestStationsHeaderTitle" = "Ближайшие станции";
+"SearchStation_NearestStationDistanceKilometersShort" = "км";
+
+"SearchStation_LastRoutesHeaderTitle" = "Предыдущие маршруты";
+"SearchStation_FavoritesHeaderTitle" = "Избранное";
+
+"SearchStation_DeleteFavoriteAlertViewHeader" = "Удаление элемента";
+"SearchStation_DeleteFavoriteAlertViewMessage" = "Вы действительно хотите удалить этот элемент из Избранных?";
+"SearchStation_DeleteFavoriteAlertViewNo" = "Нет";
+"SearchStation_DeleteFavoriteAlertViewYes" = "Да";
+
+"SearchStation_SearchResultHeaderSection" = "Результаты поиска";
+"SearchStation_SearchResultNoSearchResult" = "Станции не найдены";
+
+// Station List View
+"StationList_Stations" = "Станции";
+"StationList_Lines" = "Линии";
