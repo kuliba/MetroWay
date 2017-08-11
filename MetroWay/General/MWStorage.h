@@ -14,6 +14,8 @@
 
 @interface MWStorage : NSObject
 
+@property (nonatomic, strong) NSString *firstMetroMapIdentifier;
+
 + (MWStorage *)storage;
 + (NSString *)documentDirectory;
 + (NSString *)cachesDirectory;
@@ -35,5 +37,6 @@
 + (unsigned long long)metroMapSize:(NSString *)identifier;
 + (UIImage *)thumbnail:(NSString *)identifier;
 + (void)deleteThumbnail:(NSString *)identifier;
++ (BOOL)metroMapExists:(NSString *)identifier;
 
 @end

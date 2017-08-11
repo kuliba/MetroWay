@@ -11,6 +11,12 @@
 
 @implementation MWDownload;
 
++ (NSString *)serverURL:(NSString *)path;
+{
+    NSString *result = [NSString stringWithFormat:@"%@%@", @"http://www.clickwood.org/metroway/", path];
+    return result;
+}
+
 // Возвращаем единственный экземпляр (синглетон)
 + (MWDownload *)downloadManager
 {
@@ -47,7 +53,7 @@
 {
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
-    NSURL *downloadTaskURL = [NSURL URLWithString:@"http://www.clickwood.org/mm/_get_file.php?file=list.data"];
+    NSURL *downloadTaskURL = [NSURL URLWithString:[MWDownload serverURL:@"_get_file.php?file=list.data"]];
     [[session downloadTaskWithURL: downloadTaskURL
                 completionHandler:^(NSURL *location, NSURLResponse *responce, NSError *error) {
                     
@@ -79,17 +85,19 @@
                         @try {
                             MWList *newMetroList = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
 
-                            // Обновляем текущий список
-                            [[MWStorage metroMapList] updateList:newMetroList];
-                            
-                            // Отсылаем всем сообщение, что новый список загружен и обновлен
-                            NSNotification *listDownloaded = [NSNotification notificationWithName:@"listDownloaded" object:self];
-                            NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-                            [notificationCenter postNotification:listDownloaded];
-                            
-                            MWList *list = [MWStorage metroMapList];
-                            
-                            if (list.newVersions.count && [MWSettings automaticUpdates]) [self updateMetroMaps];
+                            if (newMetroList && newMetroList.items.count > 0) {
+                                // Обновляем текущий список
+                                [[MWStorage metroMapList] updateList:newMetroList];
+                                
+                                // Отсылаем всем сообщение, что новый список загружен и обновлен
+                                NSNotification *listDownloaded = [NSNotification notificationWithName:@"listDownloaded" object:self];
+                                NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+                                [notificationCenter postNotification:listDownloaded];
+                                
+                                MWList *list = [MWStorage metroMapList];
+                                
+                                if (list.newVersions.count && [MWSettings settings].automaticUpdates) [self updateMetroMaps];
+                            }
                         }
                         @catch (NSException *exception) {
                             //
@@ -97,6 +105,8 @@
                         @finally {
                             //
                         }
+                    } else {
+                        NSLog(@"%@", error.localizedDescription);
                     }
                 }] resume];
 }
@@ -108,7 +118,7 @@
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
     
     for (MWListItem *listItem in list.newVersions) {
-        NSURL *downloadTaskURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.clickwood.org/mm/_get_file.php?file=%@.mm", listItem.identifier]];
+        NSURL *downloadTaskURL = [NSURL URLWithString:[MWDownload serverURL:[NSString stringWithFormat:@"_get_file.php?file=%@.mm", listItem.identifier]]];
         [[session downloadTaskWithURL: downloadTaskURL
                     completionHandler:^(NSURL *location, NSURLResponse *responce, NSError *error) {
                         
@@ -139,7 +149,7 @@
                             listItem.versionNumberOnDevice = listItem.versionNumberOnSite;
                             [[MWStorage metroMapList] save];
                             
-                            if ([listItem.identifier isEqualToString:[MWSettings currentMetroMapIdentifier]]) {
+                            if ([listItem.identifier isEqualToString:[MWSettings settings].currentMetroMapIdentifier]) {
                                 [[MWStorage storage] reloadCurrentMetroMap];
                             }
                             
@@ -159,7 +169,7 @@
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self.self delegateQueue:nil];
     
-    NSURL *downloadTaskURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.clickwood.org/mm/_get_file.php?file=%@.mm", listItem.identifier]];
+    NSURL *downloadTaskURL = [NSURL URLWithString:[MWDownload serverURL:[NSString stringWithFormat:@"_get_file.php?file=%@.mm", listItem.identifier]]];
     
     downloadTask = [session downloadTaskWithURL:downloadTaskURL];
 
@@ -182,6 +192,7 @@
      MWList *list = [MWStorage metroMapList];
      for (MWListItem *listItem in list.items) {
           if ([listItem.downloadTask isEqual:downloadTask]) {
+              listItem.downloadTask = nil;
               NSError *err = nil;
               NSFileManager *fileManager = [NSFileManager defaultManager];
               NSString *cashDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -207,7 +218,7 @@
               listItem.versionNumberOnDevice = listItem.versionNumberOnSite;
               [list save];
               
-              if ([listItem.identifier isEqualToString:[MWSettings currentMetroMapIdentifier]]) {
+              if ([listItem.identifier isEqualToString:[MWSettings settings].currentMetroMapIdentifier]) {
                   [[MWStorage storage] reloadCurrentMetroMap];
               }
               
@@ -225,7 +236,7 @@
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
     NSString *fileName = [NSString stringWithFormat:@"%@_thumbnail.jpg", identifier];
-    NSURL *downloadTaskURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.clickwood.org/mm/_get_file.php?file=%@", fileName]];
+    NSURL *downloadTaskURL = [NSURL URLWithString:[MWDownload serverURL:[NSString stringWithFormat:@"_get_file.php?file=%@", fileName]]];
     [[session downloadTaskWithURL: downloadTaskURL
                 completionHandler:^(NSURL *location, NSURLResponse *responce, NSError *error) {
                     
@@ -244,7 +255,7 @@
                                                  toURL:cashDirURL
                                                  error: &err])
                         {
-                            //NSLog(@"File is saved to: %@", docsDir);
+                            //NSLog(@"File is saved to: %@", path);
                         }
                         else
                         {
@@ -254,12 +265,12 @@
                         [fileManager removeItemAtURL:location error:nil];
                         
                         // Отсылаем всем сообщение, что загружена превьюшка
-                        NSNotification *newThumbnailDownloaded = [NSNotification notificationWithName:[NSString stringWithFormat:@"%@_thumbnail_downloaded", identifier] object:self];
+                        NSDictionary *details = [[NSDictionary alloc] initWithObjectsAndKeys:identifier, @"identifier", nil];
                         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-                        [notificationCenter postNotification:newThumbnailDownloaded];
+                        NSNotification *thumbnail_downloaded = [NSNotification notificationWithName:@"thumbnail_downloaded" object:self userInfo:details];
+                        [notificationCenter postNotification:thumbnail_downloaded];
                     }
                 }] resume];
 }
-
 
 @end

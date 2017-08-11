@@ -11,11 +11,11 @@
 #import "MWStorage.h"
 #import "MWBaseTableViewCell.h"
 #import <MessageUI/MessageUI.h>
-#import "MWSelectLanguageViewController.h"
 #import "MWSelectSortViewController.h"
-#import "MWSelectMapViewController.h"
+#import "MWMetroMapsViewController.h"
+#import "MWHUD.h"
 
-@interface MWMenuViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
+@interface MWMenuViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIImageView *backgroundImageView;
 @property (strong, nonatomic) IBOutlet UIButton *doneButton;
@@ -23,5 +23,10 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)done:(id)sender;
+
+@property (strong, nonatomic) UIButton *fade;
+@property (strong, nonatomic) MWHUD *HUD;
+
+- (IBAction)swipeRecognized:(id)sender;
 
 @end

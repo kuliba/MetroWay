@@ -10,13 +10,14 @@
 #import "MWVertex.h"
 #import "MWEdge.h"
 #import "MWStorage.h"
+#import "MWRoute.h"
 
 @implementation MWRouter
 
 @synthesize routes;
 
 // Все найденные маршруты
-NSMutableArray *foundRoutes;
+NSArray *foundRoutes;
 
 // Линия, по которой расположены начальная и конечная станции
 MWLine *directLine = nil;
@@ -42,30 +43,27 @@ MWLine *directLine = nil;
 {
     self = [super init];
     if (self) {
-        foundRoutes = [[NSMutableArray alloc] init];
-        routes = [[NSMutableArray alloc] init];
+        foundRoutes = nil;
+        routes = nil;
     }
     return self;
 }
 
-- (void)dealloc
-{
-    foundRoutes = nil;
-}
-
 // Возвращаем массив маршрутов
-- (NSMutableArray *)routes
+- (NSArray *)routes
 {
-    [routes removeAllObjects];
-    for (int i = 0; (i < foundRoutes.count) && (i < 3); i++) {
-        [routes addObject:foundRoutes[i]];
+    NSMutableArray *result = [NSMutableArray array];
+    
+    for (int i = 0; i < foundRoutes.count && (i < 3); i++) {
+        [result addObject:foundRoutes[i]];
     }
-    return routes;
+
+    return [NSArray arrayWithArray:result];
 }
 
 - (void)clearRoutes
 {
-    [routes removeAllObjects];    
+    foundRoutes = nil;
 }
 
 - (void)initRoutes
@@ -145,18 +143,18 @@ MWLine *directLine = nil;
 // После расчета маршрута корректируем начальные и конечные станции
 - (int)postCorrectStations
 {
-    NSArray *path = [foundRoutes firstObject];
-    if (path.count < 3) return 0;
+    MWRoute *route = [foundRoutes firstObject];
+    if (route.path.count < 3) return 0;
 
     MWMetroMap *metroMap = [MWStorage currentMetroMap];
  
     MWStation *startStation = metroMap.startStation;
     MWStation *finishStation = metroMap.finishStation;
 
-    MWVertex *vertex = [path firstObject];
+    MWVertex *vertex = [route.path firstObject];
     if (startStation.platformIndex > 0) {
         // Делаем начальную станцию ту, которая примыкает к узлу
-        MWEdge *edge = [path objectAtIndex:1];
+        MWEdge *edge = [route.path objectAtIndex:1];
         if (edge.startVertex == vertex) {
             metroMap.startStation = [edge.elements firstObject];
         } else {
@@ -164,10 +162,10 @@ MWLine *directLine = nil;
         }
     }
     
-    vertex = [path lastObject];
+    vertex = [route.path lastObject];
     if (finishStation.platformIndex > 0) {
         // Делаем конечной станцией ту, которая примыкает к узлу
-        MWEdge *edge = [self latestEdge:path];
+        MWEdge *edge = [self latestEdge:route.path];
         if (edge.finishVertex == vertex) {
             metroMap.finishStation = [edge.elements lastObject];
         } else {
@@ -192,7 +190,7 @@ MWLine *directLine = nil;
 - (void)searchRoutes
 {
     // Инициализация
-    [foundRoutes removeAllObjects];
+    foundRoutes = nil;
     
     MWMetroMap *metroMap = [MWStorage currentMetroMap];
     
@@ -201,48 +199,147 @@ MWLine *directLine = nil;
     int i = 0;
     
     [self initRoutes];
-    
+
+    // Очищаем все переходы
+    for (MWVertex *vertex in metroMap.vertices) {
+        [vertex.transfers removeAllObjects];
+    }
+
     BOOL nextIteration;
     
     do {
         nextIteration = NO;
-        NSMutableArray *route = [[NSMutableArray alloc] init];
-        [route addObjectsFromArray:[self searchNextShortestRoute:[foundRoutes lastObject]]];
+        MWRoute *route = [self searchNextShortestRoute:[foundRoutes lastObject]];
         i++;
-        if (route.count > 0) {
-            [foundRoutes addObject:route];
-            nextIteration = [self routeTransfers:route] > 0; //[self doSearch];
+        if (route.path.count > 0) {
+            NSMutableArray *array = [NSMutableArray arrayWithArray:foundRoutes];
+            [array addObject:route];
+            foundRoutes = [NSArray arrayWithArray:array];
+            nextIteration = route.transfers > 0;
         }
         // Ограничиваем число найденных маршрутов
     } while (nextIteration && (i < 4));
+
+//    [self printAllRoutes];
     
     [self initRoutes];
+//    [self printAllRoutes];
+
     [self sort];
+//    [self printAllRoutes];
+
     [self postFilter];
+    
+//    [self printAllRoutes];
+}
+
+// Возвращаем истину, если количество пересадок, время поездки и длина маршрута совпадают
+- (BOOL)isIdenticalRoute:(MWRoute *)firstRoute secondRoute:(MWRoute *)secondRoute
+{
+    if (!(firstRoute.path.count == secondRoute.path.count)) return false;
+    if (!(firstRoute.tripTime == secondRoute.tripTime)) return false;
+    if (!(firstRoute.transfers == secondRoute.transfers)) return false;
+    if (!(firstRoute.length == secondRoute.length)) return false;
+    
+    return true;
 }
 
 - (void)postFilter
 {
     if (foundRoutes.count < 1) return;
+
+    MWRoute *firstRoute, *lastRoute;
     
-    if ([[MWSettings currentMetroMapIdentifier] isEqualToString:@"amsterdam_metro"]) {
+    if ([[MWSettings settings].currentMetroMapIdentifier isEqualToString:@"amsterdam_metro"]) {
         while (foundRoutes.count > 1) {
-            [foundRoutes removeObject:[foundRoutes lastObject]];
+            NSMutableArray *array = [NSMutableArray arrayWithArray:foundRoutes];
+            [array removeObject:[array lastObject]];
+            foundRoutes = [NSArray arrayWithArray:array];
+        }
+    } else if ([[MWSettings settings].currentMetroMapIdentifier isEqualToString:@"moscow_metro"]) {
+        if (([MWSettings settings].sortingType == 0) && (foundRoutes.count > 1)) { // По времени поездки
+            firstRoute = (MWRoute *)[foundRoutes firstObject];
+            lastRoute = (MWRoute *)[foundRoutes lastObject];
+            while ((foundRoutes.count > 1) && (lastRoute.tripTime > firstRoute.tripTime * 1.5)) {
+                NSMutableArray *array = [NSMutableArray arrayWithArray:foundRoutes];
+                [array removeObject:[array lastObject]];
+                foundRoutes = [NSArray arrayWithArray:array];
+                firstRoute = (MWRoute *)[foundRoutes firstObject];
+                lastRoute = (MWRoute *)[foundRoutes lastObject];
+            }
+        }
+    } else if ([[MWSettings settings].currentMetroMapIdentifier isEqualToString:@"boston_subway"]) {
+        // Удаляем все маршруты, у которых совпадают количество пересадок, время поездки и длина
+        NSMutableArray *tempArray = [NSMutableArray array];
+        
+        BOOL found = false;
+        for (MWRoute *route in foundRoutes) {
+            for (MWRoute *tempRoute in tempArray) {
+                if ([self isIdenticalRoute:route secondRoute:tempRoute]) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                [tempArray addObject:route];
+            }
+            found = false;
+        }
+
+        foundRoutes = nil;
+        foundRoutes = [NSArray arrayWithArray:tempArray];
+    } else if ([[MWSettings settings].currentMetroMapIdentifier isEqualToString:@"prague_metro"]) { // Максимальное число пересадок - одна
+        NSArray *tempArray = [NSArray arrayWithArray:foundRoutes];
+        foundRoutes = nil;
+        
+        for (MWRoute *route in tempArray) {
+            if (route.transfers < 2) {
+                NSMutableArray *array = [NSMutableArray arrayWithArray:foundRoutes];
+                [array addObject:route];
+                foundRoutes = [NSArray arrayWithArray:array];
+            }
+        }
+    } else if ([[MWSettings settings].currentMetroMapIdentifier isEqualToString:@"los_angeles_metro"]) { // Удаляем маршруты, у которых вершины совпадают
+        while ((foundRoutes.count > 1) && [self areVertexesEqual:[foundRoutes objectAtIndex:foundRoutes.count - 2] path2:[foundRoutes lastObject]]) {
+            NSMutableArray *array = [NSMutableArray arrayWithArray:foundRoutes];
+            [array removeObject:[array lastObject]];
+            foundRoutes = [NSArray arrayWithArray:array];
+        }
+    } else if ([[MWSettings settings].currentMetroMapIdentifier isEqualToString:@"recife_metro"]) { // Максимальное число пересадок - одна
+        NSArray *tempArray = [NSArray arrayWithArray:foundRoutes];
+        foundRoutes = nil;
+        
+        for (MWRoute *route in tempArray) {
+            if (route.transfers < 2) {
+                NSMutableArray *array = [NSMutableArray arrayWithArray:foundRoutes];
+                [array addObject:route];
+                foundRoutes = [NSArray arrayWithArray:array];
+            }
         }
     }
 
     // В случае сортировки по количеству пересадок фильтруем все маршруты, где количество пересадок больше, чем на одну превышает первый маршрут
-    if ([MWSettings sortingType] == 1) { // Сортировка по количеству пересадок
-        int firstRouteTransfers = [self routeTransfers:[foundRoutes firstObject]];
-        while ([self routeTransfers:[foundRoutes lastObject]] > firstRouteTransfers + 1) {
-            [foundRoutes removeObject:[foundRoutes lastObject]];
+    if ([MWSettings settings].sortingType == MWSortingTypeByTransfers) { // Сортировка по количеству пересадок
+        firstRoute = (MWRoute *)[foundRoutes firstObject];
+        lastRoute = (MWRoute *)[foundRoutes lastObject];
+        int firstRouteTransfers = firstRoute.transfers;
+        while (foundRoutes.count > 0 && lastRoute.transfers > firstRouteTransfers + 1) {
+            NSMutableArray *array = [NSMutableArray arrayWithArray:foundRoutes];
+            [array removeObject:[array lastObject]];
+            foundRoutes = [NSArray arrayWithArray:array];
+            lastRoute = (MWRoute *)[foundRoutes lastObject];
         }
     }
     
     // Отфильтровываем результаты, если он отличается от предыдущего больше, чем в 1.4 раза
     if (foundRoutes.count > 1) {
-        while (([self routeTripTime:[foundRoutes lastObject]] > [self routeTripTime:[foundRoutes objectAtIndex:foundRoutes.count - 2]] * 1.4) && foundRoutes.count > 1) {
-            [foundRoutes removeObject:[foundRoutes lastObject]];
+        lastRoute = (MWRoute *)[foundRoutes lastObject];
+        firstRoute = (MWRoute *)[foundRoutes objectAtIndex:foundRoutes.count - 2];
+        while (foundRoutes.count > 1 && lastRoute.tripTime > firstRoute.tripTime * 1.4) {
+            NSMutableArray *array = [NSMutableArray arrayWithArray:foundRoutes];
+            [array removeObject:[array lastObject]];
+            foundRoutes = [NSArray arrayWithArray:array];
+            lastRoute = (MWRoute *)[foundRoutes lastObject];
+            firstRoute = (MWRoute *)[foundRoutes objectAtIndex:foundRoutes.count - 2];
         }
     }
 }
@@ -252,7 +349,7 @@ MWLine *directLine = nil;
 {
     BOOL result = YES;
     
-    NSArray *lastRoute = [foundRoutes lastObject];
+    MWRoute *lastRoute = [foundRoutes lastObject];
 
     int transfers = [self routeTransfers:lastRoute];
   
@@ -261,10 +358,6 @@ MWLine *directLine = nil;
         return NO;
     }
     
-//    if ([[MMSettings currentMetroMapIdentifier] isEqualToString:@"amsterdam_metro"]) {
-//        return NO;
-//    }
-    
     return result;
 }
 
@@ -272,28 +365,29 @@ MWLine *directLine = nil;
 - (void)sort
 {
     NSArray *sortedArray = [foundRoutes sortedArrayUsingComparator: ^NSComparisonResult(id obj1, id obj2) {
-        int parameter1;
-        int parameter2;
-        switch ([MWSettings sortingType]) {
-            case 1:
-                parameter1 = [self routeTransfers:obj1];
-                parameter2 = [self routeTransfers:obj2];
+        float parameter1, parameter2;
+        MWRoute *route1 = (MWRoute *)obj1;
+        MWRoute *route2 = (MWRoute *)obj2;
+        switch ([MWSettings settings].sortingType) {
+            case MWSortingTypeByTransfers:
+                parameter1 = route1.transfers;
+                parameter2 = route2.transfers;
                 if (parameter1 == parameter2) {
-                    parameter1 = [self routeTripTime:obj1];
-                    parameter2 = [self routeTripTime:obj2];
+                    parameter1 = route1.tripTime;
+                    parameter2 = route2.tripTime;
                 }
                 break;
-            case 0:
-                parameter1 = [self routeTripTime:obj1];
-                parameter2 = [self routeTripTime:obj2];
+            case MWSortingTypeByTripTime:
+                parameter1 = route1.tripTime;
+                parameter2 = route2.tripTime;
                 if (parameter1 == parameter2) {
-                    parameter1 = [self routeTransfers:obj1];
-                    parameter2 = [self routeTransfers:obj2];
+                    parameter1 = route1.transfers;
+                    parameter2 = route2.transfers;
                 }
                 break;
-            case 2:
-                parameter1 = [self routeLength:obj1];
-                parameter2 = [self routeLength:obj2];
+            case MWSortingTypeByLength:
+                parameter1 = route1.length;
+                parameter2 = route2.length;
             default:
                 break;
         }
@@ -304,10 +398,10 @@ MWLine *directLine = nil;
         } else return (NSComparisonResult)NSOrderedSame;
     }];
     
-    [foundRoutes removeAllObjects];
-    [foundRoutes addObjectsFromArray:sortedArray];
+    foundRoutes = [NSArray arrayWithArray:sortedArray];
 }
 
+/*
 // Получение длины маршрута
 - (int)routeLength:(NSArray *)path
 {
@@ -322,13 +416,13 @@ MWLine *directLine = nil;
     }
     
     return length;
-}
+}*/
 
 // Ищем следующий самый короткий маршрут после предыдущего. После нахождения делаем неактивным ребро, при убирании которого получается самый короткий маршрут
-- (NSMutableArray *)searchNextShortestRoute:(NSMutableArray *)previousShortestRoute
+- (MWRoute *)searchNextShortestRoute:(MWRoute *)previousShortestRoute
 {
     // Если запускаем процедуру первый раз, то просто ищем кратчайший маршрут
-    if (previousShortestRoute.count == 0) return [self searchRoute];
+    if (!previousShortestRoute) return [self searchRoute];
 
     // Все новые найденные маршруты будем добавлять в массив allNewRoutes
     NSMutableArray *allNewRoutes = [[NSMutableArray alloc] init];
@@ -339,7 +433,7 @@ MWLine *directLine = nil;
     NSMutableArray *edges = [NSMutableArray array];
     
     // Организуем цикл по всем ребрам маршрута previousShortestRoute
-    for (NSObject *element in previousShortestRoute) {
+    for (NSObject *element in previousShortestRoute.path) {
         // Получаем очередное ребро
         if ([element isKindOfClass:edge.class]) {
             currentEdge = (MWEdge *)element;
@@ -348,10 +442,12 @@ MWLine *directLine = nil;
                 // Делаем ребро неактивным
                 currentEdge.enable = FALSE;
                 // Просчитываем новый маршрут
-                NSMutableArray *route = [NSMutableArray array];
-                [route addObjectsFromArray:[self searchRoute]];
+                NSMutableArray *path = [NSMutableArray array];
+                [path addObjectsFromArray:[self searchRoute].path];
                 // Если маршрут создан, включаем его в список
-                if (route.count > 0) {
+                if (path.count > 0) {
+                    MWRoute *route = [[MWRoute alloc] init];
+                    route.path = [NSArray arrayWithArray:path];
                     [allNewRoutes addObject:route];
                     [edges addObject:currentEdge];
                 }
@@ -365,18 +461,19 @@ MWLine *directLine = nil;
     int minValue = 1000000000;
     int edgeIndex = -1;
     int value = 0;
-    NSMutableArray *route = [NSMutableArray array];
-
+    MWRoute *route;
+    
     for (int i = 0; i < allNewRoutes.count; i++) {
-        switch ([MWSettings sortingType]) {
-            case 2: // Сортировка по длине маршрута
-                value = [self routeLength:[allNewRoutes objectAtIndex:i]];
+        route = (MWRoute *)[allNewRoutes objectAtIndex:i];
+        switch ([MWSettings settings].sortingType) {
+            case MWSortingTypeByLength: // Сортировка по длине маршрута
+                value = route.length;
             break;
-            case 0: // Сортировка по времени поездки
-                value = [self routeTripTime:[allNewRoutes objectAtIndex:i]];
+            case MWSortingTypeByTripTime: // Сортировка по времени поездки
+                value = route.tripTime;
             break;
-            case 1: // Сортировка по количеству пересадок
-                value = [self routeTransfers:[allNewRoutes objectAtIndex:i]];
+            case MWSortingTypeByTransfers: // Сортировка по количеству пересадок
+                value = route.transfers;
             break;
         default:
             break;
@@ -388,17 +485,18 @@ MWLine *directLine = nil;
     }
 
     // Маршрут не найден
-    if (minValue == 1000000000) return route;
+    if (minValue == HUGE) return nil;
 
     // Если сортировка по количеству пересадок, выбираем все маршруты с минимальным количеством пересадок и среди них ищем самый быстрый
     int minTransfers = minValue;
     int transfers;
-    minValue = 1000000000;
-    if ([MWSettings sortingType] == 1) {
+    minValue = HUGE;
+    if ([MWSettings settings].sortingType == MWSortingTypeByTransfers) {
         for (int i = 0; i < allNewRoutes.count; i++) {
+            route = (MWRoute *)[allNewRoutes objectAtIndex:i];
             transfers = [self routeTransfers:[allNewRoutes objectAtIndex:i]];
             if (transfers == minTransfers) {
-                value = [self routeTripTime:[allNewRoutes objectAtIndex:i]];
+                value = route.tripTime;
                 if (value < minValue) {
                     minValue = value;
                     edgeIndex = i;
@@ -407,7 +505,7 @@ MWLine *directLine = nil;
         }
     }
     
-    [route addObjectsFromArray:[allNewRoutes objectAtIndex:edgeIndex]];
+    route = [allNewRoutes objectAtIndex:edgeIndex];
     
     // Делаем неактивным ребро, при котором новый маршрут оказывается самым коротким
     edge = (MWEdge *)[edges objectAtIndex:edgeIndex];
@@ -416,7 +514,7 @@ MWLine *directLine = nil;
 }
 
 // Главная процедура поиска маршрута
-- (NSMutableArray *)searchRoute
+- (MWRoute *)searchRoute
 {
     // Инициализация
     MWMetroMap *metroMap = [MWStorage currentMetroMap];
@@ -426,14 +524,14 @@ MWLine *directLine = nil;
         // Задаем дистанции, равные мнимой бесконечности
         vertex.weight = HUGE;
         // Удаляем все пути
-        [[vertex route] removeAllObjects];
+        [vertex.path removeAllObjects];
     }
     
     MWVertex *startVertex = [self vertexByStation:metroMap.startStation];
     // Задаем вес, равный нулю
     startVertex.weight = 0;
     // Устанавливаем первоначальный путь
-    [[startVertex route] addObject:startVertex];
+    [startVertex.path addObject:startVertex];
     
     // Главный цикл поиска маршрута (релаксация)
     
@@ -449,7 +547,7 @@ MWLine *directLine = nil;
         // находим вершину с минимальным весом
         for (MWVertex *vertex in metroMap.vertices) {
             // Если вершина не посещенная и дистанция у нее минимальная, делаем ее текущей
-            if (!vertex.visited && (vertex.weight < minWeight)) {
+            if (!vertex.visited && vertex.weight < minWeight) {
                 currentVertex = vertex;
                 minWeight = vertex.weight;
             }
@@ -460,40 +558,45 @@ MWLine *directLine = nil;
         // Перерасчет дистанций
         NSMutableArray *edgesNearbyNewVertex = [self getNearbyEdges:currentVertex];
         for (MWEdge *edge in edgesNearbyNewVertex) {
+            // Очищаем все переходы
+            for (MWVertex *vertex in metroMap.vertices) {
+                [vertex.transfers removeAllObjects];
+            }
+
             // Получаем вес нового узла
             int weight;
-            if ([MWSettings sortingType] == 2) { // Сортировка по длине
+            if ([MWSettings settings].sortingType == MWSortingTypeByLength) { // Сортировка по длине
                 weight = edge.length;
-            } else if ([MWSettings sortingType] == 1) { // Сортировка по количеству пересадок
+            } else if ([MWSettings settings].sortingType == MWSortingTypeByTransfers) { // Сортировка по количеству пересадок
                 if ((edge.line == startLine) || (edge.line == finishLine)) {
                     weight = 0;
                 } else {
-                    MWEdge *previousEdge = [self latestEdge:currentVertex.route];
-                    float tripTime = edge.length / (metroMap.middleSpeed * 1000 / 60);
-                    float transferTime = metroMap.switchTime * [self transfersOnVertex:currentVertex fromEdge:previousEdge toEdge:edge];
-                    weight = tripTime + transferTime;
+                    MWEdge *previousEdge = [self latestEdge:currentVertex.path];
+                    float tripTime = edge.length / ((edge.line.middleSpeed > 0 ? edge.line.middleSpeed : metroMap.middleSpeed) * 1000 / 60);
+                    
+                    // Инициализируем количество и время переходов на узле
+                    [self transfersOnVertex:currentVertex fromEdge:previousEdge toEdge:edge];
+                    weight = tripTime + [self vertexTransferTime:currentVertex];
                 }
-//                MMEdge *previousEdge = [self latestEdge:currentVertex.route];
-//                weight = [self transfersOnVertex:currentVertex fromEdge:previousEdge toEdge:edge];
-//                NSLog(@"Пересадок: %d, %@ -> %@", weight, previousEdge.developmentName, edge.developmentName);
             } else { // Сортировка по времени поездки
-                MWEdge *previousEdge = [self latestEdge:currentVertex.route];
-                float tripTime = edge.length / (metroMap.middleSpeed * 1000 / 60);
-                float transferTime = metroMap.switchTime * [self transfersOnVertex:currentVertex fromEdge:previousEdge toEdge:edge];
-                weight = tripTime + transferTime;
+                MWEdge *previousEdge = [self latestEdge:currentVertex.path];
+                float tripTime = edge.length / ((edge.line.middleSpeed > 0 ? edge.line.middleSpeed : metroMap.middleSpeed) * 1000 / 60);
+                // Инициализируем количество и время переходов на узле
+                [self transfersOnVertex:currentVertex fromEdge:previousEdge toEdge:edge];
+                weight = tripTime + [self vertexTransferTime:currentVertex];
             }
             float newWeight = currentVertex.weight + weight;
             // Если новая дистанция меньше старой, записываем ее вместо старой
             MWVertex *vertex = [self getOtherVertex:edge firstVertex:currentVertex];
-            if (newWeight < vertex.weight) {
+            if (vertex && newWeight < vertex.weight) {
                 vertex.weight = newWeight;
                 // Обновляем лучший путь до вершины. Стираем предыдущий
-                [vertex.route removeAllObjects];
+                [vertex.path removeAllObjects];
                 // Добавляем путь из предыдущей вершины
-                [vertex.route addObjectsFromArray:currentVertex.route];
+                [vertex.path addObjectsFromArray:currentVertex.path];
                 // Добавляем себя в конец пути
-                [vertex.route addObject:edge];
-                [vertex.route addObject:vertex];
+                [vertex.path addObject:edge];
+                [vertex.path addObject:vertex];
               }
         }
 
@@ -503,8 +606,33 @@ MWLine *directLine = nil;
     
     MWVertex *finishVertex = [self vertexByStation:metroMap.finishStation];
     
-    // Отдаем маршрут из конечной вершины
-    return finishVertex.route;
+//    [self printRoute:finishVertex.route];
+    
+    MWRoute *route = [[MWRoute alloc] init];
+    route.path = [NSArray arrayWithArray:finishVertex.path];
+    
+    return route;
+}
+
+// Проверяем маршрут на возможность прохождения
+- (BOOL)checkRoute:(NSMutableArray *)path
+{
+    @try {
+        for (int i = 1; i < path.count; i += 2) {
+            MWEdge *edge = (MWEdge *)[path objectAtIndex:i];
+            if ([edge.directionFromStation isEqual:[edge.elements firstObject]]) {
+                return false;
+            }
+        }
+    }
+    @catch (NSException *exception) {
+        //
+    }
+    @finally {
+        //
+    }
+    
+    return true;
 }
 
 // Получение из маршрута последнего участка
@@ -538,23 +666,25 @@ MWLine *directLine = nil;
 }
 
 // Получение количества пересадок на маршруте
-- (int)routeTransfers:(NSArray *)path
+- (int)routeTransfers:(MWRoute *)route
 {
     int switches = 0;
     
     // Если маршрут пустой, выходим
-    if (!path.count) {
-        return switches;
-    }
+    if (!(route.path.count > 0)) return switches;
 
     MWEdge *edge;
     MWVertex *vertex;
     MWStation *station;
     BOOL onePlatform;
     MWMetroMap *metroMap = [MWStorage currentMetroMap];
+
+    if (!metroMap.startStation || !metroMap.finishStation) {
+        return 0;
+    }
     
     // Очищаем все переходы
-    for (NSObject *object in path) {
+    for (NSObject *object in route.path) {
         if ([object isKindOfClass:[MWVertex class]]) {
             vertex = (MWVertex *)object;
             [vertex.transfers removeAllObjects];
@@ -564,9 +694,9 @@ MWLine *directLine = nil;
     // Определяем, является ли начальная вершина пересадочным узлом. Для этого проверяем, принадлежит ли начальная станция маршрута первому ребру. Если принадлежит, то пересадки нет.
     
     // Получаем первое ребро маршрута
-    if ((path.count > 1) && ([[path objectAtIndex:1] isKindOfClass:[MWEdge class]])) {
-        vertex = [path firstObject];
-        edge = [path objectAtIndex:1];
+    if ((route.path.count > 1) && ([[route.path objectAtIndex:1] isKindOfClass:[MWEdge class]])) {
+        vertex = [route.path firstObject];
+        edge = [route.path objectAtIndex:1];
         
         if ([edge.startVertex isEqual:vertex]) {
             station = [edge.elements firstObject];
@@ -576,26 +706,39 @@ MWLine *directLine = nil;
     }
     
     onePlatform = (station.platformIndex + metroMap.startStation.platformIndex > 0) && (station.platformIndex == metroMap.startStation.platformIndex);
-    
+
     // Проверяем, принадлежит ли ему начальная станция маршрута
     if (edge && ![edge containsStation:metroMap.startStation] && !onePlatform) {
         switches++;
         // Добавляем в первую вершину маршрут пересадки "Станция - Станция"
         [vertex.transfers addObject:metroMap.startStation];
         [vertex.transfers addObject:station];
+//        [self initVertexTransferTime:vertex];
     }
 
-    // Если маршрут состоит из одной вершины, то мы ее проверили на предыдущем шаге и можем досрочно выйти из процедуры
-    if (path.count == 1) {
-        return [self switchesBetweenTwoStations:metroMap.startStation toStation:metroMap.finishStation];
+    // Если маршрут состоит из одной вершины...
+    if (route.path.count == 1) {
+        vertex = (MWVertex *)[route.path firstObject];
+        if ([self isPossibleTransferBetweenTwoStations:metroMap.startStation finishStation:metroMap.finishStation]) {
+            [vertex.transfers addObject:metroMap.startStation];
+            [vertex.transfers addObject:metroMap.finishStation];
+//            [self initVertexTransferTime:vertex];
+            return 1;
+        } else {
+            vertex.transfers = [self routeOnVertex:metroMap.startStation finishStation:metroMap.finishStation onVertex:vertex];
+            int switches = (int)[vertex.transfers count] / 2;
+            if (switches < 0)
+                switches = 0;
+            return switches;
+        }
     }
     
     // Определяем, является ли конечная вершина пересадочным узлом. Для этого проверяем, принадлежит ли конечная станция маршрута последнему ребру. Если принадлежит, то пересадки нет.
     
     // Получаем последнее ребро маршрута
-    if ((path.count > 1) && ([[path objectAtIndex:(path.count - 2)] isKindOfClass:[MWEdge class]])) {
-        edge = [path objectAtIndex:(path.count - 2)];
-        vertex = [path lastObject];
+    if ((route.path.count > 1) && ([[route.path objectAtIndex:(route.path.count - 2)] isKindOfClass:[MWEdge class]])) {
+        edge = [route.path objectAtIndex:(route.path.count - 2)];
+        vertex = [route.path lastObject];
         if ([edge.finishVertex isEqual:vertex]) {
             station = [edge.elements lastObject];
         } else {
@@ -611,13 +754,14 @@ MWLine *directLine = nil;
         // Добавляем в конечную вершину маршрут пересадки "Станция - Станция"
         [vertex.transfers addObject:metroMap.finishStation];
         [vertex.transfers addObject:station];
+//        [self initVertexTransferTime:vertex];
     }
 
     // Определяем сколько раз в маршруте менялась линия. Это и есть количество пересадок
     MWLine *previouslyLine = nil;
     MWEdge *previouslyEdge = nil;
     
-    for (NSObject *element in path) {
+    for (NSObject *element in route.path) {
         if ([element isKindOfClass:[MWEdge class]]) {
             edge = (MWEdge *)element;
             if (!previouslyLine) {
@@ -637,22 +781,31 @@ MWLine *directLine = nil;
             vertex = (MWVertex *)element;
         }
     }
+
     return switches;
 }
 
 // Получение второго узла ребра
 - (MWVertex *)getOtherVertex:(MWEdge *)edge firstVertex:(MWVertex *)vertex
 {
+    MWVertex *secondVertex;
     if (edge.startVertex == vertex) {
-        return edge.finishVertex;
+        secondVertex = edge.finishVertex;
     } else if (edge.finishVertex == vertex) {
-        return edge.startVertex;
+        secondVertex = edge.startVertex;
     }
-    return nil;
+
+    /*
+    // Провеяем возможность поездки из ребра firstVertex в ребро secondVertex
+    if (edge.elements.count > 0 && [edge.directionFromStation isEqual:[edge.elements firstObject]]) {
+        secondVertex = nil;
+    } */
+    
+    return secondVertex;
 }
 
 // Журналирование маршрута. Только для теста
-- (void)printRoute:(NSMutableArray *)route
+- (void)printRoute:(MWRoute *)route
 {
     if (!route) {
         NSLog(@" ");
@@ -662,23 +815,42 @@ MWLine *directLine = nil;
     
     MWVertex *vertex = [[MWVertex alloc] init];
     MWEdge *edge = [[MWEdge alloc] init];
+    MWMetroMap *metroMap = [MWStorage currentMetroMap];
+    float tripTime = 0;
     
     NSLog(@" ");
-    NSLog(@"Длина маршрута: %d метров",[self routeLength:route]);
-    NSLog(@"Время поездки: %d минут",[self routeTripTime:route]);
-    NSLog(@"Количество пересадок: %d", [self routeTransfers:route]);
-    for (int i = 0; i < route.count ; i++) {
-        NSObject *item = [route objectAtIndex:i];
+    NSLog(@"Количество пересадок: %d", route.transfers);
+    NSLog(@"Длина маршрута: %f метров",route.length);
+    NSLog(@"Время поездки: %f минут", route.tripTime);
+    for (int i = 0; i < route.path.count ; i++) {
+        NSObject *item = [route.path objectAtIndex:i];
         if ([item isKindOfClass:[vertex class]]) {
             vertex = (MWVertex *)item;
             NSLog(@"%d: %@", i+1, vertex.developmentName);
             if (vertex.transfers.count > 0) {
                 NSLog(@"   Пересадок: %d", (int)vertex.transfers.count / 2);
+                NSLog(@"   Время перехода: %f", [self vertexTransferTime:vertex]);
+                tripTime += [self vertexTransferTime:vertex];
+//                NSLog(@"   Вес: %f", vertex.weight);
             }
         } else if ([item isKindOfClass:[edge class]]) {
-            NSLog(@"%d: %@", i+1, [(MWEdge *)item developmentName]);
+            edge = (MWEdge *)item;
+            NSLog(@"%d: %@", i+1, [edge developmentName]);
+            NSLog(@"Время поездки: %f", edge.length / ((edge.line.middleSpeed > 0 ? edge.line.middleSpeed : metroMap.middleSpeed) * 1000 / 60));
+            tripTime += edge.length / ((edge.line.middleSpeed > 0 ? edge.line.middleSpeed : metroMap.middleSpeed) * 1000 / 60);
         }
     }
+    NSLog(@"Calculated tripTime: %f", tripTime);
+}
+
+- (void)printAllRoutes
+{
+    NSLog(@" ");
+    NSLog(@"Всего маршрутов: %d", (int)foundRoutes.count);
+    for (NSArray *route in foundRoutes) {
+        [self printRoute:route];
+    }
+    NSLog(@" ");
 }
 
 // Получаем массив доступных ребер, выходящих из вершины
@@ -785,21 +957,33 @@ MWLine *directLine = nil;
     
     // Делаем ребро неактивным
     foundEdge.enable = FALSE;
+
+    // Устанавливаем направления движения дня новых виртуальных ребер
+if ([foundEdge.directionFromStation isEqual:[foundEdge.elements firstObject]]) {
+        edge1.directionFromStation = [edge1.elements firstObject];
+        edge2.directionFromStation = [edge2.elements firstObject];
+    } else if ([foundEdge.directionFromStation isEqual:[foundEdge.elements lastObject]]) {
+        edge1.directionFromStation = [edge1.elements lastObject];
+        edge2.directionFromStation = [edge2.elements lastObject];
+    }
 }
 
-// Определение времени поездки по маршруту (от входа в вестибюль до выхода на улицу)
-- (int)routeTripTime:(NSArray *)path
+- (float)vertexTransferTime:(MWVertex *)vertex
 {
+    float result = 0;
+    MWStation *station1, *station2;
+    
     MWMetroMap *metroMap = [MWStorage currentMetroMap];
-    int tripTime = 0;
     
-    // Добавляем время, затрачиваемое на пересадки
-    tripTime += metroMap.switchTime * [self routeTransfers:path];
+    if (vertex.transfers.count > 0) {
+        for (int i = 0; i < vertex.transfers.count - 1; i = i + 2) {
+            station1 = (MWStation *)[vertex.transfers objectAtIndex:i];
+            station2 = (MWStation *)[vertex.transfers objectAtIndex:i + 1];
+            result += [metroMap transferTime:station1.identifier toStation:station2.identifier];
+        }
+    }
     
-    // Добавляем время самой поездки
-    tripTime += [self routeLength:path]/(metroMap.middleSpeed*1000/60);
-    
-    return tripTime;
+    return result;
 }
 
 // Получаем список всех станций узла
@@ -848,7 +1032,7 @@ MWLine *directLine = nil;
     return TRUE;
 }
 
-// Получаем количество пересадок между двумя станциями на одном узле
+/* // Получаем количество пересадок между двумя станциями на одном узле
 - (int)switchesBetweenTwoStations:(MWStation *)fromStation toStation:(MWStation *)toStation
 {
     if ([self isPossibleTransferBetweenTwoStations:fromStation finishStation:toStation]) {
@@ -860,7 +1044,7 @@ MWLine *directLine = nil;
             switches = 0;
         return switches;
     }
-}
+} */
 
 // Получаем количество пересадок на узле
 - (int)transfersOnVertex:(MWVertex *)vertex fromEdge:(MWEdge *)fromEdge toEdge:(MWEdge *)toEdge
@@ -899,23 +1083,25 @@ MWLine *directLine = nil;
     if ([self isPossibleTransferBetweenTwoStations:fromStation finishStation:toStation]) {
         [vertex.transfers addObject:fromStation];
         [vertex.transfers addObject:toStation];
+        [self vertexTransferTime:vertex];
         return 1;
     } else {
-        [vertex.transfers addObjectsFromArray:[self routeOnSwitch:fromStation finishStation:toStation]];
+        [vertex.transfers addObjectsFromArray:[self routeOnVertex:fromStation finishStation:toStation onVertex:vertex]];
         int i = ((int)vertex.transfers.count + 2) / 2;
         
         // Если в маршруте больше одной станции, то количество переходов равно количество станций в маршруте минус один
         if (i > 1) {
             i--;
         }
+        [self vertexTransferTime:vertex];
         return i;
     }
 }
 
 // Получаем маршрут пересадки (список станций)
-- (NSMutableArray *)routeOnSwitch:(MWStation *)startStation finishStation:(MWStation *)finishStation
+- (NSMutableArray *)routeOnVertex:(MWStation *)startStation finishStation:(MWStation *)finishStation onVertex:(MWVertex *)vertex
 {
-    NSMutableArray *route = [[NSMutableArray alloc] init];
+    NSMutableArray *route = [NSMutableArray array];
     
     // Проверка валидности станций
     if (!startStation || !finishStation) {
@@ -929,18 +1115,18 @@ MWLine *directLine = nil;
     }
     
     // Получаем узел стартовой станции
-    MWVertex *vertex = [self vertexByStation:startStation];
+    MWVertex *startVertex = [self vertexByStation:startStation];
     
     // Получаем узел конечной станции
     MWVertex *finishVertex = [self vertexByStation:finishStation];
     
     // Если узлы разные, то это ошибка
-    if (![vertex isEqual:finishVertex]) {
+    if (![startVertex isEqual:finishVertex]) {
         return route;
     }
     
     // Получаем список всех станций пересадочного узла
-    NSMutableArray *stations = [[NSMutableArray alloc] initWithArray:[self stationsForVertex:vertex]];
+    NSMutableArray *stations = [[NSMutableArray alloc] initWithArray:[self stationsForVertex:startVertex]];
     
     // Инициализируем станции
     for (MWStation *station in stations) {
@@ -985,25 +1171,30 @@ MWLine *directLine = nil;
         currentStation.routeVisited = TRUE;
     }
 
-    /* for (NSObject *object in finishStation.route) {
-        NSLog(@"%@", ((MMStation *)object).nameOriginal);
-    }
-
-    NSLog(@" "); */
-    
     return finishStation.route;
 }
 
 + (MWLine *)lineByStation:(MWStation *)station
 {
-    MWMetroMap *metroMap = [MWStorage currentMetroMap];
-    for (MWEdge *edge in metroMap.edges) {
-        for (NSObject *element in edge.elements) {
-            if ([element isEqual:station]) {
-                return edge.line;
+    @try {
+        MWMetroMap *metroMap = [MWStorage currentMetroMap];
+        if (!metroMap || !station) return nil;
+        
+        for (MWEdge *edge in metroMap.edges) {
+            for (NSObject *element in edge.elements) {
+                if ([element isEqual:station]) {
+                    return edge.line;
+                }
             }
         }
     }
+    @catch (NSException *exception) {
+        return nil;
+    }
+    @finally {
+        //
+    }
+
     return nil;
 }
 
@@ -1032,21 +1223,19 @@ MWLine *directLine = nil;
 }
 
 // Соединяем участки с одинаковыми линиями
-+ (NSArray *)compactRoute:(NSArray *)route
++ (MWRoute *)compactRoute:(MWRoute *)route
 {
-    NSMutableArray *result = [[NSMutableArray alloc] init];
+    NSMutableArray *path = [[NSMutableArray alloc] init];
     MWEdge *previousEdge = nil;
     MWEdge *edge;
     MWVertex *vertex, *tempVertex;
     NSObject *object;
     
-//    [[MMRouter router] printRoute:route];
-    
-    for (int i = 0; i < route.count; i++) {
-        object = [route objectAtIndex:i];
+    for (int i = 0; i < route.path.count; i++) {
+        object = [route.path objectAtIndex:i];
         if ([object isKindOfClass:[MWVertex class]]) {
             vertex = (MWVertex *)object;
-            [result addObject:vertex];
+            [path addObject:vertex];
         }
         if ([object isKindOfClass:[MWEdge class]]) {
             edge = (MWEdge *)object;
@@ -1062,38 +1251,46 @@ MWLine *directLine = nil;
                 }
                 tempVertex = edge.startVertex;
                 edge.startVertex = edge.finishVertex;
-                edge.finishVertex = tempVertex; /*
-                if ([[result lastObject] isEqual:edge.finishVertex]) {
-                    [result removeLastObject];
-                    [result addObject:edge.startVertex];
-                } else {
-                    [result removeLastObject];
-                    [result addObject:edge.finishVertex];
-                }*/
+                edge.finishVertex = tempVertex;
             }
             
             if ([edge.line isEqual:previousEdge.line]) {
                 // Объединяем предыдущий и текущий участки, поскольку они принадлежат одной и той же линии
                 // Удаляем предыдущую вершину
                 [vertex.transfers removeAllObjects];
-                [result removeLastObject];
+                [path removeLastObject];
                 // Удаляем предыдущий участок
-                [result removeLastObject];
+                [path removeLastObject];
                 // Объединяем участки
                 MWEdge *newEdge = [self concatEdges:previousEdge secondEdge:edge];
-                [result addObject:newEdge];
+                [path addObject:newEdge];
             } else {
-                [result addObject:edge];
+                [path addObject:edge];
             }
             
-            previousEdge = [result lastObject];
+            previousEdge = [path lastObject];
         }
     }
-
-//    [[MMRouter router] printRoute:result];
-
     
-    return result;
+    MWRoute *resultRoute = [[MWRoute alloc] init];
+    resultRoute.path = [NSArray arrayWithArray:path];
+
+    return resultRoute;
+}
+
+// Проверяем, проходят ли маршруты по одинаковым вершинам (порядок и количество учитываются)
+- (BOOL) areVertexesEqual:(NSArray *)path1 path2:(NSArray *)path2
+{
+    if (!path1 || !path2) return false;
+    if (path1.count != path2.count) return false;
+    if (path1.count == 0) return false;
+    
+    for (int i = 0; i < path1.count; i++) {
+        if (![[path1 objectAtIndex:i] isKindOfClass:[MWVertex class]] || ![[path2 objectAtIndex:i] isKindOfClass:[MWVertex class]]) continue;
+        if (![[path1 objectAtIndex:i] isEqual:[path2 objectAtIndex:i]]) return false;
+    }
+    
+    return true;
 }
 
 @end

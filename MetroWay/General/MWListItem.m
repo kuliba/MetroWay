@@ -89,7 +89,7 @@
 - (BOOL)isDeleteEnabled
 {
     // Если схема загружена и она не текущая, то ее можно удалить
-    return versionNumberOnDevice > 0 && ![identifier isEqualToString:[MWSettings currentMetroMapIdentifier]];
+    return versionNumberOnDevice > 0 && ![identifier isEqualToString:[MWSettings settings].currentMetroMapIdentifier];
 }
 
 - (void)setSizeText

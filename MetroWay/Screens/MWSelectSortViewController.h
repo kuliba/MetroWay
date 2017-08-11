@@ -9,6 +9,7 @@
 #import "MWStorage.h"
 #import "MWLanguage.h"
 #import "MWBaseTableViewCell.h"
+#import "MWMetroMapViewController.h"
 
 @interface MWSelectSortViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
@@ -18,5 +19,6 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 - (IBAction)done:(id)sender;
+- (IBAction)swipeRecognizer:(id)sender;
 
 @end

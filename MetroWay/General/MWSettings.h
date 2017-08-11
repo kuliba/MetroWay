@@ -8,32 +8,42 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    MWSortingTypeByTripTime,
+    MWSortingTypeByTransfers,
+    MWSortingTypeByLength
+} MWSortingType;
+
+typedef enum {
+    MWInterfaceLanguageAutomatic,
+    MWInterfaceLanguageEnglish,
+    MWInterfaceLanguageRussian
+} MWInterfaceLanguage;
+
 @interface MWSettings : NSObject
 
-@property NSString *currentMetroMapIdentifier;
++ (MWSettings *)settings;
 
 // Идентификатор текущей схемы метро
-+ (void)setCurrentMetroMapIdentifier:(NSString *)identifier;
-+ (NSString *)currentMetroMapIdentifier;
-// Тип сортировки маршрутов (по времени маршрута (по умолчанию) - 0, по количеству пересадок - 1)
-+ (void)setSortingType:(int)sortingType;
-+ (int)sortingType;
+@property (nonatomic, strong) NSString *currentMetroMapIdentifier;
+// Тип сортировки маршрутов
+@property (nonatomic) MWSortingType sortingType;
 // Необходимость отрисовки английских названий станций метро около оригинальных и другого текста
-+ (void)setShowEnglishTitles:(BOOL)showEnglishTitles;
-+ (BOOL)showEnglishTitles;
-// Язык приложения: 0 - Automatic, 1 - английский, 2 - русский
-+ (void)setLanguage:(int)language;
-+ (int)language;
+@property (nonatomic) BOOL showEnglishTitles;
+// Язык приложения
+@property (nonatomic) MWInterfaceLanguage interfaceLanguage;
 // Автоматическое обновление схем метро
-+ (void)setAutomaticUpdates:(BOOL)automaticUpdates;
-+ (BOOL)automaticUpdates;
+@property (nonatomic) BOOL automaticUpdates;
 // Счетчик запуска программы
-+ (int)runCount;
+@property (nonatomic) int runCount;
 // Показ всех схем метро или только моих
-+ (void)setShowAllMapsInList:(BOOL)showAllMapsInList;
-+ (BOOL)showAllMapsInList;
+@property (nonatomic) BOOL showAllMapsInList;
+// Показываем ли рекламу
+@property (nonatomic) BOOL areAdsRemoved;
+// Показываем ли проводник до выбранное станции метро
+@property (nonatomic) BOOL showSelectedStationExplorer;
 
-+ (void)initialize;
-+ (void)resetSettings;
+- (void)initialize;
+- (void)resetSettings;
 
 @end

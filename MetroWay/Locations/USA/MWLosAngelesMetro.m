@@ -16,6 +16,10 @@
 #import "MWDrawTextLine.h"
 #import "MWDrawArc.h"
 
+//  History:
+//  001. [23.05.2014] Initial version
+//  002. [11.07.2015] Добавлена станция Тропарево. Пофиксены мелкие баги
+
 @implementation MWLosAngelesMetro
 
 - (id)init
@@ -1189,6 +1193,12 @@
     drawTextLine0036.kernSpacing = 0.6;
     drawTextLine0036.origin = CGPointMake(2549, 3190);
     [station0012.nameOriginalTextPrimitives addObject:drawTextLine0036];
+
+    MWDrawFillCircle *fillCircle0183 = [[MWDrawFillCircle alloc] init];
+    fillCircle0183.center = station0012.mapLocation;
+    fillCircle0183.radius = 4;
+    fillCircle0183.fillColor = [UIColor whiteColor];
+    [station0012.drawPrimitives addObject:fillCircle0183];
 
     // Добавляем вершину
     edge0003.finishVertex = vertex0003;
@@ -2559,9 +2569,6 @@
     [haul0037.drawPrimitives addObject:drawLine0046];
 
     // Добавлям станцию Wilshire/Vermont
-//    [edge0012.elements addObject:station0031];
-
-    // Добавлям станцию Wilshire/Vermont
     MWStation *station0113 = [[MWStation alloc] init];
     station0113.identifier = @"station0113";
     [edge0012.elements addObject:station0113];
@@ -2879,7 +2886,6 @@
     [edge0017.elements addObject:station0118];
     
     station0118.nameOriginal = @"Union Station";
-    //    station0036.mapLocation = CGPointMake(2803.5, 1785);
     station0118.mapLocation = CGPointMake(2803.5, 1795);
     station0118.geoLocation = CGPointMake(34.055367, -118.234984);
 
@@ -3414,9 +3420,18 @@
     station0049.identifier = @"station0049";
     [edge0019.elements addObject:station0049];
     
+    station0049.showNameOnMap = NO;
+    [station0049.nameOriginalTextPrimitives addObject:drawTextLine0036];
+    
     station0049.nameOriginal = @"Willowbrook";
-    station0049.mapLocation = CGPointMake(2533, 3247.5);
+    station0049.mapLocation = CGPointMake(2552.5, 3247.5);
     station0049.geoLocation = CGPointMake(33.928243, -118.237993);
+    
+    MWDrawFillCircle *fillCircle0184 = [[MWDrawFillCircle alloc] init];
+    fillCircle0184.center = station0049.mapLocation;
+    fillCircle0184.radius = 4;
+    fillCircle0184.fillColor = [UIColor whiteColor];
+    [station0049.drawPrimitives addObject:fillCircle0184];
     
     // Добавляем вершину
     edge0019.finishVertex = vertex0003;
@@ -3998,8 +4013,14 @@
     station0061.geoLocation = CGPointMake(34.055367, -118.234978);
     
     station0061.showNameOnMap = false;
-    [station0061.drawPrimitives addObject:drawTextLine0055];
-    
+    [station0061.drawPrimitives addObject:drawTextLine0054];
+
+    MWDrawFillCircle *fillCircle0185 = [[MWDrawFillCircle alloc] init];
+    fillCircle0185.center = station0061.mapLocation;
+    fillCircle0185.radius = 4;
+    fillCircle0185.fillColor = [UIColor whiteColor];
+    [station0061.drawPrimitives addObject:fillCircle0185];
+
     // Добавляем вершину
     edge0021.finishVertex = vertex0011;
     
@@ -6453,7 +6474,7 @@
     station0109.geoLocation = CGPointMake(34.054318, -118.234300);
     
     station0109.showNameOnMap = NO;
-    [station0109.drawPrimitives addObject:drawTextLine0055];
+    [station0109.drawPrimitives addObject:drawTextLine0054];
     
     // Добавляем вершину
     edge0031.finishVertex = vertex0011;
@@ -6608,7 +6629,7 @@
     drawTextLine0117.text = @"El Monte";
     drawTextLine0117.radians = 315 * M_PI / 180;
     drawTextLine0117.fontName = @"HelveticaNeue";
-    drawTextLine0117.fontColor = [UIColor redColor];
+    drawTextLine0117.fontColor = [UIColor blackColor];
     drawTextLine0117.fontSize = 38;
     drawTextLine0117.kernSpacing = -0.3;
     drawTextLine0117.origin = CGPointMake(3772, 1688);

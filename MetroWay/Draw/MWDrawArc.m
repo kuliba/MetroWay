@@ -10,7 +10,7 @@
 
 @implementation MWDrawArc
 
-@synthesize color, width, center, radius, startRadians, endRadians, frame;
+@synthesize color, width, center, radius, startRadians, endRadians, frame, startDegrees, endDegrees;
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -48,5 +48,24 @@
     return CGRectMake(x1, y1, x2 - x1, y2 - y1);
 }
 
+- (void)setStartDegrees:(float)sd
+{
+    self.startRadians = sd * M_PI / 180;
+}
+
+- (float)startDegrees
+{
+    return self.startRadians * 180 / M_PI;
+}
+
+- (void)setEndDegrees:(float)sd
+{
+    self.endRadians = sd * M_PI / 180;
+}
+
+- (float)endDegrees
+{
+    return self.endRadians * 180 / M_PI;
+}
 
 @end

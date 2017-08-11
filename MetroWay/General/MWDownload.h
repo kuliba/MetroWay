@@ -18,5 +18,6 @@
 + (void)updateList;
 - (void)downloadMetroMap:(MWListItem *)listItem;
 + (void)downloadThumbnail:(NSString *)identifier;
++ (NSString *)serverURL:(NSString *)path;
 
 @end

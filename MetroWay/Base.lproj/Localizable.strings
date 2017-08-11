@@ -17,12 +17,18 @@
 "MainMenu_SettingsEnglishTitles" = "Titles on English";
 "MainMenu_SettingsRoutesSortingType" = "Routes sorting type";
 "MainMenu_SettingsAutomaticUpdate" = "Automatic updates";
+"MainMenu_SettingsSelectedStationExplorer" = "The station's explorer";
 
 "MainMenu_FeedbackSendAnLetter" = "Send us an Email";
 "MainMenu_FeedbackMailAlertTitle" = "No mail account";
 "MainMenu_FeedbackMailAlertMessage" = "Please set up a Mail account in order to send a mail.";
-"MainMenu_FeedbackMailSubject" = "About MetRoutes";
+"MainMenu_FeedbackMailSubject" = "About MetroWay";
 
+"MainMenu_Ads" = "Ads";
+"MainMenu_AdsRemoveCell" = "Remove ads for $2.99";
+"MainMenu_AdsRestoreCell" = "Restore purchase";
+"MainMenu_AdsRemovedTitle" = "Purchase restored";
+"MainMenu_AdsRemovedMessage" = "Adverts has been removed";
 // Metro Map
 "MetroMap_SpinnerLoadingMapTitle" = "Loading metro map...";
 "MetroMap_SpinnerDeletingEnglishTextTitle" = "Deleting english titles...";
@@ -30,6 +36,7 @@
 
 "MetroMap_RouterMaps_min" = "min";
 "MetroMap_RouterMaps_transfers_short" = "transf.";
+"MetroMap_RouterMaps_transfers_full" = "transfers";
 
 "MetroMap_SearchFrom" = "From...";
 "MetroMap_SearchTo" = "To...";
@@ -37,7 +44,15 @@
 "MetroMap_FromMenuTitle" = "From";
 "MetroMap_ToMenuTitle" = "To";
 
-// Select metro map
+"MetroMap_RemoveAdsAlertTitle" = "Confirm Your In App Purchase";
+"MetroMap_RemoveAdsAlertMessage" = "Do you want to buy one permanent removal of advertising for $2.99?";
+"MetroMap_RemoveAdsAlertCancel" = "Cancel";
+"MetroMap_RemoveAdsAlertBuy" = "Buy";
+"MetroMap_Closed" = "Closed";
+"MetroMap_Until" = "until";
+"MetroMap_From" = "from";
+"MetroMap_To" = "to";
+// Metro maps
 "SelectMap_MainTitle" = "Metro systems";
 
 "SelectMap_SegmentedItem1" = "All";
@@ -83,8 +98,11 @@
 
 "SelectMap_MyTabDescription" = "List of nearest and favorites metro maps";
 
-"SelectMap_ThumbnailNotAvailable" = "Thumbnail not available";
+"SelectMap_ThumbnailNotAvailable" = "Thumbnail is not available";
 
+"SelectMap_ThumbnailNotAvailable" = "Thumbnail is not available";
+
+"SelectMap_DistanceNotAvailable" = "N/A";
 // Select Language Controller
 "SelectLanguage_Title" = "Language";
 
@@ -94,7 +112,7 @@
 "SortingType_byTransfers" = "By transfer count";
 
 // Search station View
-"SearchStation_CancelButtonTitle" = "Cancel";
+"SearchStation_CancelButtonTitle" = "Close";
 "SearchStation_ListButtonTitle" = "List";
 "SearchStation_PlaceholderWhereFrom" = "Where from";
 "SearchStation_PlaceholderWhereTo" = "Where to";

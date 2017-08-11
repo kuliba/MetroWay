@@ -3023,6 +3023,18 @@
     [station0054.nameOriginalTextPrimitives addObject:drawTextLine0087];
     [station0054.nameEnglishTextPrimitives addObject:drawTextLine0088];
     
+    MWDrawFillCircle *fillCircle0129 = [[MWDrawFillCircle alloc] init];
+    fillCircle0129.center = station0054.mapLocation;
+    fillCircle0129.radius = 20;
+    fillCircle0129.fillColor = [UIColor blackColor];
+    [station0054.drawPrimitives addObject:fillCircle0129];
+    
+    MWDrawFillCircle *fillCircle0130 = [[MWDrawFillCircle alloc] init];
+    fillCircle0130.center = station0054.mapLocation;
+    fillCircle0130.radius = 14;
+    fillCircle0130.fillColor = [UIColor whiteColor];
+    [station0054.drawPrimitives addObject:fillCircle0130];
+
     // Добавляем вершину
     edge0007.finishVertex = vertex0006;
 
@@ -3069,6 +3081,18 @@
     [station0055.nameOriginalTextPrimitives addObject:drawTextLine0085];
     [station0055.nameEnglishTextPrimitives addObject:drawTextLine0086];
     
+    MWDrawFillCircle *fillCircle0127 = [[MWDrawFillCircle alloc] init];
+    fillCircle0127.center = station0055.mapLocation;
+    fillCircle0127.radius = 20;
+    fillCircle0127.fillColor = [UIColor blackColor];
+    [station0055.drawPrimitives addObject:fillCircle0127];
+    
+    MWDrawFillCircle *fillCircle0128 = [[MWDrawFillCircle alloc] init];
+    fillCircle0128.center = station0055.mapLocation;
+    fillCircle0128.radius = 14;
+    fillCircle0128.fillColor = [UIColor whiteColor];
+    [station0055.drawPrimitives addObject:fillCircle0128];
+
     // Добавляем вершину
     edge0008.finishVertex = vertex0005;
 

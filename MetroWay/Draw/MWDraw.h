@@ -15,6 +15,7 @@
 #import "MWRouter.h"
 #import "MWStorage.h"
 #import "MWUpload.h"
+#import "MWRoute.h"
 
 @interface MWDraw : NSObject
 
@@ -29,9 +30,14 @@
 + (void)createBlurBackgrounds;
 // Рисуем маршрут. Возвращаем область, занимаемую маршрутом (приблизительную)
 + (CGRect)drawRoute:(NSArray *)route layer:(CALayer *)layer inContext:(CGContextRef)context;
-+ (void)drawRouteList:(NSArray *)route layer:(CALayer *)layer inContext:(CGContextRef)context;
-+ (float)routeListLength:(NSArray *)route;
++ (float)drawRouteList:(MWRoute *)route layer:(CALayer *)layer inContext:(CGContextRef)context;
++ (float)routeListLength:(MWRoute *)route;
 + (NSString *)cutString:(NSString *)string length:(int)length;
 + (void)createThumbnail:(MWMetroMap *)metroMap;
++ (float)fontSize:(NSString *)text maxWidth:(float)width fromSize:(float)size;
++ (UIImage *)resizeImageWithAspect:(UIImage *)image scaledToMaxWidth:(CGFloat)width height:(CGFloat)height;
++ (UIColor *)colorAtPosition:(UIImage *)image atPosition:(CGPoint)position;
++ (NSString *)hexStringFromColor:(UIColor *)color;
++ (UIColor *)colorAtPixel:(CGPoint)point inImage:(UIImage *)image;
 
 @end

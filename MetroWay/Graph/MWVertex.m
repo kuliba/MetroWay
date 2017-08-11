@@ -10,14 +10,12 @@
 
 @implementation MWVertex
 
-@synthesize drawPrimitives, visited, weight, route, developmentName, identifier, transfers;
-
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:identifier forKey:@"identifier"];
-    [aCoder encodeObject:drawPrimitives forKey:@"drawPrimitives"];
+    [aCoder encodeObject:_identifier forKey:@"identifier"];
+    [aCoder encodeObject:_drawPrimitives forKey:@"drawPrimitives"];
 #ifdef DEBUG
-    [aCoder encodeObject:developmentName forKey:@"developmentName"];
+    [aCoder encodeObject:_developmentName forKey:@"developmentName"];
 #endif
 }
 
@@ -25,21 +23,21 @@
 {
     self = [super init];
     if (self) {
-        self.identifier = [aDecoder decodeObjectForKey:@"identifier"];
-        self.drawPrimitives = [aDecoder decodeObjectForKey:@"drawPrimitives"];
-        if (!drawPrimitives) {
-            drawPrimitives = [[NSMutableArray alloc] init];
+        _identifier = [aDecoder decodeObjectForKey:@"identifier"];
+        _drawPrimitives = [aDecoder decodeObjectForKey:@"drawPrimitives"];
+        if (!_drawPrimitives) {
+            _drawPrimitives = [NSMutableArray array];
         }
 #ifdef DEBUG
-        self.developmentName = [aDecoder decodeObjectForKey:@"developmentName"];
+        _developmentName = [aDecoder decodeObjectForKey:@"developmentName"];
 #endif
         // Все вершины изначально непосещенные
-        visited = FALSE;
+        _visited = FALSE;
         // Число в 100 000 километров считается в программе бесконечным
-        weight = HUGE;
+        _weight = HUGE;
         // Инициализируем массив для хранения маршрута
-        route = [[NSMutableArray alloc] init];
-        transfers = [[NSMutableArray alloc] init];
+        _path = [NSMutableArray array];
+        _transfers = [NSMutableArray array];
     }
     return self;
 }
@@ -48,22 +46,16 @@
 {
     self = [super init];
     if (self) {
-        drawPrimitives = [[NSMutableArray alloc] init];
+        _drawPrimitives = [NSMutableArray array];
         // Все вершины изначально непосещенные
-        visited = FALSE;
+        _visited = FALSE;
         // Число в 100 000 километров считается в программе бесконечным
-        weight = HUGE;
+        _weight = HUGE;
         // Инициализируем массив для хранения маршрута
-        route = [[NSMutableArray alloc] init];
-        transfers = [[NSMutableArray alloc] init];
+        _path = [NSMutableArray array];
+        _transfers = [NSMutableArray array];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    route = nil;
-    transfers = nil;
 }
 
 @end

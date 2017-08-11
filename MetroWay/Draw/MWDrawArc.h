@@ -20,8 +20,12 @@
 @property float radius;
 // Начальный угол (радианы)
 @property float startRadians;
+// Начальный угол (градусы)
+@property float startDegrees;
 // Конечный угол (радианы)
 @property float endRadians;
+// Конечный угол (градусы)
+@property float endDegrees;
 // Приблизительная(!) область, занимаемая дугой
 @property (readonly) CGRect frame;
 

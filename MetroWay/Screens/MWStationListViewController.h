@@ -14,6 +14,7 @@
 #import "MWViewStationCircleR14.h"
 #import "MWRouter.h"
 #import "MWDraw.h"
+#import "MWMetroMapViewController.h"
 
 @interface MWStationListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 

@@ -27,10 +27,10 @@
 @property (nonatomic, strong) NSMutableArray *lines;
 // Массив пар станций, которые присутствуют в узле, но у которых закрыт переход
 @property (nonatomic) NSMutableArray *stationsWithoutTransfer;
+// Массив переходов. Нужен для указания времени перехода, отличного от среднего
+@property (nonatomic) NSMutableArray *transfers;
 // Средняя скорость движения метрополитена, км/ч
 @property (nonatomic) int middleSpeed;
-// Среднее время пересадки в минутах
-@property (nonatomic) int switchTime;
 // Порядок рисования линий на схеме метро
 @property (nonatomic, strong) NSMutableArray *drawLinesOrder;
 // Дополнительные надписи на английском языке
@@ -58,5 +58,7 @@
 - (MWStation *)stationByIdentifier:(NSString *)identifier;
 - (NSArray *)stations;
 - (NSArray *)lineStations:(MWLine *)line;
+- (void)clearListLocations;
+- (float)transferTime:(NSString *)station1Identifier toStation:(NSString *)station2Identifier;
 
 @end

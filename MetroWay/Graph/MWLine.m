@@ -10,27 +10,27 @@
 
 @implementation MWLine
 
-@synthesize nameOriginal, nameEnglish, color, identifier, collapsed, type;
-
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:identifier forKey:@"identifier"];
-    [aCoder encodeObject:nameOriginal forKey:@"nameOriginal"];
-    [aCoder encodeObject:nameEnglish forKey:@"nameEnglish"];
-    [aCoder encodeObject:color forKey:@"color"];
-    [aCoder encodeInt:type forKey:@"type"];
+    [aCoder encodeObject:_identifier forKey:@"identifier"];
+    [aCoder encodeObject:_nameOriginal forKey:@"nameOriginal"];
+    [aCoder encodeObject:_nameEnglish forKey:@"nameEnglish"];
+    [aCoder encodeObject:_color forKey:@"color"];
+    [aCoder encodeInt:_lineType forKey:@"lineType"];
+    [aCoder encodeInt:_middleSpeed forKey:@"middleSpeed"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];
     if (self) {
-        collapsed = true;
-        self.identifier = [aDecoder decodeObjectForKey:@"identifier"];
-        self.nameOriginal = [aDecoder decodeObjectForKey:@"nameOriginal"];
-        self.nameEnglish = [aDecoder decodeObjectForKey:@"nameEnglish"];
-        self.color = [aDecoder decodeObjectForKey:@"color"];
-        self.type = [aDecoder decodeIntForKey:@"type"];
+        _collapsed = true;
+        _identifier = [aDecoder decodeObjectForKey:@"identifier"];
+        _nameOriginal = [aDecoder decodeObjectForKey:@"nameOriginal"];
+        _nameEnglish = [aDecoder decodeObjectForKey:@"nameEnglish"];
+        _color = [aDecoder decodeObjectForKey:@"color"];
+        _lineType = [aDecoder decodeIntForKey:@"lineType"];
+        _middleSpeed = [aDecoder decodeIntForKey:@"middleSpeed"];
     }
     return self;
 }
@@ -38,8 +38,9 @@
 - (id)init
 {
     self = [super init];
-    collapsed = true;
-    type = 0;
+    _collapsed = true;
+    _lineType = 0;
+    _middleSpeed = 0;
     return self;
 }
 

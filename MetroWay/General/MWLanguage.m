@@ -18,14 +18,14 @@ static int saved_language = -1;
 {
     NSString *result = nil;
  
-    if ([MWSettings language] == saved_language) {
+    if ([MWSettings settings].interfaceLanguage == saved_language) {
         if (saved_language == 0) {
             result = NSLocalizedString(key, nil);
         } else {
             result = [saved_language_bundle localizedStringForKey:key value:@"" table:nil];
         }
     } else {
-        saved_language = [MWSettings language];
+        saved_language = [MWSettings settings].interfaceLanguage;
         if (saved_language == 0) { //  Automatic
             result = NSLocalizedString(key, nil);
         } else if (saved_language == 1) { // English
@@ -47,7 +47,7 @@ static int saved_language = -1;
     NSString *result = nil;
     NSString *language;
     
-    switch ([MWSettings language]) {
+    switch ([MWSettings settings].interfaceLanguage) {
         case 1:
             result = listItem.metroMapNameEnglish;
             break;
@@ -59,7 +59,7 @@ static int saved_language = -1;
             break;
         default:
             language = [[NSLocale preferredLanguages] objectAtIndex:0];
-            if ([language isEqualToString:@"ru"]) {
+            if ([language isEqualToString:@"ru-RU"]) {
                 result = listItem.metroMapNameRussian;
                 if (listItem.metroMapNameRussian.length == 0 && listItem.metroMapNameEnglish.length > 0) {
                     result = listItem.metroMapNameEnglish;
@@ -77,7 +77,7 @@ static int saved_language = -1;
     NSString *result = nil;
     NSString *language;
     
-    switch ([MWSettings language]) {
+    switch ([MWSettings settings].interfaceLanguage) {
         case 1:
             result = listItem.cityNameEnglish;
             break;
@@ -86,7 +86,7 @@ static int saved_language = -1;
             break;
         default:
             language = [[NSLocale preferredLanguages] objectAtIndex:0];
-            if ([language isEqualToString:@"ru"]) {
+            if ([language isEqualToString:@"ru-RU"]) {
                 result = listItem.cityNameRussian;
             } else {
                 result = listItem.cityNameEnglish;
@@ -102,7 +102,7 @@ static int saved_language = -1;
     NSString *result = nil;
     NSString *language;
     
-    switch ([MWSettings language]) {
+    switch ([MWSettings settings].interfaceLanguage) {
         case 1:
             result = listItem.countryNameEnglish;
             break;
@@ -111,7 +111,7 @@ static int saved_language = -1;
             break;
         default:
             language = [[NSLocale preferredLanguages] objectAtIndex:0];
-            if ([language isEqualToString:@"ru"]) {
+            if ([language isEqualToString:@"ru-RU"]) {
                 result = listItem.countryNameRussian;
             } else {
                 result = listItem.countryNameEnglish;
@@ -127,7 +127,7 @@ static int saved_language = -1;
     NSString *result = nil;
     NSString *language;
     
-    switch ([MWSettings language]) {
+    switch ([MWSettings settings].interfaceLanguage) {
         case 1:
             result = @"cityNameEnglish";
             break;
@@ -136,7 +136,7 @@ static int saved_language = -1;
             break;
         default:
             language = [[NSLocale preferredLanguages] objectAtIndex:0];
-            if ([language isEqualToString:@"ru"]) {
+            if ([language isEqualToString:@"ru-RU"]) {
                 result = @"cityNameRussian";
             } else {
                 result = @"cityNameEnglish";
@@ -158,6 +158,12 @@ static int saved_language = -1;
         result = cityName;
     }
     return result;
+}
+
++ (BOOL)isRussianLanguage
+{
+    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    return [language isEqualToString:@"ru-RU"] || [MWSettings settings].interfaceLanguage == MWInterfaceLanguageRussian;
 }
 
 @end

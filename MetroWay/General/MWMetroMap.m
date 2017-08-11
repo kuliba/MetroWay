@@ -10,126 +10,134 @@
 #import "MWVertex.h"
 #import "MWEdge.h"
 #import "MWDrawTextLine.h"
+#import "MWTransfer.h"
 
 @implementation MWMetroMap
 
-@synthesize image, edges, vertices, lines, startStation, finishStation, middleSpeed, switchTime, stationsWithoutTransfer, drawLinesOrder, additionalEnglishTextPrimitives, additionalOverMapPrimitives, additionalUnderMapPrimitives, minimumZoomScale, maximumZoomScale, initialZoomScale, contentOffset, identifier, backgroundImage, englishTextDrawn;
-
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:identifier forKey:@"identifier"];
-    [aCoder encodeObject:UIImagePNGRepresentation(image) forKey:@"image"];
-    [aCoder encodeObject:UIImagePNGRepresentation(backgroundImage) forKey:@"backgroundImage"];
-    [aCoder encodeBool:englishTextDrawn forKey:@"englishTextDrawn"];
-    [aCoder encodeObject:edges forKey:@"edges"];
-    [aCoder encodeObject:vertices forKey:@"vertices"];
-    [aCoder encodeObject:lines forKey:@"lines"];
-    [aCoder encodeObject:stationsWithoutTransfer forKey:@"stationsWithoutTransfer"];
-    [aCoder encodeInt:middleSpeed forKey:@"middleSpeed"];
-    [aCoder encodeInt:switchTime forKey:@"switchTime"];
-    [aCoder encodeObject:drawLinesOrder forKey:@"drawLinesOreder"];
-    [aCoder encodeObject:additionalEnglishTextPrimitives forKey:@"additionalEnglishTextPrimitives"];
-    [aCoder encodeObject:additionalUnderMapPrimitives forKey:@"additionalUnderMapPrimitives"];
-    [aCoder encodeObject:additionalOverMapPrimitives forKey:@"additionalOverMapPrimitives"];
-    [aCoder encodeFloat:minimumZoomScale forKey:@"minimumZoomScale"];
-    [aCoder encodeFloat:maximumZoomScale forKey:@"maximumZoomScale"];
-    [aCoder encodeFloat:initialZoomScale forKey:@"initialZoomScale"];
-    [aCoder encodeCGPoint:contentOffset forKey:@"contentOffset"];
+    [aCoder encodeObject:_identifier forKey:@"identifier"];
+    [aCoder encodeObject:UIImagePNGRepresentation(_image) forKey:@"image"];
+    [aCoder encodeObject:UIImagePNGRepresentation(_backgroundImage) forKey:@"backgroundImage"];
+    [aCoder encodeBool:_englishTextDrawn forKey:@"englishTextDrawn"];
+    [aCoder encodeObject:_edges forKey:@"edges"];
+    [aCoder encodeObject:_vertices forKey:@"vertices"];
+    [aCoder encodeObject:_lines forKey:@"lines"];
+    [aCoder encodeObject:_stationsWithoutTransfer forKey:@"stationsWithoutTransfer"];
+    [aCoder encodeObject:_transfers forKey:@"transfers"];
+    [aCoder encodeInt:_middleSpeed forKey:@"middleSpeed"];
+    [aCoder encodeObject:_drawLinesOrder forKey:@"drawLinesOreder"];
+    [aCoder encodeObject:_additionalEnglishTextPrimitives forKey:@"additionalEnglishTextPrimitives"];
+    [aCoder encodeObject:_additionalUnderMapPrimitives forKey:@"additionalUnderMapPrimitives"];
+    [aCoder encodeObject:_additionalOverMapPrimitives forKey:@"additionalOverMapPrimitives"];
+    [aCoder encodeFloat:_minimumZoomScale forKey:@"minimumZoomScale"];
+    [aCoder encodeFloat:_maximumZoomScale forKey:@"maximumZoomScale"];
+    [aCoder encodeFloat:_initialZoomScale forKey:@"initialZoomScale"];
+    [aCoder encodeCGPoint:_contentOffset forKey:@"contentOffset"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init]; 
     if (self) {
-        self.backgroundImage = [UIImage imageWithData:[aDecoder decodeObjectForKey:@"backgroundImage"]];
-        self.image = [UIImage imageWithData:[aDecoder decodeObjectForKey:@"image"]];
+        _backgroundImage = [UIImage imageWithData:[aDecoder decodeObjectForKey:@"backgroundImage"]];
+        _image = [UIImage imageWithData:[aDecoder decodeObjectForKey:@"image"]];
         
-        if (backgroundImage) {
+        if (_backgroundImage) {
             [self setDefaultConstrains];
         }
         
         float tempFloat = [aDecoder decodeFloatForKey:@"minimumZoomScale"];
         if (tempFloat > 0) {
-            self.minimumZoomScale = tempFloat;
+            _minimumZoomScale = tempFloat;
         }
         
         tempFloat = [aDecoder decodeFloatForKey:@"maximumZoomScale"];
         if (tempFloat > 0) {
-            self.maximumZoomScale = tempFloat;
+            _maximumZoomScale = tempFloat;
         }
 
         tempFloat = [aDecoder decodeFloatForKey:@"initialZoomScale"];
         if (tempFloat > 0) {
-            self.initialZoomScale = tempFloat;
+            _initialZoomScale = tempFloat;
         }
 
         CGPoint tempPoint = [aDecoder decodeCGPointForKey:@"contentOffset"];
-        if (fabsf(tempPoint.x) + fabsf(tempPoint.y) > 1) {
-            self.contentOffset = tempPoint;
+        if (fabs(tempPoint.x) + fabs(tempPoint.y) > 1) {
+            _contentOffset = tempPoint;
         }
         
-        self.identifier = [aDecoder decodeObjectForKey:@"identifier"];
-        self.englishTextDrawn = [aDecoder decodeBoolForKey:@"englishTextDrawn"];
-        self.middleSpeed = [aDecoder decodeIntForKey:@"middleSpeed"];
-        self.switchTime = [aDecoder decodeIntForKey:@"switchTime"];
-        self.edges = [aDecoder decodeObjectForKey:@"edges"];
-        if (!edges)
-            edges = [[NSMutableArray alloc] init];
-        self.vertices = [aDecoder decodeObjectForKey:@"vertices"];
-        if (!vertices)
-            vertices = [[NSMutableArray alloc] init];
-        self.lines = [aDecoder decodeObjectForKey:@"lines"];
-        if (!lines) {
-            lines = [[NSMutableArray alloc] init];
+        _identifier = [aDecoder decodeObjectForKey:@"identifier"];
+        _englishTextDrawn = [aDecoder decodeBoolForKey:@"englishTextDrawn"];
+        _middleSpeed = [aDecoder decodeIntForKey:@"middleSpeed"];
+        _edges = [aDecoder decodeObjectForKey:@"edges"];
+        if (!_edges)
+            _edges = [NSMutableArray array];
+        
+        _vertices = [aDecoder decodeObjectForKey:@"vertices"];
+        if (!_vertices)
+            _vertices = [NSMutableArray array];
+        
+        _lines = [aDecoder decodeObjectForKey:@"lines"];
+        if (!_lines) {
+            _lines = [NSMutableArray array];
         }
-        self.stationsWithoutTransfer = [aDecoder decodeObjectForKey:@"stationsWithoutTransfer"];
-        if (!stationsWithoutTransfer) {
-            stationsWithoutTransfer = [[NSMutableArray alloc] init];
+        
+        _stationsWithoutTransfer = [aDecoder decodeObjectForKey:@"stationsWithoutTransfer"];
+        if (!_stationsWithoutTransfer) {
+            _stationsWithoutTransfer = [NSMutableArray array];
         }
-        self.drawLinesOrder = [aDecoder decodeObjectForKey:@"drawLinesOrder"];
-        if (!drawLinesOrder) {
-            drawLinesOrder = [[NSMutableArray alloc] init];
+        
+        _transfers = [aDecoder decodeObjectForKey:@"transfers"];
+        if (!_transfers) {
+            _transfers = [NSMutableArray array];
         }
-        self.additionalEnglishTextPrimitives = [aDecoder decodeObjectForKey:@"additionalEnglishTextPrimitives"];
-        if (!additionalEnglishTextPrimitives) {
-            additionalEnglishTextPrimitives = [[NSMutableArray alloc] init];
+        
+        _drawLinesOrder = [aDecoder decodeObjectForKey:@"drawLinesOrder"];
+        if (!_drawLinesOrder) {
+            _drawLinesOrder = [NSMutableArray array];
         }
-        self.additionalUnderMapPrimitives = [aDecoder decodeObjectForKey:@"additionalUnderMapPrimitives"];
-        if (!additionalUnderMapPrimitives) {
-            additionalUnderMapPrimitives = [[NSMutableArray alloc] init];
+
+        _additionalEnglishTextPrimitives = [aDecoder decodeObjectForKey:@"additionalEnglishTextPrimitives"];
+        if (!_additionalEnglishTextPrimitives) {
+            _additionalEnglishTextPrimitives = [NSMutableArray array];
         }
-        self.additionalOverMapPrimitives = [aDecoder decodeObjectForKey:@"additionalOverMapPrimitives"];
-        if (!additionalOverMapPrimitives) {
-            additionalOverMapPrimitives = [[NSMutableArray alloc] init];
+        
+        _additionalUnderMapPrimitives = [aDecoder decodeObjectForKey:@"additionalUnderMapPrimitives"];
+        if (!_additionalUnderMapPrimitives) {
+            _additionalUnderMapPrimitives = [NSMutableArray array];
+        }
+
+        _additionalOverMapPrimitives = [aDecoder decodeObjectForKey:@"additionalOverMapPrimitives"];
+        if (!_additionalOverMapPrimitives) {
+            _additionalOverMapPrimitives = [NSMutableArray array];
         }
     }
     return self;
 }
 
 - (void)setDefaultConstrains
-{ // 640x1136
+{
     CGPoint offset = CGPointZero;
-    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGRect screenBound = [UIScreen mainScreen].bounds;
     screenBound.size.height -= 75;
-    float initialZoom = screenBound.size.width / self.backgroundImage.size.width;
-    if (self.backgroundImage.size.height * initialZoom < screenBound.size.height) {
-        initialZoom = screenBound.size.height / self.backgroundImage.size.height;
+    float initialZoom = screenBound.size.width / _backgroundImage.size.width;
+    if (_backgroundImage.size.height * initialZoom < screenBound.size.height) {
+        initialZoom = screenBound.size.height / _backgroundImage.size.height;
     }
 
-    float minimumZoom = screenBound.size.width / self.backgroundImage.size.width;
-    if (self.backgroundImage.size.height * initialZoom > screenBound.size.height) {
-        initialZoom = screenBound.size.height / self.backgroundImage.size.height;
+    float minimumZoom = screenBound.size.width / _backgroundImage.size.width;
+    if (_backgroundImage.size.height * initialZoom > screenBound.size.height) {
+        initialZoom = screenBound.size.height / _backgroundImage.size.height;
     }
     
-//    if (initialZoom < 0.25) initialZoom = 0.25;
+    offset.x = - (screenBound.size.width - _backgroundImage.size.width * initialZoom) / 2;
+    offset.y = - (screenBound.size.height - _backgroundImage.size.height * initialZoom) / 2;
     
-    offset.x = - (screenBound.size.width / 2 - self.backgroundImage.size.width * initialZoom / 2);
-    offset.y = - (screenBound.size.height / 2 - self.backgroundImage.size.height * initialZoom / 2);
-    
-    self.minimumZoomScale = minimumZoom;
-    self.maximumZoomScale = 1.5;
-    self.initialZoomScale = initialZoom;
-    self.contentOffset = offset;
+    _minimumZoomScale = minimumZoom;
+    _maximumZoomScale = 1.2;
+    _initialZoomScale = initialZoom;
+    _contentOffset = offset;
 }
 
 -(id)init
@@ -137,17 +145,17 @@
     self = [super init];
     if (self)
     {
-        edges                            = [[NSMutableArray alloc] init];
-        vertices                         = [[NSMutableArray alloc] init];
-        lines                            = [[NSMutableArray alloc] init];
-        stationsWithoutTransfer          = [[NSMutableArray alloc] init];
-        drawLinesOrder                   = [[NSMutableArray alloc] init];
-        additionalEnglishTextPrimitives  = [[NSMutableArray alloc] init];
-        additionalUnderMapPrimitives     = [[NSMutableArray alloc] init];
-        additionalOverMapPrimitives      = [[NSMutableArray alloc] init];
-        middleSpeed = 41;
-        switchTime = 4;
-        englishTextDrawn = true;
+        _edges                           = [NSMutableArray array];
+        _vertices                        = [NSMutableArray array];
+        _lines                           = [NSMutableArray array];
+        _stationsWithoutTransfer         = [NSMutableArray array];
+        _transfers                       = [NSMutableArray array];
+        _drawLinesOrder                  = [NSMutableArray array];
+        _additionalEnglishTextPrimitives = [NSMutableArray array];
+        _additionalUnderMapPrimitives    = [NSMutableArray array];
+        _additionalOverMapPrimitives     = [NSMutableArray array];
+        _middleSpeed = 41;
+        _englishTextDrawn = true;
     }
     return self;
 }
@@ -156,10 +164,10 @@
 {
     MWStation *station = [[MWStation alloc] init];
     
-    if (additionalEnglishTextPrimitives.count)
+    if (_additionalEnglishTextPrimitives.count)
         return true;
     
-    for (MWEdge *edge in edges) {
+    for (MWEdge *edge in _edges) {
         for (NSObject *element in edge.elements) {
             if ([element isKindOfClass:station.class]) {
                 station = (MWStation *)element;
@@ -221,7 +229,7 @@
     float distance;
     float minDistance = HUGE;
     
-    for (MWEdge *edge in edges) {
+    for (MWEdge *edge in _edges) {
         for (NSObject *element in edge.elements) {
             if ([element isKindOfClass:[MWStation class]]) {
                 station = (MWStation *)element;
@@ -229,7 +237,7 @@
                 if ([self checkConstains:station.nameOriginalTextPrimitives coordinate:coordinate]) return station;
                 if ([self checkConstains:station.nameEnglishTextPrimitives coordinate:coordinate]) return station;
 
-                distance = sqrt(powf(abs(coordinate.x - station.mapLocation.x), 2) + powf(abs(coordinate.y - station.mapLocation.y), 2));
+                distance = sqrt(powf(fabs(coordinate.x - station.mapLocation.x), 2) + powf(fabs(coordinate.y - station.mapLocation.y), 2));
                 if ((distance < 60) && (distance < minDistance)) { // Здесь регулируем чувствительность нажатия
                     minDistance = distance;
                     minStation = station;
@@ -244,7 +252,7 @@
 - (MWStation *)stationByIdentifier:(NSString *)ident
 {
     MWStation *station;
-    for (MWEdge *edge in self.edges) {
+    for (MWEdge *edge in _edges) {
         for (NSObject *element in edge.elements) {
             if ([element isKindOfClass:[MWStation class]]) {
                 station = (MWStation *)element;
@@ -263,7 +271,7 @@
     NSMutableArray *stations = [[NSMutableArray alloc] init];
     MWStation *station;
     
-    for (MWEdge *edge in edges) {
+    for (MWEdge *edge in _edges) {
         for (NSObject *element in edge.elements) {
             if ([element isKindOfClass:[MWStation class]]) {
                 station = (MWStation *)element;
@@ -279,7 +287,7 @@
 - (NSArray *)lineStations:(MWLine *)line
 {
     NSMutableArray *stations = [NSMutableArray array];
-    for (MWEdge *edge in edges) {
+    for (MWEdge *edge in _edges) {
         if ([edge.line isEqual:line]) {
             [stations addObjectsFromArray:edge.stations];
         }
@@ -296,6 +304,37 @@
     }
 
     return stations;
+}
+
+- (void)clearListLocations
+{
+    // Получаем станции
+    MWStation *station;
+    
+    for (MWEdge *edge in _edges) {
+        for (NSObject *element in edge.elements) {
+            if ([element isKindOfClass:[MWStation class]]) {
+                station = (MWStation *)element;
+                station.listLocation = CGPointMake(-100, -100);
+            }
+        }
+    }
+}
+
+- (float)transferTime:(NSString *)station1Identifier toStation:(NSString *)station2Identifier
+{
+    if (!station1Identifier || !station2Identifier) return 4;
+    
+    for (MWTransfer *transfer in _transfers) {
+        if ([transfer.station1Identifier isEqualToString:station1Identifier] && [transfer.station2Identifier isEqualToString:station2Identifier]) {
+            return transfer.time;
+        }
+        if (transfer.roundTrip && [transfer.station2Identifier isEqualToString:station1Identifier] && [transfer.station1Identifier isEqualToString:station2Identifier]) {
+            return transfer.time;
+        }
+    }
+    
+    return 4;
 }
 
 @end

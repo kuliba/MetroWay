@@ -10,7 +10,7 @@
 
 @implementation MWDrawTextLine
 
-@synthesize text, fontName, fontSize, fontColor, kernSpacing, origin, frame, radians;
+@synthesize text, fontName, fontSize, fontColor, kernSpacing, origin, frame, radians, degrees;
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -58,13 +58,13 @@
     float catet4 = textSize.height * sin(radians);
         
     if (radians >= 0 * M_PI / 180 && radians <= 90 * M_PI / 180) {
-        result = CGRectMake(origin.x - catet4, origin.y, abs(catet1) + abs(catet4), abs(catet2) + abs(catet3));
+        result = CGRectMake(origin.x - catet4, origin.y, fabsf(catet1) + fabsf(catet4), fabsf(catet2) + fabsf(catet3));
     } else if (radians > 90 * M_PI / 180 && radians <= 180 * M_PI / 180) {
-        result = CGRectMake(origin.x - catet4 + catet1, origin.y + catet3, abs(catet1) + abs(catet4), abs(catet2) + abs(catet3));
+        result = CGRectMake(origin.x - catet4 + catet1, origin.y + catet3, fabsf(catet1) + fabsf(catet4), fabsf(catet2) + fabsf(catet3));
     } else if (radians > 180 * M_PI / 180 && radians <= 270 * M_PI / 180) {
-        result = CGRectMake(origin.x - abs(catet1), origin.y - abs(catet3) - abs(catet2), abs(catet1) + abs(catet4), abs(catet2) + abs(catet3));
+        result = CGRectMake(origin.x - fabsf(catet1), origin.y - fabsf(catet3) - fabsf(catet2), fabsf(catet1) + fabsf(catet4), fabsf(catet2) + fabsf(catet3));
     } else {
-        result = CGRectMake(origin.x, origin.y - abs(catet2), abs(catet1) + abs(catet4), abs(catet2) + abs(catet3));
+        result = CGRectMake(origin.x, origin.y - fabsf(catet2), fabsf(catet1) + fabsf(catet4), fabsf(catet2) + fabsf(catet3));
     }
     
     return result;
@@ -79,6 +79,16 @@
     
     result = CGRectMake(origin.x, origin.y, textSize.width, textSize.height);
     return result;
+}
+
+- (void)setDegrees:(float)sd
+{
+    self.radians = sd * M_PI / 180;
+}
+
+- (float)degrees
+{
+    return self.radians * 180 / M_PI;
 }
 
 @end

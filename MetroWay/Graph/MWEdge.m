@@ -8,32 +8,31 @@
 
 #import "MWEdge.h"
 #import "MWHaul.h"
+#import "MWStation.h"
 
 @implementation MWEdge
-
-@synthesize elements, directionFromStation, startVertex, finishVertex, line, enable, sinthetic, developmentName, identifier;
 
 - (id)init
 {
     self =[super init];
     if (self) {
-        elements = [[NSMutableArray alloc] init];
-        enable = TRUE;
-        sinthetic = FALSE;
+        _elements = [[NSMutableArray alloc] init];
+        _enable = TRUE;
+        _sinthetic = FALSE;
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:identifier forKey:@"identifier"];
-    [aCoder encodeObject:elements forKey:@"elements"];
-    [aCoder encodeObject:directionFromStation forKey:@"directionFromStation"];
-    [aCoder encodeObject:startVertex forKey:@"startVertex"];
-    [aCoder encodeObject:finishVertex forKey:@"finishVertex"];
-    [aCoder encodeObject:line forKey:@"line"];
+    [aCoder encodeObject:_identifier forKey:@"identifier"];
+    [aCoder encodeObject:_elements forKey:@"elements"];
+    [aCoder encodeObject:_directionFromStation forKey:@"directionFromStation"];
+    [aCoder encodeObject:_startVertex forKey:@"startVertex"];
+    [aCoder encodeObject:_finishVertex forKey:@"finishVertex"];
+    [aCoder encodeObject:_line forKey:@"line"];
 #ifdef DEBUG
-    [aCoder encodeObject:developmentName forKey:@"developmentName"];
+    [aCoder encodeObject:_developmentName forKey:@"developmentName"];
 #endif
 }
 
@@ -43,8 +42,8 @@
     if (self) {
         [self setIdentifier:[aDecoder decodeObjectForKey:@"identifier"]];
         [self setElements:[aDecoder decodeObjectForKey:@"elements"]];
-        if (!elements)
-            elements = [[NSMutableArray alloc] init];
+        if (!_elements)
+            _elements = [[NSMutableArray alloc] init];
         [self setDirectionFromStation:[aDecoder decodeObjectForKey:@"directionFromStation"]];
         [self setStartVertex:[aDecoder decodeObjectForKey:@"startVertex"]];
         [self setFinishVertex:[aDecoder decodeObjectForKey:@"finishVertex"]];
@@ -62,7 +61,7 @@
         return FALSE;
     }
     
-    return [elements containsObject:station];
+    return [_elements containsObject:station];
 }
 
 - (int)stationIndex:(MWStation *)station
@@ -79,17 +78,17 @@
 {
     MWVertex *result;
     if ([[self.elements firstObject] isEqual:station]) {
-        result = startVertex;
+        result = _startVertex;
     } else if ([[self.elements lastObject] isEqual:station]) {
-        result = finishVertex;
+        result = _finishVertex;
     }
     return result;
 }
 
-- (int)length
+- (float)length
 {
-    int result = -1;
-    for (NSObject *element in elements) {
+    float result = -1;
+    for (NSObject *element in _elements) {
         if ([element isMemberOfClass:[MWHaul class]])
             result += [(MWHaul *)element length];
     }
@@ -99,7 +98,7 @@
 // Возвращаем количество станций в участке
 - (int)stationsCount
 {
-    return ((int)elements.count - 1) / 2 + 1;
+    return ((int)_elements.count - 1) / 2 + 1;
 }
 
 - (NSArray *)stations
@@ -107,7 +106,7 @@
     MWStation *station;
     
     NSMutableArray *stations = [[NSMutableArray alloc] init];
-    for (NSObject *element in elements) {
+    for (NSObject *element in _elements) {
         if ([element isKindOfClass:[MWStation class]]) {
             station = (MWStation *)element;
             [stations addObject:station];

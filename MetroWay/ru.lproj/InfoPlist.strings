@@ -1,0 +1,10 @@
+/* 
+  MetroWay-Info.strings
+  MetroWay
+
+  Created by Valentin Ozerov on 23.06.16.
+  Copyright © 2016 Valentin Ozerov. All rights reserved.
+*/
+
+"NSLocationWhenInUseUsageDescription" = "Текущая геопозиция необходима для определения ближайших станций метро";
+"NSLocationAlwaysUsageDescription" = "Текущая геопозиция необходима для определения ближайших станций метро";

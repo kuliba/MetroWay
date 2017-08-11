@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MWStationListViewController">
@@ -18,68 +19,49 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="70e-nU-7Mn">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="70e-nU-7Mn">
                     <rect key="frame" x="0.0" y="75" width="320" height="493"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </imageView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="CLx-09-yBf">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="CLx-09-yBf">
                     <rect key="frame" x="0.0" y="75" width="320" height="493"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <animations/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="3Lv-ed-lx7"/>
                         <outlet property="delegate" destination="-1" id="JOu-WG-9fD"/>
                     </connections>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="soP-xN-tby">
-                    <rect key="frame" x="0.0" y="-6" width="60" height="76"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="60" id="JZd-kI-oIo"/>
-                        <constraint firstAttribute="height" constant="76" id="xTk-sh-ciG"/>
-                    </constraints>
-                    <inset key="contentEdgeInsets" minX="21" minY="16" maxX="0.0" maxY="0.0"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="soP-xN-tby">
+                    <rect key="frame" x="0.0" y="0.0" width="60" height="76"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <animations/>
+                    <inset key="contentEdgeInsets" minX="21" minY="12" maxX="0.0" maxY="0.0"/>
                     <state key="normal" title="&lt;"/>
                     <connections>
                         <action selector="done:" destination="-1" eventType="touchUpInside" id="VDA-kA-Tbu"/>
                     </connections>
                 </button>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Jfc-In-DJc">
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="Jfc-In-DJc">
                     <rect key="frame" x="63" y="29" width="247" height="29"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="34" id="adW-qc-ZEm"/>
-                        <constraint firstAttribute="width" constant="247" id="yPA-ea-O6G"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <animations/>
                     <segments>
                         <segment title="First"/>
                         <segment title="Second"/>
                     </segments>
-                    <color key="tintColor" red="0.29019607843137252" green="0.72941176470588232" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="0.058823529409999999" green="0.61568627450000002" blue="0.34509803919999998" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
                         <action selector="select:" destination="-1" eventType="valueChanged" id="9Ts-Wr-Lbc"/>
                     </connections>
                 </segmentedControl>
             </subviews>
+            <animations/>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstItem="CLx-09-yBf" firstAttribute="top" secondItem="soP-xN-tby" secondAttribute="bottom" constant="5" id="16H-rO-CcI"/>
-                <constraint firstAttribute="trailing" secondItem="CLx-09-yBf" secondAttribute="trailing" id="7zp-ku-eJ1"/>
-                <constraint firstItem="CLx-09-yBf" firstAttribute="trailing" secondItem="70e-nU-7Mn" secondAttribute="trailing" id="8Ta-za-4If"/>
-                <constraint firstItem="Jfc-In-DJc" firstAttribute="baseline" secondItem="soP-xN-tby" secondAttribute="baseline" id="B8I-iT-nss"/>
-                <constraint firstItem="CLx-09-yBf" firstAttribute="bottom" secondItem="70e-nU-7Mn" secondAttribute="bottom" id="Q7X-YI-BOg"/>
-                <constraint firstAttribute="bottom" secondItem="CLx-09-yBf" secondAttribute="bottom" id="QnY-nM-otK"/>
-                <constraint firstAttribute="trailing" secondItem="Jfc-In-DJc" secondAttribute="trailing" constant="10" id="RDZ-ut-EFh"/>
-                <constraint firstItem="CLx-09-yBf" firstAttribute="top" secondItem="Jfc-In-DJc" secondAttribute="bottom" constant="18" id="TUl-py-lIC"/>
-                <constraint firstItem="Jfc-In-DJc" firstAttribute="leading" secondItem="soP-xN-tby" secondAttribute="trailing" constant="3" id="VhS-Zf-eQb"/>
-                <constraint firstItem="CLx-09-yBf" firstAttribute="leading" secondItem="soP-xN-tby" secondAttribute="leading" id="XXm-0s-9DY"/>
-                <constraint firstItem="CLx-09-yBf" firstAttribute="top" secondItem="70e-nU-7Mn" secondAttribute="top" id="dSu-tG-xcd"/>
-                <constraint firstItem="Jfc-In-DJc" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="29" id="qB1-Tw-yFL"/>
-                <constraint firstItem="CLx-09-yBf" firstAttribute="leading" secondItem="70e-nU-7Mn" secondAttribute="leading" id="tU4-E2-0Mv"/>
-            </constraints>
             <point key="canvasLocation" x="540" y="582"/>
         </view>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

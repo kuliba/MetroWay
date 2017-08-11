@@ -77,6 +77,10 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (IBAction)swipeRecognizer:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
@@ -98,39 +102,42 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     if (cell == nil) {
         cell = [[MWBaseTableViewCell alloc] initWithFrame:CGRectMake(0,0,200,65)];
-        
-        if ([MWSettings sortingType] == indexPath.row) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        } else {
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        
-        if (indexPath.row > 0) {
-            UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(14.5, 0, cell.bounds.size.width - 29, 0.5)];
-            separator.backgroundColor = [UIColor colorWithRed:(204/255.0) green:(204/255.0) blue:(204/255.0) alpha:1];
-            [cell addSubview:separator];
-        }
-        
-        UILabel *languageLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        languageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
-        languageLabel.frame = CGRectMake(17, 17, cell.bounds.size.width - 50, 30);
-        languageLabel.textColor = [UIColor colorWithRed:(46/255.0) green:(51/255.0) blue:(60/255.0) alpha:1];
-        
-        switch (indexPath.row) {
-            case 0:
-                languageLabel.text = [MWLanguage localizedStringForKey:@"SortingType_byTripTime"];
-                break;
-            case 1:
-                languageLabel.text = [MWLanguage localizedStringForKey:@"SortingType_byTransfers"];
-                break;
-            default:
-                break;
-        }
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        [cell addSubview:languageLabel];
     }
+    
+    MWSortingType sortingType = [MWSettings settings].sortingType;
+    
+    if ((sortingType == MWSortingTypeByTripTime && indexPath.row == 0) ||
+        (sortingType == MWSortingTypeByTransfers && indexPath.row == 1)) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+        
+    if (indexPath.row > 0) {
+        UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(14.5, 0, cell.bounds.size.width - 29, 0.5)];
+        separator.backgroundColor = [UIColor colorWithRed:(204/255.0) green:(204/255.0) blue:(204/255.0) alpha:1];
+        [cell addSubview:separator];
+    }
+        
+    UILabel *languageLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    languageLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
+    languageLabel.frame = CGRectMake(17, 17, cell.bounds.size.width - 50, 30);
+    languageLabel.textColor = [UIColor colorWithRed:(46/255.0) green:(51/255.0) blue:(60/255.0) alpha:1];
+        
+    switch (indexPath.row) {
+        case 0:
+            languageLabel.text = [MWLanguage localizedStringForKey:@"SortingType_byTripTime"];
+            break;
+        case 1:
+            languageLabel.text = [MWLanguage localizedStringForKey:@"SortingType_byTransfers"];
+            break;
+        default:
+            break;
+    }
+        
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+    [cell addSubview:languageLabel];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -162,12 +169,20 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     UITableViewCell *cell;
-    [MWSettings setSortingType:(int)indexPath.row];
+    
+    if ((int)indexPath.row == 0) {
+        [MWSettings settings].sortingType = MWSortingTypeByTripTime;
+    } else {
+        [MWSettings settings].sortingType = MWSortingTypeByTransfers;
+    }
+
+    MWSortingType sortingType = [MWSettings settings].sortingType;
 
     [self.tableView beginUpdates];
     for (int i = 0; i < [self.tableView numberOfRowsInSection:0]; i++) {
         cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if (i == [MWSettings sortingType]) {
+        if ((i == 0 && sortingType == MWSortingTypeByTripTime) ||
+            (i == 1 && sortingType == MWSortingTypeByTransfers)) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -197,7 +212,7 @@
     
     int y;
     
-    switch ([MWSettings language]) {
+    switch ([MWSettings settings].interfaceLanguage) {
         case 1:
             y = 42;
             break;

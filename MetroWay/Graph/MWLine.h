@@ -19,8 +19,10 @@
 // Цвет линии
 @property (nonatomic, strong) UIColor *color;
 // Тип линии - метро, автобус, троллейбус и пр...
-@property (nonatomic) int type;
+@property (nonatomic) int lineType;
 // Отображаются ли в списке станции?
 @property BOOL collapsed;
+// Средняя скорость движения линии, км/ч
+@property (nonatomic) int middleSpeed;
 
 @end

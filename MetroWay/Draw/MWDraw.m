@@ -19,6 +19,7 @@
 #import "MWSettings.h"
 #import "MWDrawRoundedRect.h"
 #import "MWStorage.h"
+#import "MWLanguage.h"
 
 @implementation MWDraw
 
@@ -132,7 +133,7 @@
         }
     }
     
-    if ([MWSettings showEnglishTitles]) {
+    if ([MWSettings settings].showEnglishTitles) {
         metroMap.englishTextDrawn = true;
         // Рисуем названия станций на английском языке
         for(MWLine *line in metroMap.drawLinesOrder) {
@@ -165,7 +166,12 @@
         [self drawPrimitive:primitive inContext:context size:metroMap.backgroundImage.size];
     }
 
-    metroMap.englishTextDrawn = [MWSettings showEnglishTitles];
+    metroMap.englishTextDrawn = [MWSettings settings].showEnglishTitles;
+    
+    // Рисуем закрытые станции
+    for (MWStation *station in [metroMap stations]) {
+        if ([station isClosed]) [self drawClosedStation:station inContext:context];
+    }
 /////////////////////////
     
 	// make image out of bitmap context
@@ -178,6 +184,48 @@
     // [UIImagePNGRepresentation(retImage) writeToFile:path atomically:YES];
     
     return retImage;
+}
+
+// Рисуем закрытую станцию
++ (void)drawClosedStation:(MWStation *)station inContext:(CGContextRef)context
+{
+    MWDrawFillCircle *fillCircle = [[MWDrawFillCircle alloc] init];
+
+    fillCircle.center = station.mapLocation;
+    fillCircle.radius = 18;
+    fillCircle.fillColor = [UIColor whiteColor];
+    [self drawFillCircle:fillCircle inContext:context];
+    
+    fillCircle.center = station.mapLocation;
+    fillCircle.radius = 17;
+    fillCircle.fillColor = [UIColor redColor];
+    [self drawFillCircle:fillCircle inContext:context];
+    
+    fillCircle.center = station.mapLocation;
+    fillCircle.radius = 12.5;
+    fillCircle.fillColor = [UIColor blueColor];
+    [self drawFillCircle:fillCircle inContext:context];
+    
+    MWDrawLine *drawLine = [[MWDrawLine alloc] init];
+    drawLine.startPoint = CGPointMake(station.mapLocation.x - 10, station.mapLocation.y + 10);
+    drawLine.endPoint = CGPointMake(station.mapLocation.x + 10, station.mapLocation.y - 10);
+    drawLine.width = 4;
+    drawLine.color = [UIColor redColor];
+    [self drawLine:drawLine inContext:context];
+
+    drawLine.startPoint = CGPointMake(station.mapLocation.x - 10, station.mapLocation.y - 10);
+    drawLine.endPoint = CGPointMake(station.mapLocation.x + 10, station.mapLocation.y + 10);
+    drawLine.width = 4;
+    drawLine.color = [UIColor redColor];
+    [self drawLine:drawLine inContext:context];
+
+    MWDrawTextLine *drawTextLine = [[MWDrawTextLine alloc] init];
+    drawTextLine.text = @"i";
+    drawTextLine.fontName = @"AmericanTypewriter-Bold";
+    drawTextLine.fontColor = [UIColor whiteColor];
+    drawTextLine.fontSize = 26;
+    drawTextLine.origin = CGPointMake(station.mapLocation.x - 4.5, station.mapLocation.y - 16.1);
+    [self drawTextLine:drawTextLine inContext:context];
 }
 
 // Рисуем линию
@@ -321,7 +369,11 @@
     [dictionary setValue:style forKey:NSParagraphStyleAttributeName];
     if (textLine.kernSpacing)
         [dictionary setValue:@(textLine.kernSpacing) forKey:NSKernAttributeName];
-        
+    
+    CGContextSetShouldSmoothFonts(context, true);
+    CGContextSetShouldSubpixelQuantizeFonts(context, true);
+    CGContextSetShouldSubpixelPositionFonts(context, true);
+    
     UIGraphicsPushContext(context);
     [textLine.text drawInRect:CGRectMake(0, 0, 1500, 1500) withAttributes:dictionary];
     UIGraphicsPopContext();
@@ -616,7 +668,7 @@
     return CGRectMake(x1, y1, x2 - x1, y2 - y1);
 }
 
-+ (CGRect)drawRoute:(NSArray *)route layer:(CALayer *)layer inContext:(CGContextRef)context
++ (CGRect)drawRoute:(MWRoute *)route layer:(CALayer *)layer inContext:(CGContextRef)context
 {
     NSMutableArray *primitives = [[NSMutableArray alloc] init];
     
@@ -626,13 +678,13 @@
     MWVertex *vertex;
 
     // Инициализируем маршрут и переходы (прописываем маршруты в вершинах)
-    //[[MMRouter router] routeTransfers:(NSMutableArray *)route];
+    //[[MWRouter router] routeTransfers:(NSMutableArray *)route];
     
     CGRect primitiveFrame = CGRectZero;
     CGRect routeFrame = CGRectZero;
     
     // Рисуем перегоны
-    for (NSObject *object in route) {
+    for (NSObject *object in route.path) {
         if ([object isKindOfClass:[MWEdge class]]) {
             edge = (MWEdge *)object;
             for (NSObject *element in edge.elements) {
@@ -654,7 +706,7 @@
     }
 
     // Рисуем станции
-    for (NSObject *object in route) {
+    for (NSObject *object in route.path) {
         if ([object isKindOfClass:[MWEdge class]]) {
             edge = (MWEdge *)object;
             for (NSObject *element in edge.elements) {
@@ -663,7 +715,7 @@
                     [primitives removeAllObjects];
                     [primitives addObjectsFromArray:station1.drawPrimitives];
                     [primitives addObjectsFromArray:station1.nameOriginalTextPrimitives];
-                    if ([MWSettings showEnglishTitles]) {
+                    if ([MWSettings settings].showEnglishTitles) {
                         [primitives addObjectsFromArray:station1.nameEnglishTextPrimitives];
                     }
                     for (NSMutableArray *primitive in primitives) {
@@ -674,13 +726,14 @@
                             routeFrame = [self extensionFrame:routeFrame toRect:primitiveFrame];
                         }
                     }
+                    if ([station1 isClosed]) [self drawClosedStation:station1 inContext:context];
                 }
             }
         }
     }
 
     // Рисуем вершины
-    for (NSObject *object in route) {
+    for (NSObject *object in route.path) {
         if ([object isKindOfClass:[MWVertex class]]) {
             vertex = (MWVertex *)object;
             if (vertex.transfers.count > 1) { // Есть переходы, надо рисовать
@@ -746,9 +799,33 @@
         }
     }
     
+    if (route.path.count == 1 && [[route.path firstObject] isKindOfClass:[MWVertex class]]) { // Обрабатываем случай, когда маршрут состоит из одной пересадки
+        MWVertex *vertex = (MWVertex *)[route.path firstObject];
+        NSMutableArray *stations = [[MWRouter router] stationsForVertex:vertex];
+        
+        for (MWStation *station in stations) {
+            [primitives removeAllObjects];
+            [primitives addObjectsFromArray:station.drawPrimitives];
+            [primitives addObjectsFromArray:station.nameOriginalTextPrimitives];
+            if ([MWSettings settings].showEnglishTitles) {
+                [primitives addObjectsFromArray:station.nameEnglishTextPrimitives];
+            }
+            for (NSMutableArray *primitive in primitives) {
+                [self drawPrimitive:primitive inContext:context size:layer.bounds.size];
+                if ([primitive isKindOfClass:[MWDrawLine class]] ||
+                    [primitive isKindOfClass:[MWDrawTextLine class]]) {
+                    primitiveFrame = [self calculatePrimitiveFrame:primitive];
+                    routeFrame = [self extensionFrame:routeFrame toRect:primitiveFrame];
+                }
+            }
+        }
+    }
+    
     return routeFrame;
 }
 
+// Расстояние от левого края до центра линии
+float leftOffset = 46.5;
 // Расстояние от верхнего края до центра начала списка
 float topOffset = 63;
 // Расстояние от конца списка до нижнего края
@@ -763,6 +840,8 @@ float lastStationOffset = 56.5;
 float transferLength_original = 19;
 // Расстояние между узлами пересадок с английскими надписями
 float transferLength_withEnglish = 36;
+// Позияия времени
+float timeOffset;
 
 // Вычисляем длину участка
 + (float)edgeLength:(MWEdge *)edge
@@ -791,14 +870,14 @@ float transferLength_withEnglish = 36;
     
     MWMetroMap *metroMap = [MWStorage currentMetroMap];
     
-    if (metroMap.englishTextExists && [MWSettings showEnglishTitles]) {
+    if (metroMap.englishTextExists && [MWSettings settings].showEnglishTitles) {
         result = vertex.transfers.count / 2 * transferLength_withEnglish;
     } else {
         result = vertex.transfers.count / 2 * transferLength_original;
     }
  
     if ([vertex.transfers containsObject:metroMap.startStation]) {
-        if (metroMap.englishTextExists && [MWSettings showEnglishTitles]) {
+        if (metroMap.englishTextExists && [MWSettings settings].showEnglishTitles) {
             result -= 3;
         } else {
             result += 12;
@@ -813,13 +892,15 @@ float transferLength_withEnglish = 36;
 }
 
 // Вычисляем длину всего списка
-+ (float)routeListLength:(NSArray *)route
++ (float)routeListLength:(MWRoute *)route
 {
     float result = 0;
         
     result += topOffset;
 
-    for (NSObject *element in route) {
+    int stationsCount = 0;
+    
+    for (NSObject *element in route.path) {
         if ([element isKindOfClass:[MWVertex class]]) {
             result += [MWDraw vertexLength:(MWVertex *)element];
         } else if ([element isKindOfClass:[MWEdge class]]) {
@@ -829,12 +910,20 @@ float transferLength_withEnglish = 36;
     
     result += bottomOffset;
     
+    MWMetroMap *metroMap = [MWStorage currentMetroMap];
+
+    
+    
+    if ([MWSettings settings].showEnglishTitles && metroMap.englishTextExists) {
+        result += stationsCount * 15;
+    }
+
     return result;
 }
 
 static NSDate *arrivalTime;
 
-+ (float)drawRouteListVertex:(MWVertex *)vertex route:(NSArray *)route layer:(CALayer *)layer inContext:(CGContextRef)context fromTop:(float)currentPosition
++ (float)drawRouteListVertex:(MWVertex *)vertex route:(MWRoute *)route layer:(CALayer *)layer inContext:(CGContextRef)context fromTop:(float)currentPosition
 {
     float endPosition = currentPosition;
     UIColor *fontColor = [UIColor colorWithRed:(91/255.0) green:(108/255.0) blue:(133/255.0) alpha:1];
@@ -846,9 +935,9 @@ static NSDate *arrivalTime;
     float vCenter;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm"];
-
+    
     // Если узлы конечные, то просто возвращаем текущую позицию, т.к. мы ничего не рисуем
-    if (vertex.transfers.count == 0) {
+    if (vertex.transfers.count == 0 && route.path.count > 1) {
         return currentPosition;
     }
 
@@ -860,7 +949,7 @@ static NSDate *arrivalTime;
     MWDrawTextLine *drawTextLine = [[MWDrawTextLine alloc] init];
 
     if ([vertex.transfers containsObject:metroMap.startStation]) {
-        fillCircle.center = CGPointMake(46.5, currentPosition);
+        fillCircle.center = CGPointMake(leftOffset, currentPosition);
         fillCircle.radius = 65.5 / 2;
         fillCircle.fillColor = [UIColor colorWithRed:(247/255.0) green:(90/255.0) blue:(73/255.0) alpha:0.3];
         [MWDraw drawFillCircle:fillCircle inContext:context];
@@ -869,7 +958,7 @@ static NSDate *arrivalTime;
         drawArc.endRadians = 2 * M_PI;
         drawArc.radius = 33.5;
         drawArc.width = 1.5;
-        drawArc.center = CGPointMake(46.5, currentPosition);
+        drawArc.center = CGPointMake(leftOffset, currentPosition);
         drawArc.color = [UIColor colorWithRed:(247/255.0) green:(90/255.0) blue:(73/255.0) alpha:1];
         [MWDraw drawArc:drawArc inContext:context];
         
@@ -878,11 +967,13 @@ static NSDate *arrivalTime;
         drawTextLine.fontName = @"HelveticaNeue-Light";
         drawTextLine.fontColor = fontColor;
         drawTextLine.fontSize = 15;
-        drawTextLine.origin = CGPointMake(269.5, currentPosition - 10);
+        drawTextLine.origin = CGPointMake(timeOffset, currentPosition - 10);
         [MWDraw drawTextLine:drawTextLine inContext:context];
-    } else if ([vertex.transfers containsObject:metroMap.finishStation]) {
-        fillCircle.center = CGPointMake(46.5, endPosition);
-        fillCircle.radius = 65.5 / 3;
+    }
+    
+    if ([vertex.transfers containsObject:metroMap.finishStation]) {
+        fillCircle.center = CGPointMake(leftOffset, endPosition);
+        fillCircle.radius = 65.5 / 2;
         fillCircle.fillColor = [UIColor colorWithRed:(247/255.0) green:(90/255.0) blue:(73/255.0) alpha:0.3];
         [MWDraw drawFillCircle:fillCircle inContext:context];
         
@@ -890,38 +981,37 @@ static NSDate *arrivalTime;
         drawArc.endRadians = 2 * M_PI;
         drawArc.radius = 33.5;
         drawArc.width = 1.5;
-        drawArc.center = CGPointMake(46.5, endPosition);
+        drawArc.center = CGPointMake(leftOffset, endPosition);
         drawArc.color = [UIColor colorWithRed:(247/255.0) green:(90/255.0) blue:(73/255.0) alpha:1];
         [MWDraw drawArc:drawArc inContext:context];
         
         // Рисуем время - окончание поездки
         NSTimeInterval vertexTrip;
-        vertexTrip = [[MWRouter router] routeTripTime:route] * 60;
+        vertexTrip = route.tripTime * 60;
         NSDate *endTripTime = [[NSDate date] dateByAddingTimeInterval:vertexTrip];
         
         drawTextLine.text = [dateFormatter stringFromDate:endTripTime];
         drawTextLine.fontName = @"HelveticaNeue-Light";
         drawTextLine.fontColor = fontColor;
         drawTextLine.fontSize = 15;
-        drawTextLine.origin = CGPointMake(269.5, endPosition - 10);
+        drawTextLine.origin = CGPointMake(timeOffset, endPosition - 10);
         [MWDraw drawTextLine:drawTextLine inContext:context];
     }
-
     
     // Нарисуем два красных кружка и соединяюющую их линию
 
-    fillCircle.center = CGPointMake(46.5, currentPosition);
+    fillCircle.center = CGPointMake(leftOffset, currentPosition);
     fillCircle.radius = 15.5;
     fillCircle.fillColor = [UIColor colorWithRed:(255/255.0) green:(83/255.0) blue:(34/255.0) alpha:1];
     [MWDraw drawFillCircle:fillCircle inContext:context];
 
-    fillCircle.center = CGPointMake(46.5, endPosition);
+    fillCircle.center = CGPointMake(leftOffset, endPosition);
     fillCircle.radius = 15.5;
     fillCircle.fillColor = [UIColor colorWithRed:(255/255.0) green:(83/255.0) blue:(34/255.0) alpha:1];
     [MWDraw drawFillCircle:fillCircle inContext:context];
     
-    drawLine.startPoint = CGPointMake(46.5, currentPosition);
-    drawLine.endPoint = CGPointMake(46.5, endPosition);
+    drawLine.startPoint = CGPointMake(leftOffset, currentPosition);
+    drawLine.endPoint = CGPointMake(leftOffset, endPosition);
     drawLine.width = 31;
     drawLine.color = [UIColor colorWithRed:(255/255.0) green:(83/255.0) blue:(34/255.0) alpha:1];
     [MWDraw drawLine:drawLine inContext:context];
@@ -932,14 +1022,14 @@ static NSDate *arrivalTime;
     // Рисуем дополнительные переходы
     float inTransfersLength;
     
-    inTransfersLength = [MWSettings showEnglishTitles] && metroMap.englishTextExists ? transferLength_withEnglish : transferLength_original;
+    inTransfersLength = [MWSettings settings].showEnglishTitles && metroMap.englishTextExists ? transferLength_withEnglish : transferLength_original;
     
     vCenter = currentPosition;
     
     for (int i = 0; i < inTransfersCount; i++) {
         vCenter += (i + 1) * inTransfersLength;
         
-        fillCircle.center = CGPointMake(46.5, vCenter);
+        fillCircle.center = CGPointMake(leftOffset, vCenter);
         fillCircle.radius = 10.5;
         fillCircle.fillColor = [UIColor whiteColor];
         [MWDraw drawFillCircle:fillCircle inContext:context];
@@ -948,54 +1038,75 @@ static NSDate *arrivalTime;
         
         line = [MWRouter lineByStation:station];
 
-        fillCircle.center = CGPointMake(46.5, vCenter);
+        fillCircle.center = CGPointMake(leftOffset, vCenter);
         fillCircle.radius = 6.5;
         fillCircle.fillColor = line.color;
         [MWDraw drawFillCircle:fillCircle inContext:context];
-        
-        drawTextLine.text = [self cutString:station.nameOriginal length:19];
+
+        station.listLocation = CGPointMake(leftOffset, vCenter);
+
+        if ([station isClosed]) {
+            drawTextLine.text = [NSString stringWithFormat:@"%@ (%@)", [self cutString:station.nameOriginal length:15], [MWLanguage localizedStringForKey:@"MetroMap_Closed"].lowercaseString];
+        } else {
+            drawTextLine.text = [self cutString:station.nameOriginal length:24];
+        }
+
         drawTextLine.fontName = @"HelveticaNeue-Light";
         drawTextLine.fontColor = fontColor;
         drawTextLine.fontSize = 17;
-        drawTextLine.origin = CGPointMake(79, vCenter - 10);
+        drawTextLine.origin = CGPointMake(79, vCenter - 12);
         [MWDraw drawTextLine:drawTextLine inContext:context];
         
-        if (metroMap.englishTextExists && [MWSettings showEnglishTitles]) {
+        if (metroMap.englishTextExists && [MWSettings settings].showEnglishTitles) {
             drawTextLine.text = station.nameEnglish;
             drawTextLine.fontName = @"HelveticaNeue-Light";
             drawTextLine.fontColor = fontColor;
             drawTextLine.fontSize = 14;
-            drawTextLine.origin = CGPointMake(79, vCenter + 6);
+            drawTextLine.origin = CGPointMake(79, vCenter + 4);
             [MWDraw drawTextLine:drawTextLine inContext:context];
         }
     }
     
     station = nil;
     
-    if (vertex.transfers.count == 2 && [vertex.transfers containsObject:metroMap.startStation]) {
+    if (vertex.transfers.count > 1 && [vertex.transfers containsObject:metroMap.startStation]) {
         station = metroMap.startStation;
-    } else if (vertex.transfers.count == 2 && [vertex.transfers containsObject:metroMap.finishStation]) {
-        station = metroMap.finishStation;
-        currentPosition = endPosition;
-    }
-    
-    if (station) {
+        
         [self drawOutermostStation:station layer:layer inContext:context atPosition:currentPosition];
-
-        fillCircle.center = CGPointMake(46.5, currentPosition);
+        
+        fillCircle.center = CGPointMake(leftOffset, currentPosition);
         fillCircle.radius = 10.5;
         fillCircle.fillColor = [UIColor whiteColor];
         [MWDraw drawFillCircle:fillCircle inContext:context];
         
         line = [MWRouter lineByStation:station];
         
-        fillCircle.center = CGPointMake(46.5, currentPosition);
+        fillCircle.center = CGPointMake(leftOffset, currentPosition);
         fillCircle.radius = 6.5;
         fillCircle.fillColor = line.color;
         [MWDraw drawFillCircle:fillCircle inContext:context];
-        
-    }
 
+    }
+    
+    if (vertex.transfers.count > 1 && [vertex.transfers containsObject:metroMap.finishStation]) {
+        station = metroMap.finishStation;
+        
+        [self drawOutermostStation:station layer:layer inContext:context atPosition:endPosition];
+        
+        fillCircle.center = CGPointMake(leftOffset, endPosition);
+        fillCircle.radius = 10.5;
+        fillCircle.fillColor = [UIColor whiteColor];
+        [MWDraw drawFillCircle:fillCircle inContext:context];
+        
+        line = [MWRouter lineByStation:station];
+        
+        fillCircle.center = CGPointMake(leftOffset, endPosition);
+        fillCircle.radius = 6.5;
+        fillCircle.fillColor = line.color;
+        [MWDraw drawFillCircle:fillCircle inContext:context];
+
+        currentPosition = endPosition;
+    }
     return endPosition;
 }
 
@@ -1030,6 +1141,11 @@ static NSDate *arrivalTime;
     fillCircle.fillColor = line.color;
     [MWDraw drawFillCircle:fillCircle inContext:context];
     
+    fillCircle.center = CGPointMake(point1.x + 12, point1.y);
+    fillCircle.radius = 12;
+    fillCircle.fillColor = line.color;
+    [MWDraw drawFillCircle:fillCircle inContext:context];
+
     fillCircle.center = point2;
     fillCircle.radius = 3;
     fillCircle.fillColor = line.color;
@@ -1049,7 +1165,7 @@ static NSDate *arrivalTime;
     fillCircle.radius = 3;
     fillCircle.fillColor = line.color;
     [MWDraw drawFillCircle:fillCircle inContext:context];
-    
+
     drawLine.startPoint = point1;
     drawLine.endPoint = point2;
     drawLine.width = 6;
@@ -1092,17 +1208,30 @@ static NSDate *arrivalTime;
     drawLine.color = line.color;
     [MWDraw drawLine:drawLine inContext:context];
 
-    NSString *stationName = [self cutString:station.nameOriginal length:12];
+    station.listLocation = CGPointMake(leftOffset, position);
     
+    NSString *stationName;
+    
+    if ([station isClosed]) {
+        stationName = [NSString stringWithFormat:@"%@ (%@)", [self cutString:station.nameOriginal length:40], [MWLanguage localizedStringForKey:@"MetroMap_Closed"].lowercaseString];
+    } else {
+        stationName = [self cutString:station.nameOriginal length:50];
+    }
+
+  
     drawTextLine.text = stationName;
+//    drawTextLine.text = @"Бульвар Рокоссовского 1 2 3 4";
     drawTextLine.fontName = @"HelveticaNeue-Light";
     drawTextLine.fontColor = [MWDraw readableForegroundColorForBackgroundColor:line.color];
-    drawTextLine.fontSize = 17;
-    drawTextLine.origin = CGPointMake(111, position - 11);
+    //////////// - Уменьшаем шрифт до тех пор, пока имя станции не поместится
+    drawTextLine.fontSize = [MWDraw fontSize:drawTextLine.text maxWidth:[UIScreen mainScreen].bounds.size.width - 195 fromSize:17];
+    float textHeight = [drawTextLine.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:drawTextLine.fontSize] } context:nil].size.height;
+    drawTextLine.origin = CGPointMake(111, position - 1.5 - textHeight / 2);
+    /////////////
     [MWDraw drawTextLine:drawTextLine inContext:context];
 }
 
-+ (float)drawRouteListEdge:(MWEdge *)edge onRoute:(NSArray *)route layer:(CALayer *)layer inContext:(CGContextRef)context fromTop:(float)currentPosition previouslyVertex:(MWVertex *)vertex
++ (float)drawRouteListEdge:(MWEdge *)edge onRoute:(MWRoute *)route layer:(CALayer *)layer inContext:(CGContextRef)context fromTop:(float)currentPosition previouslyVertex:(MWVertex *)vertex
 {
     float endPosition = currentPosition + [MWDraw edgeLength:edge];
     float cp = currentPosition; // Текущая позиция
@@ -1142,7 +1271,7 @@ static NSDate *arrivalTime;
             if ([station isEqual:metroMap.startStation]) {
                 [self drawOutermostStation:station layer:layer inContext:context atPosition:currentPosition];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 65.5 / 2;
                 fillCircle.fillColor = [UIColor colorWithRed:(247/255.0) green:(90/255.0) blue:(73/255.0) alpha:0.3];
                 [MWDraw drawFillCircle:fillCircle inContext:context];
@@ -1151,22 +1280,22 @@ static NSDate *arrivalTime;
                 drawArc.endRadians = 2 * M_PI;
                 drawArc.radius = 33.5;
                 drawArc.width = 1.5;
-                drawArc.center = CGPointMake(46.5, cp);
+                drawArc.center = CGPointMake(leftOffset, cp);
                 drawArc.color = [UIColor colorWithRed:(247/255.0) green:(90/255.0) blue:(73/255.0) alpha:1];
                 [MWDraw drawArc:drawArc inContext:context];
                 
-                drawLine.startPoint = CGPointMake(46.5, cp);
-                drawLine.endPoint = CGPointMake(46.5, cp + firstStationOffset);
+                drawLine.startPoint = CGPointMake(leftOffset, cp);
+                drawLine.endPoint = CGPointMake(leftOffset, cp + firstStationOffset);
                 drawLine.width = 9;
                 drawLine.color = edge.line.color;
                 [MWDraw drawLine:drawLine inContext:context];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 10.5;
                 fillCircle.fillColor = [UIColor whiteColor];
                 [MWDraw drawFillCircle:fillCircle inContext:context];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 6.5;
                 fillCircle.fillColor = line.color;
                 [MWDraw drawFillCircle:fillCircle inContext:context];
@@ -1178,14 +1307,14 @@ static NSDate *arrivalTime;
                 drawTextLine.fontName = @"HelveticaNeue-Light";
                 drawTextLine.fontColor = fontColor;
                 drawTextLine.fontSize = 15;
-                drawTextLine.origin = CGPointMake(269.5, cp - 10);
+                drawTextLine.origin = CGPointMake(timeOffset, cp - 10);
                 [MWDraw drawTextLine:drawTextLine inContext:context];
                 
                 cp += firstStationOffset;
             } else if ([station isEqual:metroMap.finishStation]) {
                 [self drawOutermostStation:station layer:layer inContext:context atPosition:endPosition];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 65.5 / 2;
                 fillCircle.fillColor = [UIColor colorWithRed:(247/255.0) green:(90/255.0) blue:(73/255.0) alpha:0.3];
                 [MWDraw drawFillCircle:fillCircle inContext:context];
@@ -1194,72 +1323,84 @@ static NSDate *arrivalTime;
                 drawArc.endRadians = 2 * M_PI;
                 drawArc.radius = 33.5;
                 drawArc.width = 1.5;
-                drawArc.center = CGPointMake(46.5, cp);
+                drawArc.center = CGPointMake(leftOffset, cp);
                 drawArc.color = [UIColor colorWithRed:(247/255.0) green:(90/255.0) blue:(73/255.0) alpha:1];
                 [MWDraw drawArc:drawArc inContext:context];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 10.5;
                 fillCircle.fillColor = [UIColor whiteColor];
                 [MWDraw drawFillCircle:fillCircle inContext:context];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 6.5;
                 fillCircle.fillColor = line.color;
                 [MWDraw drawFillCircle:fillCircle inContext:context];
                 
                 // Рисуем время - окончание поездки
-                NSTimeInterval haulTrip = haul.length * 60 * 60 / (metroMap.middleSpeed * 1000);
-                arrivalTime = [arrivalTime dateByAddingTimeInterval:haulTrip];
+//                NSTimeInterval haulTrip = haul.length * 60 * 60 / (metroMap.middleSpeed * 1000);
+//                arrivalTime = [arrivalTime dateByAddingTimeInterval:haulTrip];
+//                drawTextLine.text = [dateFormatter stringFromDate:arrivalTime];
 
-                drawTextLine.text = [dateFormatter stringFromDate:arrivalTime];
+                NSTimeInterval vertexTrip;
+                vertexTrip = route.tripTime * 60;
+                NSDate *endTripTime = [[NSDate date] dateByAddingTimeInterval:vertexTrip];
+                drawTextLine.text = [dateFormatter stringFromDate:endTripTime];
+
                 drawTextLine.fontName = @"HelveticaNeue-Light";
                 drawTextLine.fontColor = fontColor;
                 drawTextLine.fontSize = 15;
-                drawTextLine.origin = CGPointMake(269.5, cp - 10);
+                drawTextLine.origin = CGPointMake(timeOffset, cp - 10);
                 [MWDraw drawTextLine:drawTextLine inContext:context];
 
             } else if ([station isEqual:[edge.elements firstObject]]) {
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 10.5;
                 fillCircle.fillColor = [UIColor whiteColor];
                 [MWDraw drawFillCircle:fillCircle inContext:context];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 6.5;
                 fillCircle.fillColor = line.color;
                 [MWDraw drawFillCircle:fillCircle inContext:context];
                 
-                drawLine.startPoint = CGPointMake(46.5, cp);
-                drawLine.endPoint = CGPointMake(46.5, cp + firstStationOffset);
+                drawLine.startPoint = CGPointMake(leftOffset, cp);
+                drawLine.endPoint = CGPointMake(leftOffset, cp + firstStationOffset);
                 drawLine.width = 9;
                 drawLine.color = edge.line.color;
                 [MWDraw drawLine:drawLine inContext:context];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 10.5;
                 fillCircle.fillColor = [UIColor whiteColor];
                 [MWDraw drawFillCircle:fillCircle inContext:context];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 6.5;
                 fillCircle.fillColor = line.color;
                 [MWDraw drawFillCircle:fillCircle inContext:context];
                 
-                if (metroMap.englishTextExists && [MWSettings showEnglishTitles]) {
+                if (metroMap.englishTextExists && [MWSettings settings].showEnglishTitles) {
                     [self drawRouteListTrain:0 position:cp + 26 inContext:context];
                 } else {
                     [self drawRouteListTrain:0 position:cp + 20 inContext:context];
                 }
                 
-                drawTextLine.text = [self cutString:station.nameOriginal length:19];
+                station.listLocation = CGPointMake(leftOffset, cp);
+
+                if ([station isClosed]) {
+                    drawTextLine.text = [NSString stringWithFormat:@"%@ (%@)", [self cutString:station.nameOriginal length:10], [MWLanguage localizedStringForKey:@"MetroMap_Closed"].lowercaseString];
+                } else {
+                    drawTextLine.text = [self cutString:station.nameOriginal length:19];
+                }
+
                 drawTextLine.fontName = @"HelveticaNeue-Light";
                 drawTextLine.fontColor = fontColor;
                 drawTextLine.fontSize = 17;
                 drawTextLine.origin = CGPointMake(78, cp - 9);
                 [MWDraw drawTextLine:drawTextLine inContext:context];
                 
-                if (metroMap.englishTextExists && [MWSettings showEnglishTitles]) {
+                if (metroMap.englishTextExists && [MWSettings settings].showEnglishTitles) {
                     drawTextLine.text = station.nameEnglish;
                     drawTextLine.fontName = @"HelveticaNeue-Light";
                     drawTextLine.fontColor = fontColor;
@@ -1271,36 +1412,44 @@ static NSDate *arrivalTime;
                 // Рисуем время
                 NSTimeInterval vertexTrip;
 //                vertexTrip = (vertex.transfers.count / 2) * metroMap.switchTime * 60;
-                vertexTrip = metroMap.switchTime * 60;
+//                vertexTrip = metroMap.switchTime * 60;
+                vertexTrip = 4 * 60;
                 arrivalTime = [arrivalTime dateByAddingTimeInterval:vertexTrip];
                 
                 drawTextLine.text = [dateFormatter stringFromDate:arrivalTime];
                 drawTextLine.fontName = @"HelveticaNeue-Light";
                 drawTextLine.fontColor = fontColor;
                 drawTextLine.fontSize = 15;
-                drawTextLine.origin = CGPointMake(269.5, cp - 7);
+                drawTextLine.origin = CGPointMake(timeOffset, cp - 7);
                 [MWDraw drawTextLine:drawTextLine inContext:context];
                 
                 cp += firstStationOffset;
             } else if ([station isEqual:[edge.elements lastObject]]) { // Последняя станция участка
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 10.5;
                 fillCircle.fillColor = [UIColor whiteColor];
                 [MWDraw drawFillCircle:fillCircle inContext:context];
                 
-                fillCircle.center = CGPointMake(46.5, cp);
+                fillCircle.center = CGPointMake(leftOffset, cp);
                 fillCircle.radius = 6.5;
                 fillCircle.fillColor = line.color;
                 [MWDraw drawFillCircle:fillCircle inContext:context];
                 
-                drawTextLine.text = [self cutString:station.nameOriginal length:19];
+                station.listLocation = CGPointMake(leftOffset, cp);
+
+                if ([station isClosed]) {
+                    drawTextLine.text = [NSString stringWithFormat:@"%@ (%@)", [self cutString:station.nameOriginal length:10], [MWLanguage localizedStringForKey:@"MetroMap_Closed"].lowercaseString];
+                } else {
+                    drawTextLine.text = [self cutString:station.nameOriginal length:19];
+                }
+
                 drawTextLine.fontName = @"HelveticaNeue-Light";
                 drawTextLine.fontColor = fontColor;
                 drawTextLine.fontSize = 17;
                 drawTextLine.origin = CGPointMake(78, cp - 10);
                 [MWDraw drawTextLine:drawTextLine inContext:context];
                 
-                if (metroMap.englishTextExists && [MWSettings showEnglishTitles]) {
+                if (metroMap.englishTextExists && [MWSettings settings].showEnglishTitles) {
                     drawTextLine.text = station.nameEnglish;
                     drawTextLine.fontName = @"HelveticaNeue-Light";
                     drawTextLine.fontColor = fontColor;
@@ -1317,14 +1466,14 @@ static NSDate *arrivalTime;
                 drawTextLine.fontName = @"HelveticaNeue-Light";
                 drawTextLine.fontColor = fontColor;
                 drawTextLine.fontSize = 15;
-                drawTextLine.origin = CGPointMake(269.5, cp - 8.5);
+                drawTextLine.origin = CGPointMake(timeOffset, cp - 8.5);
                 [MWDraw drawTextLine:drawTextLine inContext:context];
                 
                 // Получаем следующий узел для отрисовки времени
                 nextVertex = nil;
-                int k = (int)[route indexOfObject:edge] + 1;
-                if (k < route.count) {
-                    nextVertex = [route objectAtIndex:k];
+                int k = (int)[route.path indexOfObject:edge] + 1;
+                if (k < route.path.count) {
+                    nextVertex = [route.path objectAtIndex:k];
                 }
                 
                 if (nextVertex.transfers.count > 2) {
@@ -1334,56 +1483,110 @@ static NSDate *arrivalTime;
                     MWMetroMap *metroMap = [MWStorage currentMetroMap];
                     float vCenter;
                     
-                    float inTransfersLength = [MWSettings showEnglishTitles] ? transferLength_withEnglish : transferLength_original;
+                    float inTransfersLength = [MWSettings settings].showEnglishTitles ? transferLength_withEnglish : transferLength_original;
                     
                     for (int i = 0; i < inTransfersCount; i++) {
                         vCenter = cp + (i + 1) * inTransfersLength;
                         // Рисуем время
-                        NSTimeInterval vertexTrip;
-                        vertexTrip = metroMap.switchTime * 60;
+                        NSTimeInterval vertexTrip = 0;
+                        MWStation *station1, *station2;
+                        station1 = (MWStation *)[nextVertex.transfers objectAtIndex:i * 2];
+                        station2 = (MWStation *)[nextVertex.transfers objectAtIndex:i * 2 + 1];
+                        
+//                        vertexTrip = metroMap.switchTime * 60;
+//                        vertexTrip = nextVertex.transferTime * 60;
+                        
+                        vertexTrip += [metroMap transferTime:station1.identifier toStation:station2.identifier];
+                        
                         arrivalTime = [arrivalTime dateByAddingTimeInterval:vertexTrip];
                         
                         drawTextLine.text = [dateFormatter stringFromDate:arrivalTime];
                         drawTextLine.fontName = @"HelveticaNeue-Light";
                         drawTextLine.fontColor = fontColor;
                         drawTextLine.fontSize = 15;
-                        drawTextLine.origin = CGPointMake(269.5, vCenter - 8.5);
+                        drawTextLine.origin = CGPointMake(timeOffset, vCenter - 8.5);
                         [MWDraw drawTextLine:drawTextLine inContext:context];
                     }
                 }
 
                 
             } else {
-                fillCircle.center = CGPointMake(46.5, cp);
-                fillCircle.radius = 6.5;
-                fillCircle.fillColor = line.color;
-                [MWDraw drawFillCircle:fillCircle inContext:context];
-                
                 if ([edge.elements indexOfObject:station] == edge.elements.count - 3) {
                     cpTemp = lastStationOffset;
                 } else {
                     cpTemp = haulLength;
                 }
                 
-                drawLine.startPoint = CGPointMake(46.5, cp);
-                drawLine.endPoint = CGPointMake(46.5, cp + cpTemp);
+                drawLine.startPoint = CGPointMake(leftOffset, cp);
+                drawLine.endPoint = CGPointMake(leftOffset, cp + cpTemp);
                 drawLine.width = 9;
                 drawLine.color = edge.line.color;
                 [MWDraw drawLine:drawLine inContext:context];
+
+                fillCircle.center = CGPointMake(leftOffset, cp);
+                fillCircle.radius = 6.5;
+                fillCircle.fillColor = line.color;
+                [MWDraw drawFillCircle:fillCircle inContext:context];
                 
-                drawTextLine.text = [self cutString:station.nameOriginal length:19];
+                if ([station isClosed]) {
+                    CGPoint center = CGPointMake(leftOffset, cp);
+
+                    fillCircle.center = center;
+                    fillCircle.radius = 9;
+                    fillCircle.fillColor = [UIColor whiteColor];
+                    [self drawFillCircle:fillCircle inContext:context];
+                    
+                    fillCircle.center = center;
+                    fillCircle.radius = 8.5;
+                    fillCircle.fillColor = [UIColor redColor];
+                    [self drawFillCircle:fillCircle inContext:context];
+                    
+                    fillCircle.center = center;
+                    fillCircle.radius = 6.25;
+                    fillCircle.fillColor = [UIColor blueColor];
+                    [self drawFillCircle:fillCircle inContext:context];
+                    
+                    MWDrawLine *drawLine = [[MWDrawLine alloc] init];
+                    drawLine.startPoint = CGPointMake(center.x - 5, center.y + 5);
+                    drawLine.endPoint = CGPointMake(center.x + 5, center.y - 5);
+                    drawLine.width = 2;
+                    drawLine.color = [UIColor redColor];
+                    [self drawLine:drawLine inContext:context];
+                    
+                    drawLine.startPoint = CGPointMake(center.x - 5, center.y - 5);
+                    drawLine.endPoint = CGPointMake(center.x + 5, center.y + 5);
+                    drawLine.width = 2;
+                    drawLine.color = [UIColor redColor];
+                    [self drawLine:drawLine inContext:context];
+                }
+                
+                station.listLocation = CGPointMake(leftOffset, cp);
+
+                if ([station isClosed]) {
+                    drawTextLine.text = [NSString stringWithFormat:@"%@ (%@)", [self cutString:station.nameOriginal length:40], [MWLanguage localizedStringForKey:@"MetroMap_Closed"].lowercaseString];
+                } else {
+                    drawTextLine.text = [self cutString:station.nameOriginal length:50];
+                }
+                
                 drawTextLine.fontName = @"HelveticaNeue-Light";
                 drawTextLine.fontColor = fontColor;
-                drawTextLine.fontSize = 17;
-                drawTextLine.origin = CGPointMake(78, cp - 12);
+                
+                
+                //////////// - Уменьшаем размер шрифта до тех пор, пока он не поместится
+                drawTextLine.fontSize = [MWDraw fontSize:drawTextLine.text maxWidth:[UIScreen mainScreen].bounds.size.width - 130 fromSize:17];
+                float textHeight = [drawTextLine.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:drawTextLine.fontSize] } context:nil].size.height;
+                drawTextLine.origin = CGPointMake(78, cp - 1.5 - textHeight / 2);
+                ///////////// end
+
+                
                 [MWDraw drawTextLine:drawTextLine inContext:context];
                 
-                if (metroMap.englishTextExists && [MWSettings showEnglishTitles]) {
+                if (metroMap.englishTextExists && [MWSettings settings].showEnglishTitles) {
                     drawTextLine.text = station.nameEnglish;;
                     drawTextLine.fontName = @"HelveticaNeue-Light";
                     drawTextLine.fontColor = fontColor;
                     drawTextLine.fontSize = 12;
-                    drawTextLine.origin = CGPointMake(79, cp + 4);
+                    drawTextLine.origin = CGPointMake(79, cp + 5);
                     [MWDraw drawTextLine:drawTextLine inContext:context];
                 }
                 
@@ -1395,7 +1598,7 @@ static NSDate *arrivalTime;
                 drawTextLine.fontName = @"HelveticaNeue-Light";
                 drawTextLine.fontColor = fontColor;
                 drawTextLine.fontSize = 15;
-                drawTextLine.origin = CGPointMake(269.5, cp - 10);
+                drawTextLine.origin = CGPointMake(timeOffset, cp - 10);
                 [MWDraw drawTextLine:drawTextLine inContext:context];
 
                 if ([edge.elements indexOfObject:station] == edge.elements.count - 3) {
@@ -1410,10 +1613,13 @@ static NSDate *arrivalTime;
     return endPosition;
 }
 
-+ (void)drawRouteList:(NSArray *)route layer:(CALayer *)layer inContext:(CGContextRef)context
++ (float)drawRouteList:(MWRoute *)route layer:(CALayer *)layer inContext:(CGContextRef)context
 {
+    timeOffset = [UIScreen mainScreen].bounds.size.width - 50;
     // Очищаем
     CGContextClearRect(context, layer.bounds);
+    MWMetroMap *metroMap = [MWStorage currentMetroMap];
+    [metroMap clearListLocations];
     
     MWEdge *edge = nil;
     MWVertex *vertex;
@@ -1423,7 +1629,7 @@ static NSDate *arrivalTime;
     // Рисуем узлы пересадок
     float currentPosition = topOffset;
 
-    for (NSObject *object in route) {
+    for (NSObject *object in route.path) {
         if ([object isKindOfClass:[MWVertex class]]) {
             vertex = (MWVertex *)object;
             currentPosition = [MWDraw drawRouteListVertex:vertex route:route layer:layer inContext:context fromTop:currentPosition];
@@ -1437,8 +1643,8 @@ static NSDate *arrivalTime;
     currentPosition = topOffset;
     NSObject *object;
     
-    for (int i = 0; i < route.count; i++) {
-        object = [route objectAtIndex:i];
+    for (int i = 0; i < route.path.count; i++) {
+        object = [route.path objectAtIndex:i];
         if ([object isKindOfClass:[MWEdge class]]) {
             edge = (MWEdge *)object;
             currentPosition = [MWDraw drawRouteListEdge:edge onRoute:route layer:layer inContext:context fromTop:currentPosition previouslyVertex:vertex];
@@ -1447,6 +1653,8 @@ static NSDate *arrivalTime;
             currentPosition += [MWDraw vertexLength:vertex];
         }
     }
+    
+    return currentPosition;
 }
 
 // Рисуем вагон для поезда, отображаемого в списке маршрута
@@ -1824,7 +2032,7 @@ static NSDate *arrivalTime;
 + (void)createThumbnail:(MWMetroMap *)metroMap
 {
     // Вычисляем размер превьюшки
-    CGSize maxSize = CGSizeMake(549 / 2, 389 / 2);
+    CGSize maxSize = CGSizeMake(549, 389);
     CGSize thumbnailSize;
     
     float ch = metroMap.image.size.height * maxSize.width / metroMap.image.size.width;
@@ -1836,7 +2044,9 @@ static NSDate *arrivalTime;
         thumbnailSize = CGSizeMake(maxSize.width, ch);
     }
     
-    // Создаем превьюшку
+    UIImage *thumbnailImage = [MWDraw resizeImageWithAspect:metroMap.image scaledToMaxWidth:thumbnailSize.width height:thumbnailSize.height];
+    
+/*    // Создаем превьюшку
     UIGraphicsBeginImageContext(thumbnailSize);
     CGRect thumbnailRect = CGRectMake(0, 0, 0, 0);
     thumbnailRect.origin = CGPointMake(0.0, 0.0);
@@ -1856,7 +2066,7 @@ static NSDate *arrivalTime;
     
     UIImage *thumbnailImage = UIGraphicsGetImageFromCurrentImageContext();
     
-    UIGraphicsEndImageContext();
+    UIGraphicsEndImageContext(); */
     
     NSString *fileName = [NSString stringWithFormat:@"%@_thumbnail.jpg", metroMap.identifier];
     NSString *cachesDirectory = [MWStorage cachesDirectory];
@@ -1866,6 +2076,119 @@ static NSDate *arrivalTime;
 
     thumbnailImage = nil;
     data = nil;
+}
+
++ (float)fontSize:(NSString *)text maxWidth:(float)width fromSize:(float)size
+{
+    float textWidth = [text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:size] } context:nil].size.width;
+
+    float textSize = size;
+    
+    while (textWidth > width) {
+        textSize -= 1;
+        textWidth = [text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:textSize] } context:nil].size.width;
+    }
+    
+    return textSize;
+}
+
++ (UIImage *)resizeImageWithAspect:(UIImage *)image scaledToMaxWidth:(CGFloat)width height:(CGFloat)height
+{
+    float oldWidth = image.size.width;
+    float oldHeight = image.size.height;
+    
+    float scaleFactor = (oldWidth > oldHeight) ? width / oldWidth : height / oldHeight;
+    
+    float newHeight = oldHeight * scaleFactor;
+    float newWidth = oldWidth * scaleFactor;
+    CGSize newSize = CGSizeMake(newWidth, newHeight);
+    
+    return [MWDraw imageWithSize:image size:newSize];
+}
+
++ (UIImage *)imageWithSize:(UIImage *)image size:(CGSize)size
+{
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+        UIGraphicsBeginImageContextWithOptions(size, false, [UIScreen mainScreen].scale);
+    } else {
+        UIGraphicsBeginImageContext(size);
+    }
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
++ (UIColor *)colorAtPosition:(UIImage *)image atPosition:(CGPoint)position {
+    
+    CGRect sourceRect = CGRectMake(position.x, position.y, 1.f, 1.f);
+    CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, sourceRect);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    unsigned char *buffer = malloc(4);
+    CGBitmapInfo bitmapInfo = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
+    CGContextRef context = CGBitmapContextCreate(buffer, 1, 1, 8, 4, colorSpace, bitmapInfo);
+    CGColorSpaceRelease(colorSpace);
+    CGContextDrawImage(context, CGRectMake(0.f, 0.f, 1.f, 1.f), imageRef);
+    CGImageRelease(imageRef);
+    CGContextRelease(context);
+    
+    CGFloat r = buffer[0] / 255.f;
+    CGFloat g = buffer[1] / 255.f;
+    CGFloat b = buffer[2] / 255.f;
+    CGFloat a = buffer[3] / 255.f;
+    
+    free(buffer);
+    
+    return [UIColor colorWithRed:r green:g blue:b alpha:a];
+}
+
++ (NSString *)hexStringFromColor:(UIColor *)color {
+    const CGFloat *components = CGColorGetComponents(color.CGColor);
+    
+    CGFloat r = components[0];
+    CGFloat g = components[1];
+    CGFloat b = components[2];
+    
+    return [NSString stringWithFormat:@"#%02lX%02lX%02lX",
+            lroundf(r * 255),
+            lroundf(g * 255),
+            lroundf(b * 255)];
+}
+
++ (UIColor *)colorAtPixel:(CGPoint)point inImage:(UIImage *)image {
+    
+    if (!CGRectContainsPoint(CGRectMake(0.0f, 0.0f, image.size.width, image.size.height), point)) {
+        return nil;
+    }
+    
+    // Create a 1x1 pixel byte array and bitmap context to draw the pixel into.
+    NSInteger pointX = trunc(point.x);
+    NSInteger pointY = trunc(point.y);
+    CGImageRef cgImage = image.CGImage;
+    NSUInteger width = image.size.width;
+    NSUInteger height = image.size.height;
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    int bytesPerPixel = 4;
+    int bytesPerRow = bytesPerPixel * 1;
+    NSUInteger bitsPerComponent = 8;
+    unsigned char pixelData[4] = { 0, 0, 0, 0 };
+    CGContextRef context = CGBitmapContextCreate(pixelData, 1, 1, bitsPerComponent, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    CGColorSpaceRelease(colorSpace);
+    CGContextSetBlendMode(context, kCGBlendModeCopy);
+    
+    // Draw the pixel we are interested in onto the bitmap context
+    CGContextTranslateCTM(context, -pointX, pointY-(CGFloat)height);
+    CGContextDrawImage(context, CGRectMake(0.0f, 0.0f, (CGFloat)width, (CGFloat)height), cgImage);
+    CGContextRelease(context);
+    
+    // Convert color values [0..255] to floats [0.0..1.0]
+    CGFloat red   = (CGFloat)pixelData[0] / 255.0f;
+    CGFloat green = (CGFloat)pixelData[1] / 255.0f;
+    CGFloat blue  = (CGFloat)pixelData[2] / 255.0f;
+    CGFloat alpha = (CGFloat)pixelData[3] / 255.0f;
+    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
 @end

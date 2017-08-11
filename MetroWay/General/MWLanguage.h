@@ -22,5 +22,6 @@
 + (NSString *)localizedCountry:(MWListItem *)listItem;
 + (NSString *)localizedCityNameFieldName;
 + (NSString *)LocalizedCurrentMetroMapName:(MWListItem *)listItem;
++ (BOOL)isRussianLanguage;
 
 @end

@@ -1,6 +1,6 @@
 //
-//  MMUpload.m
-//  Metro Maps
+//  MWUpload.m
+//  MetroWays
 //
 //  Created by Valentin Ozerov on 12.04.14.
 //  Copyright (c) 2014 Valentin Ozerov. All rights reserved.
@@ -45,7 +45,7 @@
 
 - (void)uploadFileAsynchronous
 {
-    NSString *URL = @"http://www.clickwood.org/mm/_uploader.php";
+    NSString *URL = [MWDownload serverURL:@"_uploader.php"];
     URL = [URL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:URL] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0f];
@@ -81,7 +81,7 @@
 // Синхронная загрузка файла на сервер
 + (void)uploadFileSynchronous:(NSString *)fileName
 {
-    NSString *URL = @"http://www.clickwood.org/mm/_uploader.php";
+    NSString *URL = [MWDownload serverURL:@"_uploader.php"];
     URL = [URL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     NSMutableURLRequest *theRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:URL] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0f];

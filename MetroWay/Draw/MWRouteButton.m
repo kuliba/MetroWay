@@ -84,29 +84,33 @@
     float textWidth = [text boundingRectWithSize:self.bounds.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:15] } context:nil].size.width;
     float left = (75 - textWidth) / 2;
     
+    // Вычисляем вертикальную позицию текста
+    float top = transfers ? 6.5 : 16;
+    
     MWDrawTextLine *drawTextLine = [[MWDrawTextLine alloc] init];
     drawTextLine.text = text;
     drawTextLine.fontName = @"HelveticaNeue-Light";
     drawTextLine.fontColor = [UIColor whiteColor];
     drawTextLine.fontSize = 15;
-    //drawTextLine0001.kernSpacing = -0.3;
-    drawTextLine.origin = CGPointMake(left, 6.5);
-    [MWDraw drawTextLine:drawTextLine inContext:context];
-    
-    text = [NSString stringWithFormat:@"%d %@", transfers, [MWLanguage localizedStringForKey:@"MetroMap_RouterMaps_transfers_short"]];
-    
-    // Вычисляем ширину текста для размещения его по середине
-    textWidth = [text boundingRectWithSize:self.bounds.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:15] } context:nil].size.width;
-    left = (75 - textWidth) / 2;
-    
-    drawTextLine.text = text;
-    drawTextLine.fontName = @"HelveticaNeue-Light";
-    drawTextLine.fontColor = [UIColor whiteColor];
-    drawTextLine.fontSize = 15;
-    //drawTextLine0001.kernSpacing = -0.3;
-    drawTextLine.origin = CGPointMake(left, 23.5);
+    drawTextLine.origin = CGPointMake(left, top);
     [MWDraw drawTextLine:drawTextLine inContext:context];
 
+    // Показываем количество пересадок только при их наличии
+    if (transfers) {
+        text = [NSString stringWithFormat:@"%d %@", transfers, [MWLanguage localizedStringForKey:@"MetroMap_RouterMaps_transfers_short"]];
+        
+        // Вычисляем ширину текста для размещения его по середине
+        textWidth = [text boundingRectWithSize:self.bounds.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:15] } context:nil].size.width;
+        left = (75 - textWidth) / 2;
+        
+        drawTextLine.text = text;
+        drawTextLine.fontName = @"HelveticaNeue-Light";
+        drawTextLine.fontColor = [UIColor whiteColor];
+        drawTextLine.fontSize = 15;
+        drawTextLine.origin = CGPointMake(left, 23.5);
+        [MWDraw drawTextLine:drawTextLine inContext:context];
+    }
+    
     MWDrawFillCircle *drawFillCircle = [[MWDrawFillCircle alloc] init];
     MWDrawLine *drawLine = [[MWDrawLine alloc] init];
     
@@ -445,22 +449,6 @@
             break;
     }
 }
-
-/*
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-//    NSLog(@"Button");
-    self.state = UIControlStateSelected;
-//    [self.layer setNeedsDisplay];
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{   return;
-    isHighLighted = FALSE;
-    //isSelected = true;
-    [self.layer setNeedsDisplay];
-    [super touchesEnded:touches withEvent:event];
-}*/
 
 - (void)setTransfers:(int)t
 {

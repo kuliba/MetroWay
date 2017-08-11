@@ -8,6 +8,10 @@
 
 #import "MWMetroMap.h"
 #import "MWHaul.h"
+#import "MWDrawFillCircle.h"
+#import "MWDrawTextLine.h"
+#import "MWDrawLine.h"
+#import "MWDrawArc.h"
 
 @interface MWBostonSubway : MWMetroMap
 

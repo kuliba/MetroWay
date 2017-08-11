@@ -10,6 +10,7 @@
 #import "MWStorage.h"
 #import "MWLanguage.h"
 #import "MWBaseTableViewCell.h"
+#import "MWMetroMapViewController.h"
 
 @interface MWSelectLanguageViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
@@ -20,5 +21,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 
 - (IBAction)done:(id)sender;
+- (IBAction)swipeRecognizer:(id)sender;
 
 @end

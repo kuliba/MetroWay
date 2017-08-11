@@ -13,8 +13,6 @@
 
 @implementation MWStorage
 
-static MWMetroMap *currentMetroMap_in = nil; // Текущая схема метро
-
 + (MWStorage *)storage
 {
     // Реализуем синглетон
@@ -57,18 +55,26 @@ static MWMetroMap *currentMetroMap_in = nil; // Текущая схема мет
 
 - (void)reloadCurrentMetroMap
 {
-    currentMetroMap_in = nil;
+    currentMetroMapStatic = nil;
 }
 
 + (BOOL)needChangeEnglishSet:(MWMetroMap *)metroMap
 {
-    return [MWSettings showEnglishTitles] != metroMap.englishTextDrawn;
+    return [MWSettings settings].showEnglishTitles != metroMap.englishTextDrawn;
 }
 
 + (void)changeEnglishSet
 {
     MWMetroMap *metroMap = [MWStorage currentMetroMap];
+    NSString *startStationIdentifier = metroMap.startStation.identifier;
+    NSString *finishStationIdentifier = metroMap.finishStation.identifier;
     [MWStorage changeEnglishSet:metroMap];
+    if (![metroMap.startStation.identifier isEqualToString:startStationIdentifier]) {
+        metroMap.startStation = [metroMap stationByIdentifier:startStationIdentifier];
+    }
+    if (![metroMap.finishStation.identifier isEqualToString:finishStationIdentifier]) {
+        metroMap.finishStation = [metroMap stationByIdentifier:finishStationIdentifier];
+    }
 }
 
 + (void)changeEnglishSet:(MWMetroMap *)metroMap
@@ -118,8 +124,8 @@ static MWMetroMap *currentMetroMap_in = nil; // Текущая схема мет
             MWList *list = [[MWList alloc] init];
             [list setUnavailable:identifier];
             // Если метро было текущим, то удаляем его из текущих
-            if ([[MWSettings currentMetroMapIdentifier] isEqualToString:identifier]) {
-                [MWSettings setCurrentMetroMapIdentifier:@""];
+            if ([[MWSettings settings].currentMetroMapIdentifier isEqualToString:identifier]) {
+                [MWSettings settings].currentMetroMapIdentifier = @"";
             }
         }
         @finally {
@@ -130,34 +136,51 @@ static MWMetroMap *currentMetroMap_in = nil; // Текущая схема мет
         MWList *list = [[MWList alloc] init];
         [list setUnavailable:identifier];
         // Если метро было текущим, то удаляем его из текущих
-        if ([[MWSettings currentMetroMapIdentifier] isEqualToString:identifier]) {
-            [MWSettings setCurrentMetroMapIdentifier:@""];
+        if ([[MWSettings settings].currentMetroMapIdentifier isEqualToString:identifier]) {
+            [MWSettings settings].currentMetroMapIdentifier = @"";
         }
     }
     
     return mm;
 }
 
++ (BOOL)metroMapExists:(NSString *)identifier
+{
+    NSString *cachesDirectory = [MWStorage cachesDirectory];
+    
+    // Добавляем расширение
+    NSString *fileName = [identifier stringByAppendingPathExtension:@"mm"];
+    
+    // Получаем полный путь
+    NSString *path = [cachesDirectory stringByAppendingPathComponent:fileName];
+    
+    bool fileExists = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    
+    return fileExists;
+}
+
 + (MWMetroMap *)loadCurrentMetroMap
 {
     MWMetroMap *metroMap = nil;
-    if ([MWSettings currentMetroMapIdentifier].length) {
-        metroMap = [MWStorage loadMetroMap:[MWSettings currentMetroMapIdentifier]];
+    if ([MWSettings settings].currentMetroMapIdentifier.length) {
+        metroMap = [MWStorage loadMetroMap:[MWSettings settings].currentMetroMapIdentifier];
     }
     return metroMap;
 }
 
+static MWMetroMap *currentMetroMapStatic = nil; // Текущая схема метро
+
 + (MWMetroMap *)currentMetroMap
 {
-    if (!currentMetroMap_in) {
-        currentMetroMap_in = [MWStorage loadCurrentMetroMap];
+    if (!currentMetroMapStatic) {
+        currentMetroMapStatic = [MWStorage loadCurrentMetroMap];
     }
 
-    if (![currentMetroMap_in.identifier isEqualToString:[MWSettings currentMetroMapIdentifier]]) {
-        currentMetroMap_in = [MWStorage loadCurrentMetroMap];
+    if (![currentMetroMapStatic.identifier isEqualToString:[MWSettings settings].currentMetroMapIdentifier]) {
+        currentMetroMapStatic = [MWStorage loadCurrentMetroMap];
     }
     
-    return currentMetroMap_in;
+    return currentMetroMapStatic;
 }
 
 + (MWList *)metroMapList
@@ -182,6 +205,8 @@ static MWMetroMap *currentMetroMap_in = nil; // Текущая схема мет
     NSString *path = [cachesDirectory stringByAppendingPathComponent:fileExt];
     
     bool fileExists = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    
+//    NSLog(@"%@", path);
     
     if (!fileExists) {
         [result createNewList];
@@ -230,14 +255,29 @@ static MWMetroMap *currentMetroMap_in = nil; // Текущая схема мет
 
 - (void)checkListUpdate
 {
-    if ([MWStorage metroMapList].isNeedUpdate) {
-        [NSThread detachNewThreadSelector:@selector(updateList) toTarget:self withObject:nil];
-    }
+    // Выполняем код один раз за все время сессии
+    
+    static dispatch_once_t once;
+    
+    dispatch_once(&once, ^{
+        if ([MWStorage metroMapList].isNeedUpdate) {
+            [MWDownload updateList];
+//            [NSThread detachNewThreadSelector:@selector(updateList) toTarget:self withObject:nil];
+        }
+    });
 }
 
 - (void)updateList
 {
-    [MWDownload updateList];
+    @try {
+        [MWDownload updateList];
+    }
+    @catch (NSException *exception) {
+        //
+    }
+    @finally {
+        //
+    }
 }
 
 + (void)deleteMetroMap:(NSString *)identifier
@@ -281,6 +321,10 @@ static MWMetroMap *currentMetroMap_in = nil; // Текущая схема мет
     
     // Получаем полный путь
     NSString *path = [self.cachesDirectory stringByAppendingPathComponent:fileExt];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+//        NSLog(@"%@: для подсчета размера схемы ее необходимо создать", identifier);
+    }
     
     NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL];
     

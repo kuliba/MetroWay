@@ -17,12 +17,18 @@
 "MainMenu_SettingsEnglishTitles" = "Надписи на английском";
 "MainMenu_SettingsRoutesSortingType" = "Сортировка маршрутов";
 "MainMenu_SettingsAutomaticUpdate" = "Автообновление";
+"MainMenu_SettingsSelectedStationExplorer" = "Проводник до станции";
 
 "MainMenu_FeedbackSendAnLetter" = "Написать письмо";
 "MainMenu_FeedbackMailAlertTitle" = "Учетная запись не найдена";
 "MainMenu_FeedbackMailAlertMessage" = "Создайте учетную запись для отправки письма.";
-"MainMenu_FeedbackMailSubject" = "О MetROutes";
+"MainMenu_FeedbackMailSubject" = "О MetroWay";
 
+"MainMenu_Ads" = "Реклама";
+"MainMenu_AdsRemoveCell" = "Удалить рекламу за 169 р.";
+"MainMenu_AdsRestoreCell" = "Восстановить покупку";
+"MainMenu_AdsRemovedTitle" = "Покупка восстановлена";
+"MainMenu_AdsRemovedMessage" = "Рекламные объявления удалены";
 // Metro Map
 "MetroMap_SpinnerLoadingMapTitle" = "Загрузка схемы метро...";
 "MetroMap_SpinnerDeletingEnglishTextTitle" = "Удаление надписей на английском языке...";
@@ -30,6 +36,7 @@
 
 "MetroMap_RouterMaps_min" = "мин";
 "MetroMap_RouterMaps_transfers_short" = "перес.";
+"MetroMap_RouterMaps_transfers_full" = "пересадок";
 
 "MetroMap_SearchFrom" = "Откуда...";
 "MetroMap_SearchTo" = "Куда...";
@@ -37,7 +44,16 @@
 "MetroMap_FromMenuTitle" = "Отсюда";
 "MetroMap_ToMenuTitle" = "Cюда";
 
-// Select metro map
+"MetroMap_RemoveAdsAlertTitle" = "Подтверждение покупки";
+"MetroMap_RemoveAdsAlertMessage" = "Вы хотите навсегда удалить рекламу за 169 р.?";
+"MetroMap_RemoveAdsAlertCancel" = "Отмена";
+"MetroMap_RemoveAdsAlertBuy" = "Оплата";
+
+"MetroMap_Closed" = "Закрыта";
+"MetroMap_Until" = "до";
+"MetroMap_From" = "с";
+"MetroMap_To" = "до";
+// Metro maps
 "SelectMap_MainTitle" = "Схемы метро";
 
 "SelectMap_SegmentedItem1" = "Все";
@@ -85,6 +101,7 @@
 
 "SelectMap_ThumbnailNotAvailable" = "Превью не доступно";
 
+"SelectMap_DistanceNotAvailable" = "не доступно";
 // Select Language Controller
 "SelectLanguage_Title" = "Язык";
 
@@ -94,7 +111,7 @@
 "SortingType_byTransfers" = "По числу пересадок";
 
 // Search station View
-"SearchStation_CancelButtonTitle" = "Отмена";
+"SearchStation_CancelButtonTitle" = "Закрыть";
 "SearchStation_ListButtonTitle" = "Список";
 "SearchStation_PlaceholderWhereFrom" = "Откуда";
 "SearchStation_PlaceholderWhereTo" = "Куда";

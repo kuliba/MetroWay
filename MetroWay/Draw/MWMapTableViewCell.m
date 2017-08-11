@@ -55,32 +55,35 @@ float offset = 10.5;
     self.separator2.backgroundColor = [UIColor colorWithRed:(204/255.0) green:(204/255.0) blue:(204/255.0) alpha:1];
     [self.contentView addSubview:self.separator2];
 
-    self.separator3 = [[UIView alloc] initWithFrame:CGRectMake([MWSettings.currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 141.5 : screenBound.size.width - 206.5, 0, 0.5, 65)];
+    self.separator3 = [[UIView alloc] initWithFrame:CGRectMake([[MWSettings settings].currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 141.5 : screenBound.size.width - 206.5, 0, 0.5, 65)];
     self.separator3.backgroundColor = [UIColor colorWithRed:(204/255.0) green:(204/255.0) blue:(204/255.0) alpha:1];
     [self.contentView insertSubview:self.separator3 aboveSubview:self.topBarImageView];
     
+    
+    UIImage *deleteImage = [MWDraw resizeImageWithAspect:[UIImage imageNamed:@"Delete.png"] scaledToMaxWidth:24 height:30];
     self.deleteTopButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.deleteTopButton setImage: [UIImage imageNamed:@"Delete.png"] forState:UIControlStateNormal];
+    [self.deleteTopButton setImage: deleteImage forState:UIControlStateNormal];
     [self.deleteTopButton addTarget:self action:@selector(delete) forControlEvents:UIControlEventTouchUpInside];
     self.deleteTopButton.backgroundColor = [UIColor clearColor];
     self.deleteTopButton.frame = CGRectMake(screenBound.size.width - 82, 0, 65, 65);
     self.deleteTopButton.tintColor = [UIColor colorWithRed:(112/255.0) green:(112/255.0) blue:(112/255.0) alpha:1];
     [self.contentView insertSubview:self.deleteTopButton aboveSubview:self.topBarImageView];
     
-    float x = [MWSettings.currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 82 : screenBound.size.width - 140;
+    float x = [[MWSettings settings].currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 82 : screenBound.size.width - 140;
     
+    UIImage *starOffImage = [MWDraw resizeImageWithAspect:[UIImage imageNamed:@"StarOff.png"] scaledToMaxWidth:31 height:30];
     self.favoriteTopButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.favoriteTopButton setImage: [UIImage imageNamed:@"StarOff.png"] forState:UIControlStateNormal];
+    [self.favoriteTopButton setImage: starOffImage forState:UIControlStateNormal];
     [self.favoriteTopButton addTarget:self action:@selector(setFavorite) forControlEvents:UIControlEventTouchUpInside];
     self.favoriteTopButton.backgroundColor = [UIColor clearColor];
     self.favoriteTopButton.frame = CGRectMake(x, 0, 65, 65);
     self.favoriteTopButton.tintColor = [UIColor colorWithRed:(112/255.0) green:(112/255.0) blue:(112/255.0) alpha:1];
     [self.contentView insertSubview:self.favoriteTopButton aboveSubview:self.topBarImageView];
 
-    x = [MWSettings.currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 140 : screenBound.size.width - 203.5;
+    x = [[MWSettings settings].currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 140 : screenBound.size.width - 203.5;
     
     self.selectMapTopButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.selectMapTopButton setImage: [UIImage imageNamed:@"Map.png"] forState:UIControlStateNormal];
+    [self.selectMapTopButton setImage: [MWDraw resizeImageWithAspect:[UIImage imageNamed:@"Map.png"] scaledToMaxWidth:32 height:32] forState:UIControlStateNormal];
     [self.selectMapTopButton addTarget:self action:@selector(selectMetroMap) forControlEvents:UIControlEventTouchUpInside];
     self.selectMapTopButton.backgroundColor = [UIColor clearColor];
     self.selectMapTopButton.frame = CGRectMake(x, 0, 65, 65);
@@ -116,8 +119,9 @@ float offset = 10.5;
     [self.downloadStatusTopButton addTarget:self action:@selector(cancelDownload) forControlEvents:UIControlEventTouchUpInside];
     [self.swipeView addSubview:self.downloadStatusTopButton];
     
+    UIImage *downloadImage = [MWDraw resizeImageWithAspect:[UIImage imageNamed:@"Download.png"] scaledToMaxWidth:22 height:20];
     self.downloadTopButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.downloadTopButton setImage:[UIImage imageNamed:@"Download.png"] forState:UIControlStateNormal];
+    [self.downloadTopButton setImage:downloadImage forState:UIControlStateNormal];
     [self.downloadTopButton addTarget:self action:@selector(download) forControlEvents:UIControlEventTouchUpInside];
     self.downloadTopButton.frame = CGRectMake(self.swipeView.frame.size.width - 65, 0, 65, 65);
     self.downloadTopButton.tintColor = [UIColor colorWithRed:(112/255.0) green:(112/255.0) blue:(112/255.0) alpha:1];
@@ -152,10 +156,11 @@ float offset = 10.5;
     self.additionalView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:self.additionalView];
 
-    self.thumbnailImageView = [[UIImageView alloc] initWithFrame:CGRectMake(12, 0, 274.5, 194.5)]; // 549 x 389
+    self.thumbnailImageView = [[UIImageView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width - offset * 2 - 274.5) / 2, 0, 274.5, 194.5)]; // 549 x 389
     self.thumbnailImageView.backgroundColor = [UIColor whiteColor];
     self.thumbnailImageView.layer.borderColor = [UIColor colorWithRed:(206/255.0) green:(206/255.0) blue:(206/255.0) alpha:1].CGColor;
     self.thumbnailImageView.layer.borderWidth = 0.5f;
+    _thumbnailImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.additionalView addSubview:self.thumbnailImageView];
 
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectMetroMap)];
@@ -235,22 +240,23 @@ float offset = 10.5;
     [self.additionalView addSubview:self.bottomBarImageView];
     
     // Bottom panel
-    self.downloadStatusBottomButton = [[MWDownloadStatusButton alloc] initWithFrame:CGRectMake(screenBound.size.width / 2 - 44.5, 304, 65, 65)];
+    self.downloadStatusBottomButton = [[MWDownloadStatusButton alloc] initWithFrame:CGRectMake((self.additionalView.frame.size.width - 65) / 2, 304, 65, 65)];
     [self.downloadStatusBottomButton addTarget:self action:@selector(cancelDownload) forControlEvents:UIControlEventTouchUpInside];
     [self.additionalView addSubview:self.downloadStatusBottomButton];
 
     self.downloadBottomButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.downloadBottomButton.backgroundColor = [UIColor colorWithRed:(74/255.0) green:(186/255.0) blue:(91/255.0) alpha:1];
     [self.downloadBottomButton addTarget:self action:@selector(download) forControlEvents:UIControlEventTouchUpInside];
-    self.downloadBottomButton.frame = CGRectMake(70, 315.5, 154, 42);
+    self.downloadBottomButton.frame = CGRectMake((self.additionalView.frame.size.width - 154) / 2, 315.5, 154, 42);
     self.downloadTopButton.tintColor = [UIColor whiteColor];
     self.downloadBottomButton.layer.cornerRadius = 4;
     [self.downloadBottomButton setTitle:[MWLanguage localizedStringForKey:@"SelectMap_DownloadButtonTitle"] forState:UIControlStateNormal];
     self.downloadBottomButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
     [self.additionalView addSubview:self.downloadBottomButton];
     
+    UIImage *updateImage = [MWDraw resizeImageWithAspect:[UIImage imageNamed:@"Update.png"] scaledToMaxWidth:30 height:30];
     self.updateBottomButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.updateBottomButton setImage: [UIImage imageNamed:@"Update.png"] forState:UIControlStateNormal];
+    [self.updateBottomButton setImage: updateImage forState:UIControlStateNormal];
     [self.updateBottomButton addTarget:self action:@selector(download) forControlEvents:UIControlEventTouchUpInside];
     self.updateBottomButton.backgroundColor = [UIColor clearColor];
     self.updateBottomButton.frame = CGRectMake(10, 304, 65, 65);
@@ -258,28 +264,32 @@ float offset = 10.5;
     [self.additionalView addSubview:self.updateBottomButton];
     
     self.selectMapBottomButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.selectMapBottomButton setImage: [UIImage imageNamed:@"Map.png"] forState:UIControlStateNormal];
+    [self.selectMapBottomButton setImage: [MWDraw resizeImageWithAspect:[UIImage imageNamed:@"Map.png"] scaledToMaxWidth:32 height:32] forState:UIControlStateNormal];
     [self.selectMapBottomButton addTarget:self action:@selector(selectMetroMap) forControlEvents:UIControlEventTouchUpInside];
     self.selectMapBottomButton.backgroundColor = [UIColor clearColor];
     self.selectMapBottomButton.frame = CGRectMake(10, 304, 65, 65);
     self.selectMapBottomButton.tintColor = [UIColor colorWithRed:(112/255.0) green:(112/255.0) blue:(112/255.0) alpha:1];
     [self.additionalView addSubview:self.selectMapBottomButton];
     
+    UIImage *starOffImage = [MWDraw resizeImageWithAspect:[UIImage imageNamed:@"StarOff.png"] scaledToMaxWidth:31 height:30];
     self.favoriteBottomButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.favoriteBottomButton setImage: [UIImage imageNamed:@"StarOff.png"] forState:UIControlStateNormal];
+    [self.favoriteBottomButton setImage: starOffImage forState:UIControlStateNormal];
     [self.favoriteBottomButton addTarget:self action:@selector(setFavorite) forControlEvents:UIControlEventTouchUpInside];
     self.favoriteBottomButton.backgroundColor = [UIColor clearColor];
     self.favoriteBottomButton.frame = CGRectMake(10, 304, 65, 65);
     self.favoriteBottomButton.tintColor = [UIColor colorWithRed:(112/255.0) green:(112/255.0) blue:(112/255.0) alpha:1];
     [self.additionalView addSubview:self.favoriteBottomButton];
     
+    UIImage *deleteImage = [MWDraw resizeImageWithAspect:[UIImage imageNamed:@"Delete.png"] scaledToMaxWidth:24 height:30];
     self.deleteBottomButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.deleteBottomButton setImage: [UIImage imageNamed:@"Delete.png"] forState:UIControlStateNormal];
+    [self.deleteBottomButton setImage: deleteImage forState:UIControlStateNormal];
     [self.deleteBottomButton addTarget:self action:@selector(delete) forControlEvents:UIControlEventTouchUpInside];
     self.deleteBottomButton.backgroundColor = [UIColor clearColor];
     self.deleteBottomButton.frame = CGRectMake(10, 304, 65, 65);
     self.deleteBottomButton.tintColor = [UIColor colorWithRed:(112/255.0) green:(112/255.0) blue:(112/255.0) alpha:1];
     [self.additionalView addSubview:self.deleteBottomButton];
+    
+    downloadedThumbnail = NO;
 }
 
 - (void)awakeFromNib
@@ -329,28 +339,31 @@ float offset = 10.5;
     self.dateLabel.text = listItem.versionDateText;
     
     self.sizeLabel.text = listItem.sizeText;
-    self.sizeLabel.hidden = listItem.size == 0;
+    self.sizeLabel.hidden = !listItem.size;
     self.linesCountLabel.text = [NSString stringWithFormat:@"%d", listItem.linesCount];
     self.stationsCountLabel.text = [NSString stringWithFormat:@"%d", listItem.stationsCount];
     self.lengthLabel.text = [NSString stringWithFormat:@"%d %@", listItem.length, [MWLanguage localizedStringForKey:@"SelectMap_KilometersShort"]];
     [self setDistanceLabelText];
 
     NSString *favofiteIconName = listItem.favorited ? @"StarOn.png" : @"StarOff.png";
-    [self.favoriteBottomButton setImage: [UIImage imageNamed:favofiteIconName] forState:UIControlStateNormal];
-    [self.favoriteTopButton setImage: [UIImage imageNamed:favofiteIconName] forState:UIControlStateNormal];
+    UIImage *starImage = [MWDraw resizeImageWithAspect:[UIImage imageNamed:favofiteIconName] scaledToMaxWidth:31 height:30];
+    [self.favoriteTopButton setImage: starImage forState:UIControlStateNormal];
+    [self.favoriteBottomButton setImage: starImage forState:UIControlStateNormal];
 
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGRect frame = self.separator3.frame;
-    frame.origin.x = [MWSettings.currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 141.5 : screenBound.size.width - 206.5;
+    frame.origin.x = [[MWSettings settings].currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 141.5 : screenBound.size.width - 206.5;
     self.separator3.frame = frame;
     
     frame = self.favoriteTopButton.frame;
-    frame.origin.x = [MWSettings.currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 82 : screenBound.size.width - 140;
+    frame.origin.x = [[MWSettings settings].currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 82 : screenBound.size.width - 140;
     self.favoriteTopButton.frame = frame;
     
     frame = self.selectMapTopButton.frame;
-    frame.origin.x = [MWSettings.currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 140 : screenBound.size.width - 203.5;
+    frame.origin.x = [[MWSettings settings].currentMetroMapIdentifier isEqualToString:listItem.identifier] ? screenBound.size.width - 140 : screenBound.size.width - 203.5;
     self.selectMapTopButton.frame = frame;
+    
+    [self setStatisticLabels];
     
     [listItem addObserver:self forKeyPath:@"showStatus" options:0 context:nil];
     [listItem addObserver:self forKeyPath:@"downloadProgress" options:0 context:nil];
@@ -364,16 +377,51 @@ float offset = 10.5;
     return listItem;				
 }
 
-- (void)initThumbnailImageView
+- (void)downloadedThumbnail:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self initThumbnailImageView:notification];
+    });
+}
+
+static BOOL downloadedThumbnail = false;
+- (void)initThumbnailImageView:(NSNotification *)notification
 {
     if (self.thumbnailImageView.image) return;
-    static BOOL downloadedThumbnail = false;
 
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    NSString *notificationName = [NSString stringWithFormat:@"%@_thumbnail_downloaded", listItem.identifier];
+    NSString *notificationName = @"thumbnail_downloaded";
+    NSString *identifier = nil;
+    BOOL downloaded = NO;
+    UIImage *image;
     
-    UIImage *image = [MWStorage thumbnail:listItem.identifier];
-    if (image) {
+    if (notification) {
+        identifier = [notification.userInfo objectForKey:@"identifier"];
+        if ([listItem.identifier isEqualToString:identifier]) {
+            image = [MWStorage thumbnail:listItem.identifier];
+            if (image) {
+                downloaded = YES;
+            }
+        }
+    } else if (listItem) {
+        image = [MWStorage thumbnail:listItem.identifier];
+        if (image) {
+            downloaded = YES;
+        }
+    }
+
+    CGRect frame = self.thumbnailImageView.frame;
+    frame.size = image.size;
+    if (frame.size.height < 1 || frame.size.width < 1) {
+        frame.size.width = 274.5;
+        frame.size.height = 194.5;
+    }
+    // Устанавливаем изображение в центре
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    frame.origin.x = screenBound.size.width / 2 - frame.size.width / 2 - offset;
+    frame.origin.y = (389 / 2 - frame.size.height) / 2 + 0.5;
+
+    if (downloaded) {
         // Отписываемся от событий
         [notificationCenter removeObserver:self name:notificationName object:nil];
 
@@ -382,17 +430,13 @@ float offset = 10.5;
             [self.spinner stopAnimating];
             self.spinner.hidden = true;
         });
-        
-        CGRect frame = self.thumbnailImageView.frame;
-        frame.size = image.size;
-        // Устанавливаем изображение в центре
-        CGRect screenBound = [[UIScreen mainScreen] bounds];
-        frame.origin.x = screenBound.size.width / 2 - image.size.width / 2 - offset;
-        frame.origin.y = (389 / 2 - image.size.height) / 2;
-        
+
+//        [self.thumbnailNotAvailableLabel removeFromSuperview];
+        self.thumbnailNotAvailableLabel.hidden = YES;
+
         popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.005 * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-            self.thumbnailImageView.frame = frame;
+            //self.thumbnailImageView.frame = frame;
             self.thumbnailImageView.image = image;
         });
 
@@ -405,13 +449,15 @@ float offset = 10.5;
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
                 [self.spinner stopAnimating];
                 self.spinner.hidden = true;
+                //self.thumbnailImageView.frame = frame;
                 self.thumbnailImageView.backgroundColor = [UIColor colorWithRed:(250/255.0) green:(250/255.0) blue:(250/255.0) alpha:1];
                 self.thumbnailNotAvailableLabel.hidden = NO;
             });
+            return;
         }
         [self.spinner startAnimating];
         // Подписываемся на событие, по которому мы можем отследить окончание загрузки превьюшки
-        [notificationCenter addObserver:self selector:@selector(initThumbnailImageView) name:notificationName object:nil];
+        [notificationCenter addObserver:self selector:@selector(downloadedThumbnail:) name:notificationName object:nil];
         downloadedThumbnail = true;
         [MWDownload downloadThumbnail:listItem.identifier];
     }
@@ -426,7 +472,7 @@ float offset = 10.5;
         ;
         frame.size.height = additionalViewHeight;
         self.closeAdditionalViewLabel.hidden = false;
-        [self initThumbnailImageView];
+        [self initThumbnailImageView:nil];
     } else {
         frame.size.height = 0;
         self.closeAdditionalViewLabel.hidden = true;
@@ -468,6 +514,8 @@ float offset = 10.5;
     if (listItem.showStatus == 2) return;
     
     if (!self.topBarImageView) [self initTopBar];
+
+    _topBarImageView.hidden = false;
     
     [self setButtons];
     
@@ -497,6 +545,7 @@ float offset = 10.5;
             self.swipeView.frame = frame;
         }
                          completion:^(BOOL finished) {
+                             _topBarImageView.hidden = true;
                          }
          ];
 
@@ -531,7 +580,7 @@ float offset = 10.5;
     
     if (listItem.versionNumberOnDevice == 0) {
         result = 0;
-    } else if ([MWSettings.currentMetroMapIdentifier isEqualToString:listItem.identifier]) {
+    } else if ([[MWSettings settings].currentMetroMapIdentifier isEqualToString:listItem.identifier]) {
         result = 2 * 65 + offset - 20;
     } else {
         result = 3 * 65 + offset - 20;
@@ -563,21 +612,47 @@ float offset = 10.5;
     self.favoriteBottomButton.hidden = listItem.downloadTask || listItem.showStatus != 1 || listItem.versionNumberOnDevice == 0;
     self.deleteBottomButton.hidden = !listItem.isDeleteEnabled || listItem.showStatus != 1;
     
-    float x1, x2, x3, x4;
+    float x1 = 0;
+    float x2 = 0;
+    float x3 = 0;
+    float x4 = 0;
+    float offset = 0;
+    
     if (isNewVersionAvailable) {
+        /*
         x1 = (self.frame.size.width - 65 * 4 - offset * 2) / 5 + self.frame.origin.x;
         x2 = (self.frame.size.width - 65 * 4 - offset * 2) * 2 / 5 + 65 + self.frame.origin.x;
         x3 = (self.frame.size.width - 65 * 4 - offset * 2) * 3 / 5 + 130 + self.frame.origin.x;
         x4 = (self.frame.size.width - 65 * 4 - offset * 2) * 4 / 5 + 195 + self.frame.origin.x;
-    } else if (![listItem.identifier isEqualToString:[MWSettings currentMetroMapIdentifier]]) {
-        x2 = (self.frame.size.width - 65 * 3 - offset * 2) / 4 + self.frame.origin.x;
+         */
+        
+        offset = (_additionalView.frame.size.width - 4 * 65) / 4;
+        
+        x1 = offset / 2;
+        x2 = x1 + 65 + offset;
+        x3 = x2 + 65 + offset;
+        x4 = x3 + 65 + offset;
+
+    } else if (![listItem.identifier isEqualToString:[MWSettings settings].currentMetroMapIdentifier]) {
+        offset = (_additionalView.frame.size.width - 3 * 65) / 3;
+
+        x2 = offset / 2;
+        x3 = x2 + 65 + offset;
+        x4 = x3 + 65 + offset;
+
+        /* x2 = (self.frame.size.width - 65 * 3 - offset * 2) / 4 + self.frame.origin.x;
         x3 = (self.frame.size.width - 65 * 3 - offset * 2) * 2 / 4 + 65 + self.frame.origin.x;
-        x4 = (self.frame.size.width - 65 * 3 - offset * 2) * 3 / 4 + 130 + self.frame.origin.x;
+        x4 = (self.frame.size.width - 65 * 3 - offset * 2) * 3 / 4 + 130 + self.frame.origin.x; */
     } else {
-        x2 = (self.frame.size.width - 65 * 2 - offset * 2) / 3 + self.frame.origin.x;
-        x3 = (self.frame.size.width - 65 * 2 - offset * 2) * 2 / 3 + 65 + self.frame.origin.x;
+        offset = (_additionalView.frame.size.width - 2 * 65) / 2;
+
+        x2 = offset / 2;
+        x3 = x2 + 65 + offset;
+
+        /* x2 = (self.frame.size.width - 65 * 2 - offset * 2) / 3 + self.frame.origin.x;
+        x3 = (self.frame.size.width - 65 * 2 - offset * 2) * 2 / 3 + 65 + self.frame.origin.x; */
     }
-    
+
     CGRect frame = self.updateBottomButton.frame;
     frame.origin.x = x1;
     self.updateBottomButton.frame = frame;
@@ -592,8 +667,9 @@ float offset = 10.5;
     self.deleteBottomButton.frame = frame;
     
     NSString *favofiteIconName = listItem.favorited ? @"StarOn.png" : @"StarOff.png";
-    [self.favoriteBottomButton setImage: [UIImage imageNamed:favofiteIconName] forState:UIControlStateNormal];
-    [self.favoriteTopButton setImage: [UIImage imageNamed:favofiteIconName] forState:UIControlStateNormal];
+    UIImage *starImage = [MWDraw resizeImageWithAspect:[UIImage imageNamed:favofiteIconName] scaledToMaxWidth:31 height:30];
+    [self.favoriteTopButton setImage: starImage forState:UIControlStateNormal];
+    [self.favoriteBottomButton setImage: starImage forState:UIControlStateNormal];
 }
 
 - (void)delete
@@ -634,6 +710,8 @@ float offset = 10.5;
 
 - (void)download
 {
+    _downloadStatusBottomButton.progress = 0;
+    _downloadStatusTopButton.progress = 0;
     // Если интернета нет, выводим предупреждающее окно
     if (![MWDownload isConnectionAvailable]) {
         self.alertView = [[UIAlertView alloc] initWithTitle:[MWLanguage localizedStringForKey:@"SelectMap_NoInternetAlertViewTitle"] message:[MWLanguage localizedStringForKey:@"SelectMap_NoInternetAlertViewMessage"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -676,7 +754,7 @@ float offset = 10.5;
                 if (listItem.showStatus == 0) {
                     [NSTimer scheduledTimerWithTimeInterval:.1 target:self selector:@selector(leftPan) userInfo:nil repeats:NO];
                 }
-                if ([MWSettings currentMetroMapIdentifier].length == 0) {
+                if ([MWSettings settings].currentMetroMapIdentifier.length == 0) {
                     [NSTimer scheduledTimerWithTimeInterval:.001 target:self selector:@selector(selectMetroMap) userInfo:nil repeats:NO];
                 }
             });
@@ -721,7 +799,7 @@ float offset = 10.5;
         if ([self.delegate respondsToSelector:@selector(selectMetroMap:)]) {
             [self.delegate selectMetroMap:self];
         }
-    } else if ([MWSettings currentMetroMapIdentifier].length == 0) {
+    } else if ([MWSettings settings].currentMetroMapIdentifier.length == 0) {
         [self download];
     } else {
         [self downloadBottomButtonAnimation];
@@ -742,6 +820,8 @@ float offset = 10.5;
         NSString *detail3 = [MWLanguage localizedStringForKey:@"SelectMap_KilometersShort"];
         
         distanceText = [@"" stringByAppendingFormat:@"%@ %@", distanceString, detail3];
+    } else if ((int)listItem.distance == 0) {
+        distanceText = [MWLanguage localizedStringForKey:@"SelectMap_DistanceNotAvailable"];
     } else {
         distanceText = [MWLanguage localizedStringForKey:@"SelectMap_DistanceNear"];
     }
@@ -773,6 +853,99 @@ float offset = 10.5;
     [bounce setDuration:1.5];
     [bounce setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
     [self.downloadBottomButton.layer addAnimation:bounce forKey:@"bounceAnimation"];
+}
+
+- (void)setStatisticLabels
+{
+    // Алгоритм:
+    // 1. Рассчитываем ширину обоих колонок (по самому широкому элементу)
+    // 2. Находим размещение обоих колонок с учетом offset между ними и размещение всего блока статистики по центру экрана
+    // 3. Размещаем колонки
+
+    if (!_linesCountLabel.text || !_stationsCountLabel.text || !_lengthLabel.text || !_distanceLabel.text) return;
+    
+    float textWidth00 = [_linesCountTitle.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:12] } context:nil].size.width;
+
+    float textWidth01 = [_linesCountLabel.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:12] } context:nil].size.width;
+
+    float textWidth10 = [_stationsCountTitle.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:12] } context:nil].size.width;
+    
+    float textWidth11 = [_stationsCountLabel.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:12] } context:nil].size.width;
+
+    float textWidth20 = [_lengthTitle.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:12] } context:nil].size.width;
+    
+    float textWidth21 = [_lengthLabel.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:12] } context:nil].size.width;
+
+    float textWidth30 = [_distanceTitle.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:12] } context:nil].size.width;
+    
+    float textWidth31 = [_distanceLabel.text boundingRectWithSize:CGSizeMake(HUGE, HUGE) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue-Light" size:12] } context:nil].size.width;
+
+    float maxLeft = 0;
+    if (textWidth00 > maxLeft) {
+        maxLeft = textWidth00;
+    }
+    if (textWidth10 > maxLeft) {
+        maxLeft = textWidth10;
+    }
+    if (textWidth20 > maxLeft) {
+        maxLeft = textWidth20;
+    }
+    if (textWidth30 > maxLeft) {
+        maxLeft = textWidth30;
+    }
+
+    float maxRight = 0;
+    if (textWidth01 > maxRight) {
+        maxRight = textWidth01;
+    }
+    if (textWidth11 > maxRight) {
+        maxRight = textWidth11;
+    }
+    if (textWidth21 > maxRight) {
+        maxRight = textWidth21;
+    }
+    if (textWidth31 > maxRight) {
+        maxRight = textWidth31;
+    }
+    
+    float columnOffset = 12;
+    float sumWidth = maxLeft + maxRight + columnOffset;
+    float leftOffset = (([UIScreen mainScreen].bounds.size.width - offset * 2) - sumWidth) / 2;
+    float righOffset = leftOffset + sumWidth - _linesCountLabel.frame.size.width;
+    
+    CGRect frame;
+    
+    frame = _linesCountTitle.frame;
+    frame.origin.x = leftOffset;
+    _linesCountTitle.frame = frame;
+    
+    frame = _linesCountLabel.frame;
+    frame.origin.x = righOffset;
+    _linesCountLabel.frame = frame;
+    
+    frame = _stationsCountTitle.frame;
+    frame.origin.x = leftOffset;
+    _stationsCountTitle.frame = frame;
+    
+    frame = _stationsCountLabel.frame;
+    frame.origin.x = righOffset;
+    _stationsCountLabel.frame = frame;
+    
+    frame = _lengthTitle.frame;
+    frame.origin.x = leftOffset;
+    _lengthTitle.frame = frame;
+    
+    frame = _lengthLabel.frame;
+    frame.origin.x = righOffset;
+    _lengthLabel.frame = frame;
+    
+    frame = _distanceTitle.frame;
+    frame.origin.x = leftOffset;
+    _distanceTitle.frame = frame;
+    
+    frame = _distanceLabel.frame;
+    frame.origin.x = righOffset;
+    _distanceLabel.frame = frame;
 }
 
 @end

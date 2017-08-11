@@ -26,11 +26,13 @@
 - (void)setUnavailable:(NSString *)identifier;
 // Обновляем список после получения нового
 - (void)updateList:(MWList *)newList;
-- (NSMutableArray *)countryItems:(NSString *)country;
+- (NSArray *)countryItems:(NSString *)country;
 - (BOOL)isNeedUpdate;
 - (void)createNewListTXTVersion;
 - (void)checkVersionsOnDevice;
 - (void)clearShowStatus;
+- (void)clearCountryArray;
+- (BOOL)checkSizes;
 
 @end
  

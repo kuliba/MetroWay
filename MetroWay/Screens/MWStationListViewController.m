@@ -193,10 +193,15 @@ NSInteger stationsAlphabeticSort(id station1, id station2, void *context)
     
     UILabel *stationLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     stationLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
-    stationLabel.frame = CGRectMake(30, 14, self.view.window.bounds.size.width - 47, 20);
+    stationLabel.frame = CGRectMake(30, 14, self.view.window.bounds.size.width - 65, 20);
     stationLabel.textColor = [UIColor colorWithRed:(21/255.0) green:(125/255.0) blue:(251/255.0) alpha:1];
-    stationLabel.text = station.nameOriginal;
-    
+
+    if ([station isClosed]) {
+        stationLabel.text = [NSString stringWithFormat:@"%@ (%@)", station.nameOriginal, [station closedText].lowercaseString];
+    } else {
+        stationLabel.text = station.nameOriginal;
+    }
+
     MWViewStationCircleR14 *stationCircle = [[MWViewStationCircleR14 alloc] initWithFrame:CGRectMake(11, 17.5, 14, 14)];
     line = [MWRouter lineByStation:station];
     stationCircle.color = line.color;
@@ -205,10 +210,10 @@ NSInteger stationsAlphabeticSort(id station1, id station2, void *context)
     [cell addSubview:stationCircle];
     [cell addSubview:stationLabel];
 
-    if ([MWSettings showEnglishTitles] && [metroMap englishTextExists]) {
+    if ([MWSettings settings].showEnglishTitles && [metroMap englishTextExists]) {
         UILabel *englishLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         englishLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-        englishLabel.frame = CGRectMake(30, 32, self.view.window.bounds.size.width - 47, 17);
+        englishLabel.frame = CGRectMake(30, 32, self.view.window.bounds.size.width - 65, 17);
         englishLabel.textColor = [UIColor colorWithRed:(91/255.0) green:(108/255.0) blue:(133/255.0) alpha:1];
         englishLabel.text = station.nameEnglish;
         
@@ -253,36 +258,36 @@ NSInteger stationsAlphabeticSort(id station1, id station2, void *context)
     NSArray *stations = [metroMap lineStations:line];
     float height, delta;
     
-    UIControl *customHeader = [[UIControl alloc] initWithFrame:CGRectMake(10, 0, 300, 49.5)];
+    UIControl *customHeader = [[UIControl alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, 49.5)];
 
-    height = [MWSettings showEnglishTitles] && [metroMap englishTextExists] ? 59.5 : 49.5;
+    height = [MWSettings settings].showEnglishTitles && [metroMap englishTextExists] ? 59.5 : 49.5;
     UIButton *backgroundHeader = [[UIButton alloc] initWithFrame:CGRectMake(10.5, 11, self.view.window.bounds.size.width - 21, height)];
     backgroundHeader.backgroundColor = [UIColor whiteColor];
 
-    delta = [MWSettings showEnglishTitles] && [metroMap englishTextExists] ? 0 : 2;
+    delta = [MWSettings settings].showEnglishTitles && [metroMap englishTextExists] ? 0 : 2;
     MWViewStationCircleR14 *lineCircle = [[MWViewStationCircleR14 alloc] initWithFrame:CGRectMake(21.5, 27.5 + delta, 14, 14)];
     lineCircle.color = line.color;
 
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:17];
-    headerLabel.frame = CGRectMake(41, 24 + delta, self.view.window.bounds.size.width - 47, 20);
+    headerLabel.frame = CGRectMake(41, 24 + delta, self.view.window.bounds.size.width - 100, 20);
     headerLabel.text = [MWDraw cutString:line.nameOriginal length:24];
 
     [customHeader addSubview:backgroundHeader];
     [customHeader addSubview:lineCircle];
     [customHeader addSubview:headerLabel];
     
-    if ([MWSettings showEnglishTitles] && [metroMap englishTextExists]) {
+    if ([MWSettings settings].showEnglishTitles && [metroMap englishTextExists]) {
         UILabel *englishLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         englishLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-        englishLabel.frame = CGRectMake(41, 44, self.view.window.bounds.size.width - 47, 17);
+        englishLabel.frame = CGRectMake(41, 44, self.view.window.bounds.size.width - 100, 17);
         englishLabel.textColor = [UIColor colorWithRed:(91/255.0) green:(108/255.0) blue:(133/255.0) alpha:1];
         englishLabel.text = [MWDraw cutString:line.nameEnglish length:31];
         
         [customHeader addSubview:englishLabel];
     }
 
-    float labelTop = [MWSettings showEnglishTitles] && [metroMap englishTextExists] ? 26.5 : 20.5;
+    float labelTop = [MWSettings settings].showEnglishTitles && [metroMap englishTextExists] ? 26.5 : 20.5;
 
     UILabel *stationCountLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     
@@ -325,9 +330,9 @@ NSInteger stationsAlphabeticSort(id station1, id station2, void *context)
         MWMetroMap *metroMap = [MWStorage currentMetroMap];
         MWLine *line = [metroMap.lines objectAtIndex:section];
         if (line.collapsed) {
-            return [MWSettings showEnglishTitles] && [metroMap englishTextExists] ? 64.5 : 54.5;
+            return [MWSettings settings].showEnglishTitles && [metroMap englishTextExists] ? 64.5 : 54.5;
         } else {
-            return [MWSettings showEnglishTitles] && [metroMap englishTextExists] ? 70.5 : 60.5;
+            return [MWSettings settings].showEnglishTitles && [metroMap englishTextExists] ? 70.5 : 60.5;
         }
     }
 }
@@ -335,7 +340,7 @@ NSInteger stationsAlphabeticSort(id station1, id station2, void *context)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MWMetroMap *metroMap = [MWStorage currentMetroMap];
-    int result = [MWSettings showEnglishTitles] && [metroMap englishTextExists] ? 60 : 50;
+    int result = [MWSettings settings].showEnglishTitles && [metroMap englishTextExists] ? 60 : 50;
     return result;
 }
 
@@ -376,6 +381,10 @@ NSInteger stationsAlphabeticSort(id station1, id station2, void *context)
     
     MWMetroMap *metroMap = [MWStorage currentMetroMap];
     
+    if ([cell.station1 isClosed]) {
+        return;
+    }
+    
     if (is_From && ![metroMap.startStation isEqual:cell.station1]) {
         metroMap.startStation = cell.station1;
         // Отсылаем всем сообщение, что выбрана новая начальная станция
@@ -390,7 +399,8 @@ NSInteger stationsAlphabeticSort(id station1, id station2, void *context)
         [notificationCenter postNotification:changeFinishStation];
     }
     
-    [self.view.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    MWMetroMapViewController *metroMapViewContoller = (MWMetroMapViewController *)[[[[UIApplication sharedApplication]delegate] window] rootViewController];
+    [metroMapViewContoller dismissModalStackAnimated:true completion:nil];
 }
 
 @end

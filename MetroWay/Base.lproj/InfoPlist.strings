@@ -1,0 +1,11 @@
+/* 
+  MetroWay-Info.strings
+  MetroWay
+
+  Created by Valentin Ozerov on 23.06.16.
+  Copyright © 2016 Valentin Ozerov. All rights reserved.
+*/
+
+"NSLocationWhenInUseUsageDescription" = "Accessing user's location to determine the nearest metro station";
+"NSLocationAlwaysUsageDescription" = "Accessing user's location to determine the nearest metro station";
+

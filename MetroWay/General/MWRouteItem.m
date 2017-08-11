@@ -19,6 +19,9 @@
     [aCoder encodeObject:stationIdentifier2 forKey:@"stationIdentifier2"];
     [aCoder encodeInt:type forKey:@"type"];
     [aCoder encodeObject:added forKey:@"added"];
+    [aCoder encodeInt:_routeNumber forKey:@"routeNumber"];
+    [aCoder encodeInt:_sortingType forKey:@"sortingType"];
+    [aCoder encodeObject:_details forKey:@"details"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -30,6 +33,9 @@
         [self setStationIdentifier2:[aDecoder decodeObjectForKey:@"stationIdentifier2"]];
         [self setType:[aDecoder decodeIntForKey:@"type"]];
         [self setAdded:[aDecoder decodeObjectForKey:@"added"]];
+        _routeNumber = [aDecoder decodeIntForKey:@"routeNumber"];
+        _sortingType = [aDecoder decodeIntForKey:@"sortingType"];
+        _details = [aDecoder decodeObjectForKey:@"details"];
     }
     return self;
 }

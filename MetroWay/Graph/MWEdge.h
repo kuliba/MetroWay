@@ -29,8 +29,8 @@
 // Линия, которой принадлежит ребро
 @property (nonatomic, weak) MWLine *line;
 
-// Длина участка
-@property (nonatomic, readonly) int length;
+// Длина участка в метрах
+@property (nonatomic, readonly) float length;
 // Флаг, показывающий включенность участка (используется для расчетов кратчайших маршрутов)
 @property (nonatomic) BOOL enable;
 // Флаг, показывающий что ребро создано для просчета маршрута (когда начальная или конечные станции не явлются вершинами)

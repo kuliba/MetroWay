@@ -24,8 +24,10 @@
 @property float kernSpacing;
 // Точка, где должен располагаться левый верхний угол
 @property CGPoint origin;
-// Угол, на который следует повернуть текст
+// Угол, на который следует повернуть текст (радианы)
 @property float radians;
+// Угол, на который следует повернуть текст (градусы)
+@property float degrees;
 // Область, занимаемая фигурой
 @property (readonly) CGRect frame;
 @property (readonly) CGRect frame_not_rotated;

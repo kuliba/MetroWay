@@ -6,9 +6,15 @@
 //  Copyright (c) 2013 Valentin Ozerov. All rights reserved.
 //
 //  History:
-//    001. Initial version
-//    002. Добавлены новые станции и пересадки: "Деловой центр", "Парк Победы", "Лесопарковая" и "Битцевский парк".
-//    003. [07.10.2014] Добавлена станция "Спартак"
+//  001. Initial version
+//  002. Добавлена станция Тропарево. Пофиксены мелкие баги
+//  003. [15.03.2015] Пофиксены мелкие баги
+//  004. [02.07.2015] Пофиксены мелкие баги
+//  005. [06.07.2015] Пофиксены мелкие баги
+//  006. [08.07.2015] Улица Побдельского переименована в Бульвар Рокоссовского
+//  007. [13.07.2015] Пофиксены мелкие баги
+//  008. [14.12.2015] Добавлена станция Котельники
+//  009. [13.02.2015] Добавлена станция Румянцево
 
 // Удалено:
 // drawGradientArc0002
@@ -39,6 +45,7 @@
 #import "MWDrawGradientRect.h"
 #import "MWDrawFillCircle.h"
 #import "MWDrawGradientArc.h"
+#import "MWGraphStatus.h"
 
 @implementation MWMoscowMetro
 
@@ -48,10 +55,10 @@
     self = [super init];
     
     [self setIdentifier:@"moscow_metro"];
-    [self setMinimumZoomScale: 0.15];
-    [self setMaximumZoomScale: 1.5];
-    [self setInitialZoomScale: 0.25];
-    [self setContentOffset:CGPointMake(197, 162)];
+//    [self setMinimumZoomScale: 0.15];
+//    [self setMaximumZoomScale: 1.2];
+//    [self setInitialZoomScale: 0.25];
+//    [self setContentOffset:CGPointMake(197, 162)];
     
     ////////////////////////////////////////////////////////////////
     // Создаем линии
@@ -171,10 +178,10 @@
     // Создаем вершины графа
     ////////////////////////////////////////////////////////////////
     
-    // Юго-западная
+    // Румянцево
     MWVertex *vertex0001 = [[MWVertex alloc] init];
     vertex0001.identifier = @"vertex0001";
-    vertex0001.developmentName = @"Вершина: Юго-западная";
+    vertex0001.developmentName = @"Вершина: Румянцево";
     [self.vertices addObject:vertex0001];
     
     // Парк культуры
@@ -675,10 +682,10 @@
     fillCircle0016.fillColor = [UIColor whiteColor];
     [vertex0007.drawPrimitives addObject:fillCircle0016];
     
-    // Улица Подбельского
+    // Бульвар Рокоссовского
     MWVertex *vertex0008 = [[MWVertex alloc] init];
     vertex0008.identifier = @"vertex0008";
-    vertex0008.developmentName = @"Вершина: Улица Подбельского";
+    vertex0008.developmentName = @"Вершина: Бульвар Рокоссовского";
     [self.vertices addObject:vertex0008];
     
     // Алма-Атинская
@@ -2163,10 +2170,10 @@
     vertex0031.developmentName = @"Вершина: Медведково";
     [self.vertices addObject:vertex0031];
     
-    // Жулебино
+    // Котельники
     MWVertex *vertex0032 = [[MWVertex alloc] init];
     vertex0032.identifier = @"vertex0032";
-    vertex0032.developmentName = @"Вершина: Жулебино";
+    vertex0032.developmentName = @"Вершина: Котельники";
     [self.vertices addObject:vertex0032];
     
     // Крестьянская Застава - Пролетарская
@@ -2518,11 +2525,11 @@
     // 1. Сокольническая линия
     ////////////////////////////////////////////////////////////////
     
-    // Создаем участок линии от "Юго-Западной" до "Парк культуры"
+    // Создаем участок линии от "Румянцево" до "Парк культуры"
     ////////////////////////////////////////////////////////////////
     MWEdge *edge0001 = [[MWEdge alloc] init];
     edge0001.identifier = @"edge0001";
-    edge0001.developmentName = @"Ребро: Юго-Западная - Парк культуры";
+    edge0001.developmentName = @"Ребро: Тропарево - Парк культуры";
     [self.edges addObject:(edge0001)];
     
     // Добавляем линию
@@ -2530,7 +2537,99 @@
     
     // Добавляем вершину
     edge0001.startVertex = vertex0001;
+
+    // Добавляем станцию "Румянцево"
+    MWStation *station0198 = [[MWStation alloc] init];
+    station0198.identifier = @"station0198";
+    [edge0001.elements addObject:station0198];
     
+    station0198.nameOriginal = @"Румянцево";
+    station0198.nameEnglish = @"Rumyantsevo";
+    station0198.mapLocation = CGPointMake(650.5, 2725.5);
+    station0198.geoLocation = CGPointMake(55.633, 37.4419);
+
+    MWDrawLine *drawLine0389 = [[MWDrawLine alloc] init];
+    drawLine0389.startPoint = CGPointMake(630, 2726);
+    drawLine0389.endPoint = CGPointMake(670, 2726);
+    drawLine0389.width = 12;
+    drawLine0389.color = line0001.color;
+    [station0198.drawPrimitives addObject:drawLine0389];
+
+    MWDrawTextLine *drawTextLine0425 = [[MWDrawTextLine alloc] init];
+    drawTextLine0425.text = station0198.nameOriginal;
+    drawTextLine0425.fontName = @"HelveticaNeue";
+    drawTextLine0425.fontColor = [UIColor blackColor];
+    drawTextLine0425.fontSize = 32;
+    drawTextLine0425.origin = CGPointMake(678, 2703);
+    [station0198.nameOriginalTextPrimitives addObject:drawTextLine0425];
+
+    MWDrawTextLine *drawTextLine0426 = [[MWDrawTextLine alloc] init];
+    drawTextLine0426.text = station0198.nameEnglish;
+    drawTextLine0426.fontName = @"HelveticaNeue";
+    drawTextLine0426.fontColor = [UIColor colorWithRed:(139/255.0) green:(151/255.0) blue:(158/255.0) alpha:1];
+    drawTextLine0426.fontSize = 18;
+    drawTextLine0426.origin = CGPointMake(672, 2735);
+    [station0198.nameEnglishTextPrimitives addObject:drawTextLine0426];
+
+    // Добавляем перегон
+    MWHaul *haul0186 = [[MWHaul alloc] init];
+    haul0186.identifier = @"haul0186";
+    haul0186.length = 2420;
+    [edge0001.elements addObject:haul0186];
+
+    MWDrawLine *drawLine0390 = [[MWDrawLine alloc] init];
+    drawLine0390.startPoint = CGPointMake(650.5, 2726);
+    drawLine0390.endPoint = CGPointMake(650.5, 2645);
+    drawLine0390.width = 14.5;
+    drawLine0390.color = line0001.color;
+    [haul0186.drawPrimitives addObject:drawLine0390];
+
+    // Добавляем станцию "Тропарево"
+    MWStation *station0196 = [[MWStation alloc] init];
+    station0196.identifier = @"station0196";
+    [edge0001.elements addObject:station0196];
+
+    station0196.nameOriginal = @"Тропарёво";
+    station0196.nameEnglish = @"Troparevo";
+    station0196.mapLocation = CGPointMake(650.5, 2645);
+    station0196.geoLocation = CGPointMake(55.6459, 37.4725);
+
+    MWDrawLine *drawLine0385 = [[MWDrawLine alloc] init];
+    drawLine0385.startPoint = CGPointMake(650, 2645.5);
+    drawLine0385.endPoint = CGPointMake(670, 2645.5);
+    drawLine0385.width = 12;
+    drawLine0385.color = line0001.color;
+    [station0196.drawPrimitives addObject:drawLine0385];
+
+    MWDrawTextLine *drawTextLine0421 = [[MWDrawTextLine alloc] init];
+    drawTextLine0421.text = station0196.nameOriginal;
+    drawTextLine0421.fontName = @"HelveticaNeue";
+    drawTextLine0421.fontColor = [UIColor blackColor];
+    drawTextLine0421.fontSize = 32;
+    drawTextLine0421.origin = CGPointMake(678, 2622.5);
+    [station0196.nameOriginalTextPrimitives addObject:drawTextLine0421];
+    
+    MWDrawTextLine *drawTextLine0422 = [[MWDrawTextLine alloc] init];
+    drawTextLine0422.text = station0196.nameEnglish;
+    drawTextLine0422.fontName = @"HelveticaNeue";
+    drawTextLine0422.fontColor = [UIColor colorWithRed:(139/255.0) green:(151/255.0) blue:(158/255.0) alpha:1];
+    drawTextLine0422.fontSize = 18;
+    drawTextLine0422.origin = CGPointMake(672, 2654.5);
+    [station0196.nameEnglishTextPrimitives addObject:drawTextLine0422];
+    
+    // Добавляем перегон
+    MWHaul *haul0184 = [[MWHaul alloc] init];
+    haul0184.identifier = @"haul0184";
+    haul0184.length = 2100;
+    [edge0001.elements addObject:haul0184];
+
+    MWDrawLine *drawLine0386 = [[MWDrawLine alloc] init];
+    drawLine0386.startPoint = CGPointMake(650.5, 2645);
+    drawLine0386.endPoint = CGPointMake(650.5, 2566);
+    drawLine0386.width = 14.5;
+    drawLine0386.color = line0001.color;
+    [haul0184.drawPrimitives addObject:drawLine0386];
+
     // Добавляем станцию "Юго-западная"
     MWStation *station0001 = [[MWStation alloc] init];
     station0001.identifier = @"station0001";
@@ -2542,7 +2641,7 @@
     station0001.geoLocation = CGPointMake(55.663750, 37.483152);
     
     MWDrawLine *drawLine0001 = [[MWDrawLine alloc] init];
-    drawLine0001.startPoint = CGPointMake(630, 2565);
+    drawLine0001.startPoint = CGPointMake(650, 2565);
     drawLine0001.endPoint = CGPointMake(670, 2565);
     drawLine0001.width = 12;
     drawLine0001.color = line0001.color;
@@ -2600,7 +2699,7 @@
     drawTextLine0003.fontColor = [UIColor blackColor];
     drawTextLine0003.fontSize = 32;
     drawTextLine0003.origin = CGPointMake(678, 2430);
-    //[station0002.nameOriginalTextPrimitives addObject:drawTextLine0003];
+    [station0002.nameOriginalTextPrimitives addObject:drawTextLine0003];
     
     MWDrawTextLine *drawTextLine0004 = [[MWDrawTextLine alloc] init];
     drawTextLine0004.text = @"Вернадского";
@@ -2796,6 +2895,17 @@
     station0006.mapLocation = CGPointMake(797.5, 2123.5);
     station0006.geoLocation = CGPointMake(55.727474, 37.580684);
     
+    MWGraphStatus *status = [[MWGraphStatus alloc] init];
+    status.status = MWGraphObjectStatusClosed;
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd.MM.yyyy"];
+    NSString *dateString = @"1.3.2017";
+    NSDate *date = [dateFormatter dateFromString:dateString];
+    status.toDate = date;
+
+    [station0006.states addObject:status];
+    
     MWDrawLine *drawLine0011 = [[MWDrawLine alloc] init];
     drawLine0011.startPoint = CGPointMake(797.5, 2123.5);
     drawLine0011.endPoint = CGPointMake(810, 2137);
@@ -2873,6 +2983,12 @@
     drawTextLine0016.fontSize = 18;
     drawTextLine0016.origin = CGPointMake(995, 2054);
     [station0007.nameEnglishTextPrimitives addObject:drawTextLine0016];
+    
+    MWDrawFillCircle *fillCircle0083 = [[MWDrawFillCircle alloc] init];
+    fillCircle0083.center = CGPointMake(972, 2007);
+    fillCircle0083.radius = 4;
+    fillCircle0083.fillColor = [UIColor whiteColor];
+    [station0007.drawPrimitives addObject:fillCircle0083];
     
     // Добавляем вершину
     edge0001.finishVertex = vertex0002;
@@ -3073,7 +3189,7 @@
     // Создаем участок линии от "Охотный ряд" до "Лубянка"
     ////////////////////////////////////////////////////////////////
     MWEdge *edge0004 = [[MWEdge alloc] init];
-    edge0004.identifier = @"haul0004";
+    edge0004.identifier = @"edge0004";
     edge0004.developmentName = @"Ребро: Охотный ряд - Лубянка";
     [self.edges addObject:(edge0004)];
     
@@ -3312,14 +3428,20 @@
     drawTextLine0032.origin = CGPointMake(1995, 1197);
     [station0014.nameEnglishTextPrimitives addObject:drawTextLine0032];
     
+    MWDrawFillCircle *fillCircle0081 = [[MWDrawFillCircle alloc] init];
+    fillCircle0081.center = station0014.mapLocation;
+    fillCircle0081.radius = 4;
+    fillCircle0081.fillColor = [UIColor whiteColor];
+    [station0014.drawPrimitives addObject:fillCircle0081];
+
     // Добавляем вершину
     edge0006.finishVertex = vertex0007;
     
-    // Создаем участок линии от "Комсомольская" до "Улица Подбельского"
+    // Создаем участок линии от "Комсомольская" до "Бульвара Рокоссовского"
     ////////////////////////////////////////////////////////////////
     MWEdge *edge0007 = [[MWEdge alloc] init];
     edge0007.identifier = @"edge0007";
-    edge0007.developmentName = @"Ребро: Комсомолькая - Улица Подбельского";
+    edge0007.developmentName = @"Ребро: Комсомолькая - Бульвар Рокоссовского";
     [self.edges addObject:edge0007];
     
     // Добавляем линию
@@ -3553,13 +3675,13 @@
     drawLine0032.color = line0001.color;
     [haul0018.drawPrimitives addObject:drawLine0032];
     
-    // Добавляем станцию "Улица Подбельского"
+    // Добавляем станцию "Бульвар Рокоссовского"
     MWStation *station0019 = [[MWStation alloc] init];
     station0019.identifier = @"station0019";
     [edge0007.elements addObject:station0019];
     
-    station0019.nameOriginal = @"Улица Подбельского";
-    station0019.nameEnglish = @"Ulitsa Podbelskogo";
+    station0019.nameOriginal = @"Бульвар Рокоссовского";
+    station0019.nameEnglish = @"Bulvar Rokossovskogo";
     station0019.mapLocation = CGPointMake(1997, 718);
     station0019.geoLocation = CGPointMake(55.814528, 37.734261);
     
@@ -3571,7 +3693,7 @@
     [station0019.drawPrimitives addObject:drawLine0033];
     
     MWDrawTextLine *drawTextLine0043 = [[MWDrawTextLine alloc] init];
-    drawTextLine0043.text = @"Улица";
+    drawTextLine0043.text = @"Бульвар";
     drawTextLine0043.fontName = @"HelveticaNeue";
     drawTextLine0043.fontColor = [UIColor blackColor];
     drawTextLine0043.fontSize = 32;
@@ -3579,7 +3701,7 @@
     [station0019.nameOriginalTextPrimitives addObject:drawTextLine0043];
 
     MWDrawTextLine *drawTextLine0044 = [[MWDrawTextLine alloc] init];
-    drawTextLine0044.text = @"Подбельского";
+    drawTextLine0044.text = @"Рокоссовского";
     drawTextLine0044.fontName = @"HelveticaNeue";
     drawTextLine0044.fontColor = [UIColor blackColor];
     drawTextLine0044.fontSize = 32;
@@ -4102,6 +4224,12 @@
     drawTextLine0065.fontSize = 18;
     drawTextLine0065.origin = CGPointMake(1755, 2213);
     [station0029.nameEnglishTextPrimitives addObject:drawTextLine0065];
+    
+    MWDrawFillCircle *fillCircle0082 = [[MWDrawFillCircle alloc] init];
+    fillCircle0082.center = CGPointMake(1688.5, 2249);
+    fillCircle0082.radius = 4;
+    fillCircle0082.fillColor = [UIColor whiteColor];
+    [station0029.drawPrimitives addObject:fillCircle0082];
     
     // Добавляем вершину
     edge0010.finishVertex = vertex0012;
@@ -8725,11 +8853,11 @@
     // 7 - Таганско-Краснопресненская линия
     ////////////////////////////////////////////////////////////////
     
-    // Создаем участок линии от "Жулебино" до "Пролетарская"
+    // Создаем участок линии от "Котельники" до "Пролетарская"
     ////////////////////////////////////////////////////////////////
     MWEdge *edge0043 = [[MWEdge alloc] init];
     edge0043.identifier = @"edge0043";
-    edge0043.developmentName = @"Ребро: Жулебино - Пролетарская";
+    edge0043.developmentName = @"Ребро: Котельники - Пролетарская";
     [self.edges addObject:edge0043];
     
     // Добавляем линию
@@ -8737,6 +8865,52 @@
 
     // Добавляем вершину
     edge0043.startVertex = vertex0032;
+    
+    // Добавляем станцию "Котельники"
+    MWStation *station0197 = [[MWStation alloc] init];
+    station0197.identifier = @"station0197";
+    [edge0043.elements addObject:station0197];
+    
+    station0197.nameOriginal = @"Котельники";
+    station0197.nameEnglish = @"Kotelniki";
+    station0197.mapLocation = CGPointMake(2307.5, 2857);
+    station0197.geoLocation = CGPointMake(55.6743, 37.8582);
+
+    MWDrawLine *drawLine0387 = [[MWDrawLine alloc] init];
+    drawLine0387.startPoint = CGPointMake(2288, 2857);
+    drawLine0387.endPoint = CGPointMake(2326.5, 2857);
+    drawLine0387.width = 12;
+    drawLine0387.color = line0007.color;
+    [station0197.drawPrimitives addObject:drawLine0387];
+
+    MWDrawTextLine *drawTextLine0423 = [[MWDrawTextLine alloc] init];
+    drawTextLine0423.text = station0197.nameOriginal;
+    drawTextLine0423.fontName = @"HelveticaNeue";
+    drawTextLine0423.fontColor = [UIColor blackColor];
+    drawTextLine0423.fontSize = 32;
+    drawTextLine0423.origin = CGPointMake(2335, 2831.5);
+    [station0197.nameOriginalTextPrimitives addObject:drawTextLine0423];
+    
+    MWDrawTextLine *drawTextLine0424 = [[MWDrawTextLine alloc] init];
+    drawTextLine0424.text = station0197.nameEnglish;
+    drawTextLine0424.fontName = @"HelveticaNeue";
+    drawTextLine0424.fontColor = [UIColor colorWithRed:(139/255.0) green:(151/255.0) blue:(158/255.0) alpha:1];
+    drawTextLine0424.fontSize = 18;
+    drawTextLine0424.origin = CGPointMake(2331, 2866.5);
+    [station0197.nameEnglishTextPrimitives addObject:drawTextLine0424];
+
+    // Добавляем перегон
+    MWHaul *haul0185 = [[MWHaul alloc] init];
+    haul0185.identifier = @"haul0185";
+    haul0185.length = 1460;
+    [edge0043.elements addObject:haul0185];
+    
+    MWDrawLine *drawLine0388 = [[MWDrawLine alloc] init];
+    drawLine0388.startPoint = CGPointMake(2307.5, 2768);
+    drawLine0388.endPoint = CGPointMake(2307.5, 2857);
+    drawLine0388.width = 14.5;
+    drawLine0388.color = line0007.color;
+    [haul0185.drawPrimitives addObject:drawLine0388];
     
     // Добавляем станцию "Жулебино"
     MWStation *station0112 = [[MWStation alloc] init];
@@ -8749,7 +8923,7 @@
     station0112.geoLocation = CGPointMake(55.684259, 37.854868);
     
     MWDrawLine *drawLine0195 = [[MWDrawLine alloc] init];
-    drawLine0195.startPoint = CGPointMake(2288, 2768.5);
+    drawLine0195.startPoint = CGPointMake(2307.5, 2768.5);
     drawLine0195.endPoint = CGPointMake(2326.5, 2768.5);
     drawLine0195.width = 12;
     drawLine0195.color = line0007.color;
@@ -11341,6 +11515,12 @@
     drawTextLine0308.origin = CGPointMake(1138, 1297);
     [station0156.nameEnglishTextPrimitives addObject:drawTextLine0308];
     
+    MWDrawFillCircle *fillCircle0084 = [[MWDrawFillCircle alloc] init];
+    fillCircle0084.center = CGPointMake(1287.5, 1240.5);
+    fillCircle0084.radius = 4;
+    fillCircle0084.fillColor = [UIColor whiteColor];
+    [station0156.drawPrimitives addObject:fillCircle0084];
+
     // Добавляем вершину
     edge0057.finishVertex = vertex0039;
     
@@ -13374,7 +13554,7 @@
     drawTextLine0386.fontName = @"HelveticaNeue";
     drawTextLine0386.fontColor = [UIColor colorWithRed:(139/255.0) green:(151/255.0) blue:(158/255.0) alpha:1];
     drawTextLine0386.fontSize = 18;
-    drawTextLine0386.origin = CGPointMake(675, 2690);
+    drawTextLine0386.origin = CGPointMake(675, 2980);
     [self.additionalEnglishTextPrimitives addObject:drawTextLine0386];
     
     MWDrawTextLine *drawTextLine0387 = [[MWDrawTextLine alloc] init];
@@ -13561,9 +13741,6 @@
     drawTextLine0411.origin = CGPointMake(1023, 330);
     [self.additionalEnglishTextPrimitives addObject:drawTextLine0411];
     
-    // Добавляем вершину
-    edge0067.finishVertex = vertex0037;
-
     ///////////////////////////////////////////////////////////////////
     // Добавляем станции, связанные узлом, но без возможности перехода
     ///////////////////////////////////////////////////////////////////

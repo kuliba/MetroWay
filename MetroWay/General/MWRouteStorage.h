@@ -17,10 +17,10 @@
 @property (nonatomic, weak, readonly) NSArray *allFavorites;
 
 - (void)addLastRoute:(NSString *)stationIdentifier1 station2:(NSString *)stationIdentifier2;
-- (void)addFavoriteRoute:(NSString *)stationIdentifier1 station2:(NSString *)stationIdentifier2;
+- (void)addFavoriteRoute:(int)routeNumber details:(NSString *)details;
 - (void)addFavoriteStation:(NSString *)stationIdentifier;
 - (void)save;
-
-// 0 - Последний маршрут, 1 - избранный маршрут, 2 - избранная станция
+- (BOOL)isFavoriteRoute:(int)routeNumber;
+- (void)removeFavoriteRoute:(NSString *)stationIdentifier1 station2:(NSString *)stationIdentifier2 routeNumber:(int)routeNumber;
 
 @end

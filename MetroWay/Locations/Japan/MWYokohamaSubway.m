@@ -2469,8 +2469,8 @@
     [station0036.drawPrimitives addObject:fillCircle0039];
 
     station0036.showNameOnMap = NO;
-    [station0036.nameOriginalTextPrimitives addObject:drawLine0007];
-    [station0036.nameEnglishTextPrimitives addObject:drawLine0008];
+    [station0036.nameOriginalTextPrimitives addObject:drawTextLine0007];
+    [station0036.nameEnglishTextPrimitives addObject:drawTextLine0008];
     
     // Добавляем вершину
     edge0004.finishVertex = vertex0003;
@@ -2498,7 +2498,7 @@
     [edge0005.elements addObject:haul0035];
 
     MWDrawLine *drawLine0073 = [[MWDrawLine alloc] init];
-    drawLine0073.startPoint = CGPointMake(1818.5, 600);
+    drawLine0073.startPoint = CGPointMake(1839.5, 546.5);
     drawLine0073.endPoint = CGPointMake(1895, 410);
     drawLine0073.width = 34;
     drawLine0073.color = line0002.color;

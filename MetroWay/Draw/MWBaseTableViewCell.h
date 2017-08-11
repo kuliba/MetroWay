@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "MWStation.h"
 #import "MWListItem.h"
+#import "MWRouteItem.h"
 
 @interface MWBaseTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) MWStation *station1, *station2;
 @property (weak, nonatomic) MWListItem *listItem;
+@property (weak, nonatomic) MWRouteItem *routeItem;
 
 @end

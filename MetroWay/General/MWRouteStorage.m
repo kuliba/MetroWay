@@ -82,7 +82,7 @@ int maxLastRoutes = 3;
     // Если количество последних маршрутов больше, чем их должно быть, удаляем лишние
     int count = 0;
     for (MWRouteItem *routeItem in lastRoutes) {
-        if (routeItem.type == 0) {
+        if (routeItem.type == MWRouteItemTypeLastRoute) {
             count++;
         }
         if (count >= maxLastRoutes) {
@@ -94,21 +94,30 @@ int maxLastRoutes = 3;
     routeItem.metroMapIdentifier = [MWStorage currentMetroMap].identifier;
     routeItem.stationIdentifier1 = stationIdentifier1;
     routeItem.stationIdentifier2 = stationIdentifier2;
-    routeItem.type = 0;
+    routeItem.type = MWRouteItemTypeLastRoute;
     routeItem.added = [NSDate date];
     
     [self.items insertObject:routeItem atIndex:0];
     [self save];
 }
 
-- (void)addFavoriteRoute:(NSString *)stationIdentifier1 station2:(NSString *)stationIdentifier2
+- (void)addFavoriteRoute:(int)routeNumber details:(NSString *)details
 {
+    if ([self isFavoriteRoute:routeNumber]) {
+        return;
+    }
+    
+    MWMetroMap *metroMap = [MWStorage currentMetroMap];
+    
     MWRouteItem *routeItem = [[MWRouteItem alloc] init];
     routeItem.metroMapIdentifier = [MWStorage currentMetroMap].identifier;
-    routeItem.stationIdentifier1 = stationIdentifier1;
-    routeItem.stationIdentifier2 = stationIdentifier2;
-    routeItem.type = 1;
+    routeItem.stationIdentifier1 = metroMap.startStation.identifier;
+    routeItem.stationIdentifier2 = metroMap.finishStation.identifier;
+    routeItem.type = MWRouteItemTypeFavoriteRoute;
+    routeItem.routeNumber = routeNumber;
+    routeItem.sortingType = [MWSettings settings].sortingType;
     routeItem.added = [NSDate date];
+    routeItem.details = details;
     
     [self.items insertObject:routeItem atIndex:0];
     [self save];
@@ -119,7 +128,7 @@ int maxLastRoutes = 3;
     MWRouteItem *routeItem = [[MWRouteItem alloc] init];
     routeItem.metroMapIdentifier = [MWStorage currentMetroMap].identifier;
     routeItem.stationIdentifier1 = stationIdentifier;
-    routeItem.type = 2;
+    routeItem.type = MWRouteItemTypeFavoriteStation;
     routeItem.added = [NSDate date];
     
     [self.items insertObject:routeItem atIndex:0];
@@ -128,9 +137,11 @@ int maxLastRoutes = 3;
 
 - (NSArray *)lastRoutes
 {
+    [self removeRoutesWithClosedStations];
+    
     NSMutableArray *result = [[NSMutableArray alloc] init];
     for (MWRouteItem *routeItem in items) {
-        if (routeItem.type == 0 && [[MWSettings currentMetroMapIdentifier] isEqualToString:routeItem.metroMapIdentifier]) {
+        if (routeItem.type == MWRouteItemTypeLastRoute && [[MWSettings settings].currentMetroMapIdentifier isEqualToString:routeItem.metroMapIdentifier]) {
             [result addObject:routeItem];
         }
     }
@@ -139,9 +150,11 @@ int maxLastRoutes = 3;
 
 - (NSArray *)favoriteRoutes
 {
+    [self removeRoutesWithClosedStations];
+    
     NSMutableArray *result = [[NSMutableArray alloc] init];
     for (MWRouteItem *routeItem in items) {
-        if (routeItem.type == 1 && [[MWSettings currentMetroMapIdentifier] isEqualToString:routeItem.metroMapIdentifier]) {
+        if (routeItem.type == MWRouteItemTypeFavoriteRoute && [[MWSettings settings].currentMetroMapIdentifier isEqualToString:routeItem.metroMapIdentifier]) {
             [result addObject:routeItem];
         }
     }
@@ -152,7 +165,7 @@ int maxLastRoutes = 3;
 {
     NSMutableArray *result = [[NSMutableArray alloc] init];
     for (MWRouteItem *routeItem in items) {
-        if (routeItem.type == 2 && [[MWSettings currentMetroMapIdentifier] isEqualToString:routeItem.metroMapIdentifier]) {
+        if (routeItem.type == MWRouteItemTypeFavoriteStation && [[MWSettings settings].currentMetroMapIdentifier isEqualToString:routeItem.metroMapIdentifier]) {
             [result addObject:routeItem];
         }
     }
@@ -173,13 +186,74 @@ NSInteger favoritesSort(id routeItem1, id routeItem2, void *context)
 
 - (NSArray *)allFavorites
 {
+    [self removeRoutesWithClosedStations];
+    
     NSMutableArray *result = [[NSMutableArray alloc] init];
     for (MWRouteItem *routeItem in items) {
-        if ((routeItem.type == 1 || routeItem.type == 2) && [[MWSettings currentMetroMapIdentifier] isEqualToString:routeItem.metroMapIdentifier]) {
+        if ((routeItem.type == MWRouteItemTypeFavoriteRoute || routeItem.type == MWRouteItemTypeFavoriteStation) && [[MWSettings settings].currentMetroMapIdentifier isEqualToString:routeItem.metroMapIdentifier]) {
             [result addObject:routeItem];
         }
     }
     return [result sortedArrayUsingFunction:favoritesSort context:nil];
+}
+
+- (BOOL)isFavoriteRoute:(int)routeNumber
+{
+    MWMetroMap *metroMap = [MWStorage currentMetroMap];
+    
+    for (MWRouteItem *routeItem in items) {
+        if (routeItem.type == MWRouteItemTypeFavoriteRoute
+            && [[MWSettings settings].currentMetroMapIdentifier isEqualToString:routeItem.metroMapIdentifier]
+            && [routeItem.stationIdentifier1 isEqualToString:metroMap.startStation.identifier]
+            && [routeItem.stationIdentifier2 isEqualToString:metroMap.finishStation.identifier]
+            && routeItem.routeNumber == routeNumber) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+- (void)removeFavoriteRoute:(NSString *)stationIdentifier1 station2:(NSString *)stationIdentifier2 routeNumber:(int)routeNumber
+{
+    for (MWRouteItem *routeItem in items) {
+        if (routeItem.type == MWRouteItemTypeFavoriteRoute
+            && [[MWSettings settings].currentMetroMapIdentifier isEqualToString:routeItem.metroMapIdentifier]
+            && [routeItem.stationIdentifier1 isEqualToString:stationIdentifier1]
+            && [routeItem.stationIdentifier2 isEqualToString:stationIdentifier2]
+            && routeItem.routeNumber == routeNumber) {
+            [items removeObject:routeItem];
+            return;
+        }
+    }
+}
+
+- (BOOL)isRouteItemHasClosedStation:(MWRouteItem *)routeItem
+{
+    MWMetroMap *metroMap = [MWStorage currentMetroMap];
+    MWStation *station1 = [metroMap stationByIdentifier:routeItem.stationIdentifier1];
+    MWStation *station2 = [metroMap stationByIdentifier:routeItem.stationIdentifier2];
+    
+    return [station1 isClosed] || [station2 isClosed];
+}
+
+- (void)removeRoutesWithClosedStations
+{
+    MWMetroMap *metroMap = [MWStorage currentMetroMap];
+
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    for (MWRouteItem *routeItem in items) {
+        MWStation *station1 = [metroMap stationByIdentifier:routeItem.stationIdentifier1];
+        if ((routeItem.type == MWRouteItemTypeLastRoute || MWRouteItemTypeFavoriteRoute) && [[MWSettings settings].currentMetroMapIdentifier isEqualToString:routeItem.metroMapIdentifier] && [self isRouteItemHasClosedStation:routeItem]) {
+            ////// Пропускаем маршруты, где начальная или конечная станция закрыты
+        } else if (routeItem.type == MWRouteItemTypeFavoriteStation && [[MWSettings settings].currentMetroMapIdentifier isEqualToString:routeItem.metroMapIdentifier] && [station1 isClosed]) {
+            ////// Пропускаем избранные станции, которые закрыты
+        } else {
+            [result addObject:routeItem];
+        }
+    }
+    [items removeAllObjects];
+    [items addObjectsFromArray:result];
 }
 
 @end

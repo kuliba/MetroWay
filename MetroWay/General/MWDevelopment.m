@@ -29,16 +29,33 @@
     MWMetroMap *metroMap = [MWStorage loadMetroMap:listItem.identifier];
 
     if (!metroMap) {
-        NSLog(@"Не все схемы доступны. Предварительно создайте все схемы метро функцией createAllMetro или закачайте их вручную из программы");
+        NSLog(@"Недоступна схема метро %@", listItem.identifier);
         return;
     }
+
+    [self createRandomRoute:listItem.identifier];
+}
+
++ (void)createRandomRoute:(NSString *)identifier
+{
+    MWMetroMap *metroMap = [MWStorage loadMetroMap:identifier];
     
     // Получаем станции
     NSArray *stations = metroMap.stations;
+    if (stations.count < 2) {
+        NSLog(@" ");
+        NSLog(@"%@: количество станций меньше двух", metroMap.identifier);
+        return;
+    }
     
-    int randomNumber1 = [self randomInRangeLo:0 toHi:(u_int32_t)stations.count - 1];
+    int randomNumber1, randomNumber2;
+    
+    do {
+        randomNumber1 = [self randomInRangeLo:0 toHi:(u_int32_t)stations.count - 1];
+        randomNumber2 = [self randomInRangeLo:0 toHi:(u_int32_t)stations.count - 1];
+    } while (randomNumber1 == randomNumber2);
+    
     MWStation *startStation = [stations objectAtIndex:randomNumber1];
-    int randomNumber2 = [self randomInRangeLo:0 toHi:(u_int32_t)stations.count - 1];
     MWStation *finishStation = [stations objectAtIndex:randomNumber2];
     int randomNumber3 = [self randomInRangeLo:0 toHi:2];
     NSString *language;
@@ -55,11 +72,37 @@
         default:
             break;
     }
-
-    NSLog(@"Метро: %@", metroMap.identifier);
-    NSLog(@"%@: %@", startStation.identifier, startStation.nameEnglish);
-    NSLog(@"%@: %@", finishStation.identifier, finishStation.nameEnglish);
+    int randomNumber4 = [self randomInRangeLo:0 toHi:1];
+    NSString *englishTitle = randomNumber4 ? @"английские надписи включены" : @"английские надписи выключены";
+    
+    int randomNumber5 = [self randomInRangeLo:0 toHi:1];
+    NSString *sort = randomNumber5 ? @"по времени поездки" : @"по числу пересадок";
+    
+    int randomNumber6 = [self randomInRangeLo:0 toHi:2];
+    NSString *device;
+    switch (randomNumber6) {
+        case 0:
+            device = @"iPhone 5";
+            break;
+        case 1:
+            device = @"iPhone 6";
+            break;
+        case 2:
+            device = @"iPhone 6+";
+            break;
+        default:
+            break;
+    }
+    
+    NSLog(@" ");
+    NSLog(@"Устройство: %@", device);
     NSLog(@"Язык интерфейса: %@", language);
+    NSLog(@"%@", englishTitle);
+    NSLog(@"Сортировка маршрутов: %@", sort);
+    NSLog(@" ");
+    NSLog(@"Метро: %@", metroMap.identifier);
+    NSLog(@"%@: %@ (%@)", startStation.identifier, startStation.nameEnglish, startStation.nameOriginal);
+    NSLog(@"%@: %@ (%@)\n", finishStation.identifier, finishStation.nameEnglish, finishStation.nameOriginal);
 }
 
 // Упаковка изображения со схемой метро в файл
@@ -89,28 +132,14 @@
     [list createNewList];
     [list save];
     if (uploadToServer) {
-        [list createNewListTXTVersion];
-        [MWUpload uploadFileSynchronous:@"list.data"];
-        [MWUpload uploadFileSynchronous:@"list.txt"];
+        if ([list checkSizes]) {
+            [list createNewListTXTVersion];
+            [MWUpload uploadFileSynchronous:@"list.data"];
+            [MWUpload uploadFileSynchronous:@"list.txt"];
+        } else {
+            NSLog(@"Список не загружен, необходимо исправление ошибок");
+        }
     }
-}
-
-+ (void)createAllMetro:(BOOL)uploadToServer
-{
-    [self createMoscowMetro:uploadToServer];
-    [self createBeloHorizonteMetro:uploadToServer];
-    [self createMedellinMetro:uploadToServer];
-    [self createAmsterdamMetro:uploadToServer];
-    [self createBangkokAirport:uploadToServer];
-    [self createPortoAlegreMetro:uploadToServer];
-    [self createLosAngelesMetro:uploadToServer];
-    [self createYekaterinburgMetro:uploadToServer];
-    [self createWuhanMetro:uploadToServer];
-    [self createKyotoSubway:uploadToServer];
-    [self createTorontoSubway:uploadToServer];
-    [self createNizhnyNovgorodMetro:uploadToServer];
-    [self createYokohamaSubway:uploadToServer];
-    [self createBostonSubway:uploadToServer];
 }
 
 + (void)createMetro:(MWMetroMap *)metroMap uploadToServer:(BOOL)uploadToServer
@@ -140,6 +169,13 @@
     MWMoscowMetro *moscowMetro = [[MWMoscowMetro alloc] init];
     [self createMetro:moscowMetro uploadToServer:uploadToServer];
     moscowMetro = nil;
+}
+
++ (void)createMoscowMetro2:(BOOL)uploadToServer
+{
+    MWMoscowMetro2 *moscowMetro2 = [[MWMoscowMetro2 alloc] init];
+    [self createMetro:moscowMetro2 uploadToServer:uploadToServer];
+    moscowMetro2 = nil;
 }
 
 + (void)createBeloHorizonteMetro:(BOOL)uploadToServer
@@ -231,6 +267,55 @@
     MWBostonSubway *bostonSubway = [[MWBostonSubway alloc] init];
     [self createMetro:bostonSubway uploadToServer:uploadToServer];
     bostonSubway = nil;
+}
+
++ (void)createPyongyangMetro:(BOOL)uploadToServer
+{
+    MWPyongyangMetro *pyongyangMetro = [[MWPyongyangMetro alloc] init];
+    [self createMetro:pyongyangMetro uploadToServer:uploadToServer];
+    pyongyangMetro = nil;
+}
+
++ (void)createRecifeMetro:(BOOL)uploadToServer
+{
+    MWRecifeMetro *recifeMetro = [[MWRecifeMetro alloc] init];
+    [self createMetro:recifeMetro uploadToServer:uploadToServer];
+    recifeMetro = nil;
+}
+
++ (void)createHiroshimaMetro:(BOOL)uploadToServer
+{
+    MWHiroshimaMetro *hiroshimaMetro = [[MWHiroshimaMetro alloc] init];
+    [self createMetro:hiroshimaMetro uploadToServer:uploadToServer];
+    hiroshimaMetro = nil;
+}
+
++ (void)createAlgiersMetro:(BOOL)uploadToServer
+{
+    MWAlgiersMetro *algiersMetro = [[MWAlgiersMetro alloc] init];
+    [self createMetro:algiersMetro uploadToServer:uploadToServer];
+    algiersMetro = nil;
+}
+
++ (void)createPragueMetro:(BOOL)uploadToServer
+{
+    MWPragueMetro *pragueMetro = [[MWPragueMetro alloc] init];
+    [self createMetro:pragueMetro uploadToServer:uploadToServer];
+    pragueMetro = nil;
+}
+
++ (void)createParisMetro:(BOOL)uploadToServer
+{
+    MWParisMetro *parisMetro = [[MWParisMetro alloc] init];
+    [self createMetro:parisMetro uploadToServer:uploadToServer];
+    parisMetro = nil;
+}
+
++ (void)createBudapestMetro:(BOOL)uploadToServer
+{
+    MWBudapestMetro *budapestMetro = [[MWBudapestMetro alloc] init];
+    [self createMetro:budapestMetro uploadToServer:uploadToServer];
+    budapestMetro = nil;
 }
 
 // Проверка схемы метро
@@ -358,11 +443,24 @@
 
   // Проверка наличия перегонов нулевой длины
     for (MWEdge *edge in metroMap.edges) {
-        for (NSObject *element in edge.elements) {
+        for (int i = 0; i < edge.elements.count; i++) {
+            NSObject *element = [edge.elements objectAtIndex:i];
             if ([element isKindOfClass:[haul class]]) {
                 haul = (MWHaul *)element;
                 if (!haul.length) {
-                    NSLog(@"Перегон %@ имеет нулевую длину", haul.identifier);
+                    MWStation *station1 = (MWStation *)[edge.elements objectAtIndex:i-1];
+                    MWStation *station2 = (MWStation *)[edge.elements objectAtIndex:i+1];
+                    if ((station1.geoLocation.x == 0 &&station1.geoLocation.y == 0) || (station2.geoLocation.x == 0 && station2.geoLocation.y == 0)) {
+                        NSLog(@"Перегон %@ между станциями %@ и %@ имеет нулевую длину", haul.identifier, station1.identifier, station2.identifier);
+                    } else {
+                        CLLocationCoordinate2D station1Coordinate, station2Coordinate;
+                        station1Coordinate.latitude = station1.geoLocation.x;
+                        station1Coordinate.longitude = station1.geoLocation.y;
+                        station2Coordinate.latitude = station2.geoLocation.x;
+                        station2Coordinate.longitude = station2.geoLocation.y;
+                        int length = (int)[MWLocation geodesicDistance:station1Coordinate toPoint:station2Coordinate];
+                        NSLog(@"Перегон %@ между станциями %@ и %@ имеет нулевую длину вместо ожидаемой длины в %d метров", haul.identifier, station1.identifier, station2.identifier, length);
+                    }
                 }
             }
         }
@@ -514,6 +612,15 @@
 
 + (void)uploadMetroMapImageToSite:(NSString *)identifier
 {
+#ifdef DEBUG
+    NSLog(@"Выключите debug режим для аплоада на сервер!");
+    return;
+#else
+    if (![MWSettings settings].showEnglishTitles) {
+        NSLog(@"Включите отображение английских надписей!");
+        return;
+    }
+    
     MWMetroMap *metroMap = [MWStorage loadMetroMap:identifier];
     NSString *cachesDirectory = [MWStorage cachesDirectory];
     
@@ -526,6 +633,7 @@
     [binaryImageData writeToFile:path atomically:YES];
     
     [MWUpload uploadFileSynchronous:fileName];
+#endif
 }
 
 @end
