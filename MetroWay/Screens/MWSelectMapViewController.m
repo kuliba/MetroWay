@@ -81,6 +81,17 @@ NSArray *favoritesMetro;
     self.noMyMetroMapsLabel.numberOfLines = 0;
     [self.tableView addSubview:self.noMyMetroMapsLabel];
 
+    self.noCitiesFoundLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.noCitiesFoundLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:17];
+    self.noCitiesFoundLabel.frame = CGRectMake(24, 30, screenBound.size.width - 48, 100);
+    self.noCitiesFoundLabel.textAlignment = NSTextAlignmentCenter;
+    self.noCitiesFoundLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.noCitiesFoundLabel.textColor = [UIColor colorWithRed:(91/255.0) green:(108/255.0) blue:(133/255.0) alpha:1];
+    self.noCitiesFoundLabel.text = [MWLanguage localizedStringForKey:@"SelectMap_NoResultButtonTitle"];
+    self.noCitiesFoundLabel.hidden = YES;
+    self.noCitiesFoundLabel.numberOfLines = 0;
+    [self.tableView addSubview:self.noCitiesFoundLabel];
+
     // Подписываемся на события
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     
@@ -227,7 +238,8 @@ static bool block = true;
 }
 
 - (IBAction)done:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    MWMetroMapViewController *metroMapViewContoller = (MWMetroMapViewController *)[[[[UIApplication sharedApplication]delegate] window] rootViewController];
+    [metroMapViewContoller hideSelectMapViewController];
 }
 
 - (void)setText
@@ -312,6 +324,7 @@ static bool block = true;
     predicate = [NSPredicate predicateWithFormat: @"SELF.%@ contains[cd]%@", [MWLanguage localizedCityNameFieldName], searchTextField.text];
     self.filteredList = [[MWStorage metroMapList].items filteredArrayUsingPredicate:predicate];
     [self.tableView reloadData];
+    self.noCitiesFoundLabel.hidden = !((self.filteredList.count == 0) && searchTextField.text.length > 0);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -376,6 +389,7 @@ static bool block = true;
             result = (int)nearestMetro.count;
         }
     }
+    
     return result;
 }
 
@@ -580,16 +594,15 @@ static bool block = true;
   
     if (![[MWSettings currentMetroMapIdentifier] isEqualToString:cell.listItem.identifier]) {
         [MWSettings setCurrentMetroMapIdentifier:cell.listItem.identifier];
-        
+
         // Отсылаем всем сообщение, что выбрана новая схема метро
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         NSNotification *changeMetroMap = [NSNotification notificationWithName:@"changeMetroMap" object:nil];
         [notificationCenter postNotification:changeMetroMap];
     }
     
-//    [self dismissViewControllerAnimated:YES completion:nil];
-    
-   [self.view.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    MWMetroMapViewController *metroMapViewContoller = (MWMetroMapViewController *)[[[[UIApplication sharedApplication]delegate] window] rootViewController];
+    [metroMapViewContoller hideAllViewControllers];
 }
 
 - (void)metroMapDownloaded:(NSNotification *)notification
@@ -605,7 +618,8 @@ static bool block = true;
         NSNotification *changeMetroMap = [NSNotification notificationWithName:@"changeMetroMap" object:nil];
         [notificationCenter postNotification:changeMetroMap];
 
-        [self.view.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+        MWMetroMapViewController *metroMapViewContoller = (MWMetroMapViewController *)[[[[UIApplication sharedApplication]delegate] window] rootViewController];
+        [metroMapViewContoller hideAllViewControllers];
     }
 }
 
